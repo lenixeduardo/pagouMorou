@@ -76,7 +76,7 @@ export const users: User[] = [
   },
 ];
 
-export const currentUser: User = users[0];
+export const currentUser: User = users[0]!;
 
 export const apartments: Apartment[] = [
   {
