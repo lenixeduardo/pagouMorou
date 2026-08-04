@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnunciarRouteImport } from './routes/anunciar'
+import { Route as BuscarRouteImport } from './routes/buscar'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as EntrarRouteImport } from './routes/entrar'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as MensagensRouteImport } from './routes/mensagens'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as ApartamentoIdRouteImport } from './routes/apartamento.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnunciarRoute = AnunciarRouteImport.update({
+  id: '/anunciar',
+  path: '/anunciar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuscarRoute = BuscarRouteImport.update({
+  id: '/buscar',
+  path: '/buscar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntrarRoute = EntrarRouteImport.update({
+  id: '/entrar',
+  path: '/entrar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MensagensRoute = MensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApartamentoIdRoute = ApartamentoIdRouteImport.update({
+  id: '/apartamento/$id',
+  path: '/apartamento/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anunciar': typeof AnunciarRoute
+  '/buscar': typeof BuscarRoute
+  '/cadastro': typeof CadastroRoute
+  '/entrar': typeof EntrarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/mensagens': typeof MensagensRoute
+  '/perfil': typeof PerfilRoute
+  '/apartamento/$id': typeof ApartamentoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anunciar': typeof AnunciarRoute
+  '/buscar': typeof BuscarRoute
+  '/cadastro': typeof CadastroRoute
+  '/entrar': typeof EntrarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/mensagens': typeof MensagensRoute
+  '/perfil': typeof PerfilRoute
+  '/apartamento/$id': typeof ApartamentoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/anunciar': typeof AnunciarRoute
+  '/buscar': typeof BuscarRoute
+  '/cadastro': typeof CadastroRoute
+  '/entrar': typeof EntrarRoute
+  '/favoritos': typeof FavoritosRoute
+  '/mensagens': typeof MensagensRoute
+  '/perfil': typeof PerfilRoute
+  '/apartamento/$id': typeof ApartamentoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/anunciar'
+    | '/buscar'
+    | '/cadastro'
+    | '/entrar'
+    | '/favoritos'
+    | '/mensagens'
+    | '/perfil'
+    | '/apartamento/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/anunciar'
+    | '/buscar'
+    | '/cadastro'
+    | '/entrar'
+    | '/favoritos'
+    | '/mensagens'
+    | '/perfil'
+    | '/apartamento/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/anunciar'
+    | '/buscar'
+    | '/cadastro'
+    | '/entrar'
+    | '/favoritos'
+    | '/mensagens'
+    | '/perfil'
+    | '/apartamento/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnunciarRoute: typeof AnunciarRoute
+  BuscarRoute: typeof BuscarRoute
+  CadastroRoute: typeof CadastroRoute
+  EntrarRoute: typeof EntrarRoute
+  FavoritosRoute: typeof FavoritosRoute
+  MensagensRoute: typeof MensagensRoute
+  PerfilRoute: typeof PerfilRoute
+  ApartamentoIdRoute: typeof ApartamentoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/anunciar': {
+      id: '/anunciar'
+      path: '/anunciar'
+      fullPath: '/anunciar'
+      preLoaderRoute: typeof AnunciarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buscar': {
+      id: '/buscar'
+      path: '/buscar'
+      fullPath: '/buscar'
+      preLoaderRoute: typeof BuscarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entrar': {
+      id: '/entrar'
+      path: '/entrar'
+      fullPath: '/entrar'
+      preLoaderRoute: typeof EntrarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mensagens': {
+      id: '/mensagens'
+      path: '/mensagens'
+      fullPath: '/mensagens'
+      preLoaderRoute: typeof MensagensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apartamento/$id': {
+      id: '/apartamento/$id'
+      path: '/apartamento/$id'
+      fullPath: '/apartamento/$id'
+      preLoaderRoute: typeof ApartamentoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnunciarRoute: AnunciarRoute,
+  BuscarRoute: BuscarRoute,
+  CadastroRoute: CadastroRoute,
+  EntrarRoute: EntrarRoute,
+  FavoritosRoute: FavoritosRoute,
+  MensagensRoute: MensagensRoute,
+  PerfilRoute: PerfilRoute,
+  ApartamentoIdRoute: ApartamentoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

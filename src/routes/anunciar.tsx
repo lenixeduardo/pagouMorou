@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BuildingPlus } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
@@ -20,7 +20,7 @@ function AnunciarPage() {
   return (
     <Page title="Anunciar imóvel" description="O fluxo de publicação do anúncio será construído aqui.">
       <EmptyState
-        icon={BuildingPlus}
+        icon={Building2}
         title="Publicação em construção"
         description="Etapas de fotos, valores e características do imóvel chegam nas próximas etapas."
       />
