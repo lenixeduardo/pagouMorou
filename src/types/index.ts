@@ -1,0 +1,118 @@
+export type ID = string;
+
+export interface Neighborhood {
+  id: ID;
+  name: string;
+  city: string;
+  state: string;
+  slug: string;
+  averageRent: number;
+  highlights: string[];
+}
+
+export type UserRole = "tenant" | "owner";
+
+export interface User {
+  id: ID;
+  name: string;
+  email: string;
+  phone?: string;
+  avatarUrl?: string;
+  role: UserRole;
+  verified: boolean;
+  memberSince: string;
+}
+
+export type ApartmentStatus = "available" | "reserved" | "rented";
+
+export interface ApartmentFeatures {
+  bedrooms: number;
+  bathrooms: number;
+  parkingSpots: number;
+  areaM2: number;
+  furnished: boolean;
+  petFriendly: boolean;
+  floor?: number;
+}
+
+export interface Apartment {
+  id: ID;
+  title: string;
+  description: string;
+  status: ApartmentStatus;
+  rent: number;
+  condoFee: number;
+  iptu: number;
+  images: string[];
+  address: {
+    street: string;
+    number: string;
+    neighborhoodId: ID;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  features: ApartmentFeatures;
+  amenities: string[];
+  ownerId: ID;
+  rating: number;
+  reviewsCount: number;
+  createdAt: string;
+}
+
+export interface Review {
+  id: ID;
+  apartmentId: ID;
+  authorId: ID;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
+export interface Favorite {
+  id: ID;
+  userId: ID;
+  apartmentId: ID;
+  createdAt: string;
+}
+
+export interface Message {
+  id: ID;
+  conversationId: ID;
+  senderId: ID;
+  content: string;
+  sentAt: string;
+  read: boolean;
+}
+
+export interface Conversation {
+  id: ID;
+  apartmentId: ID;
+  participantIds: ID[];
+  messages: Message[];
+  updatedAt: string;
+  unreadCount: number;
+}
+
+export type NotificationKind = "message" | "visit" | "contract" | "payment" | "system";
+
+export interface AppNotification {
+  id: ID;
+  kind: NotificationKind;
+  title: string;
+  description: string;
+  createdAt: string;
+  read: boolean;
+  href?: string;
+}
+
+export interface SearchFilters {
+  query?: string;
+  city?: string;
+  neighborhoodId?: ID;
+  minRent?: number;
+  maxRent?: number;
+  bedrooms?: number;
+  furnished?: boolean;
+  petFriendly?: boolean;
+}
