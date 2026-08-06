@@ -19,8 +19,6 @@ import { slideUp, fadeIn } from "@/lib/motion";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
 
-import { EmptyState } from "@/components/feedback/empty-state";
-import { Page } from "@/components/layout/page";
 
 export const Route = createFileRoute("/apartamento/$id")({
   head: () => ({
