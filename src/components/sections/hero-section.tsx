@@ -78,10 +78,10 @@ export function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="bg-white rounded-[40px] p-8 md:p-12 shadow-xl border border-border relative z-20"
             >
-              <h1 className="text-[48px] md:text-[64px] font-bold leading-[1.05] tracking-tight text-foreground mb-6">
+              <h2 className="text-[48px] md:text-[64px] font-bold leading-[1.05] tracking-tight text-foreground mb-6">
                 Encontre<br />
                 <span className="text-primary">seu novo lar</span>
-              </h1>
+              </h2>
               
               <p className="text-lg text-text-secondary mb-10 max-w-sm leading-relaxed">
                 Imóveis de qualidade na faixa de R$ 2.000 a R$ 4.000 para alugar.
@@ -109,7 +109,7 @@ export function HeroSection() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className="relative overflow-hidden rounded-[30px] col-span-1 h-[70%] mt-[15%]"
               >
-                <img src={propertyImages[0]} className="absolute inset-0 size-full object-cover" alt="" />
+                <img src={propertyImages[0]} className="absolute inset-0 size-full object-cover" alt="Cozinha planejada moderna e iluminada" />
               </motion.div>
               
               <motion.div 
@@ -127,7 +127,7 @@ export function HeroSection() {
                 transition={{ duration: 1, delay: 0.6 }}
                 className="relative overflow-hidden rounded-[30px] col-span-1 h-[80%] mt-[10%]"
               >
-                <img src={propertyImages[2]} className="absolute inset-0 size-full object-cover" alt="" />
+                <img src={propertyImages[2]} className="absolute inset-0 size-full object-cover" alt="Fachada de edifício residencial contemporâneo" />
               </motion.div>
             </div>
             
