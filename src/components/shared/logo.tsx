@@ -17,11 +17,18 @@ export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) 
 
   return (
     <Link to="/" className={cn("flex items-center gap-2.5", className)} aria-label="PagouMorou">
-      <img 
-        src={logoData.url} 
-        alt="PagouMorou" 
-        className={cn("object-contain w-auto", sizes[size])} 
-      />
+      <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary shadow-sm overflow-hidden p-1.5">
+          <img 
+            src={logoData.url} 
+            alt="PagouMorou Icon" 
+            className="w-full h-full object-contain brightness-0 invert" 
+          />
+        </div>
+        <span className="text-xl font-display font-bold tracking-tight text-text">
+          Pagou<span className="text-primary">Morou</span>
+        </span>
+      </div>
       {withSlogan && (
         <span className="flex flex-col leading-none">
           <span className="text-caption text-text-secondary mt-1">Alugou. Pagou. Morou.</span>
