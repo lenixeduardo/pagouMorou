@@ -6,9 +6,9 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegação inferior"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl md:hidden"
+      className="fixed inset-x-4 bottom-4 z-40 rounded-3xl border border-border bg-background/80 shadow-2xl backdrop-blur-2xl md:hidden"
     >
-      <ul className="mx-auto flex max-w-app items-stretch justify-around px-2 pb-[env(safe-area-inset-bottom)]">
+      <ul className="flex items-stretch justify-around px-2 py-1">
         {primaryNav.map((item) => (
           <li key={item.to} className="flex-1">
             <Link

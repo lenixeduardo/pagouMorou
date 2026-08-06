@@ -34,7 +34,7 @@ export function PropertyCard({
       initial="rest"
       whileHover="hover"
       className={cn(
-        "group relative overflow-hidden rounded-card border border-border bg-card shadow-xs transition-shadow duration-200 hover:shadow-md",
+        "group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-2xl",
         className,
       )}
     >

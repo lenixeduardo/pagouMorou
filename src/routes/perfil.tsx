@@ -140,7 +140,7 @@ function PerfilPage() {
                 <span className="text-caption font-bold text-text-secondary">Mensagens</span>
                 <p className="text-3xl font-bold mt-1">1</p>
               </div>
-              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+              <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Favoritos</span>
                 <p className="text-3xl font-bold mt-1">2</p>
               </div>
@@ -165,14 +165,14 @@ function PerfilPage() {
                   variants={container}
                   initial="initial"
                   animate="animate"
-                  className="grid gap-6 sm:grid-cols-2"
+                  className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                 >
                   {userProperties.map((apt) => (
                     <PropertyCard key={apt.id} apartment={apt} />
                   ))}
                 </motion.div>
               ) : (
-                <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-12 text-center bg-white">
+                <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-12 text-center bg-card">
                   <div className="mb-4 rounded-full bg-surface-secondary p-4 text-muted">
                     <Home className="size-8" />
                   </div>

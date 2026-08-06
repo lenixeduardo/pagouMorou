@@ -287,7 +287,7 @@ function BuscarPage() {
                   variants={staggerContainer}
                   initial="initial"
                   animate="animate"
-                  className="grid gap-6 sm:grid-cols-2"
+                  className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                 >
                   {filteredApartments.map((apt) => (
                     <motion.div key={apt.id} variants={fadeIn}>

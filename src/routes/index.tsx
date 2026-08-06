@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, FileSignature, Search, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
@@ -35,9 +36,9 @@ function HomePage() {
   const recentApartments = apartments.slice(0, 4);
 
   return (
-    <Page fullWidth className="pb-20">
+    <Page fullWidth className="bg-background pb-20 pt-0">
       {/* Hero / Search Section */}
-      <section className="relative flex min-h-[500px] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[600px]">
+      <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[60vh]">
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
           <div className="grid h-full w-full grid-cols-6 grid-rows-6 opacity-20">
@@ -68,7 +69,7 @@ function HomePage() {
 
           <motion.div
             variants={fadeIn}
-            className="mx-auto max-w-2xl rounded-2xl bg-white p-2 shadow-xl ring-1 ring-black/5"
+            className="mx-auto max-w-2xl rounded-3xl bg-card p-2 shadow-2xl ring-1 ring-border"
           >
             <div className="flex flex-col gap-2 md:flex-row">
               <div className="relative flex-1">
@@ -104,18 +105,11 @@ function HomePage() {
       </section>
 
       <div className="container mx-auto mt-16 px-6">
-        {/* Featured Section */}
+        {/* Featured Section - Bento Grid Style */}
         <section className="mb-20">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-display text-3xl font-bold">Destaques em São Paulo</h2>
-              <p className="text-text-secondary">Os imóveis mais desejados da capital paulista.</p>
-            </div>
-            <Button variant="ghost" className="hidden font-semibold text-primary md:flex" asChild>
-              <Link to="/buscar">
-                Ver todos <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
+          <div className="mb-8 px-4 md:px-0">
+            <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Destaques</h2>
+            <p className="text-text-secondary font-medium">Os imóveis mais desejados selecionados para você.</p>
           </div>
 
           <motion.div
@@ -123,26 +117,31 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {featuredApartments.map((apt) => (
-              <PropertyCard key={apt.id} apartment={apt} />
+            {featuredApartments.map((apt, idx) => (
+              <div key={apt.id} className={cn(
+                "group relative overflow-hidden rounded-3xl border border-border bg-card transition-all hover:border-primary/50",
+                idx === 0 ? "md:col-span-2 md:row-span-2" : ""
+              )}>
+                <PropertyCard apartment={apt} />
+              </div>
             ))}
           </motion.div>
         </section>
 
         {/* Categories / Neighborhoods (Simple) */}
         <section className="mb-20">
-          <h2 className="mb-8 text-display text-3xl font-bold">Explore por bairro</h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <h2 className="mb-8 px-4 text-display text-4xl font-extrabold uppercase tracking-tighter md:px-0">Explore por bairro</h2>
+          <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4 md:px-0">
             {neighborhoods.map((nb) => (
               <Link
                 key={nb.id}
                 to="/buscar"
-                className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-white p-6 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
+                className="group flex flex-col items-center justify-center rounded-3xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:bg-primary/5 hover:shadow-xl"
               >
-                <span className="mb-1 text-lg font-bold text-foreground group-hover:text-primary">{nb.name}</span>
-                <span className="text-sm text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
+                <span className="mb-1 text-display text-xl font-bold uppercase tracking-tight text-foreground group-hover:text-primary">{nb.name}</span>
+                <span className="text-xs font-semibold text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
               </Link>
             ))}
           </div>
@@ -151,9 +150,9 @@ function HomePage() {
         {/* All Listings Section */}
         <section>
           <div className="mb-8 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-display text-3xl font-bold">Novos anúncios</h2>
-              <p className="text-text-secondary">Explore as últimas unidades disponíveis na plataforma.</p>
+            <div className="px-4 md:px-0">
+              <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Novos anúncios</h2>
+              <p className="text-text-secondary font-medium">Explore as últimas unidades disponíveis na plataforma.</p>
             </div>
           </div>
 
@@ -162,7 +161,7 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           >
             {recentApartments.map((apt) => (
               <PropertyCard key={apt.id} apartment={apt} />
