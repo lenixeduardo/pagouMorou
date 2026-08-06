@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="faça um loader personalizado que aparece uma chave uma casa uma porta enquanto carrega as telas, deve possuir skeleton.">
+    <html lang="ajuste o tamanho correamente do logotipo no menu de navegação, para que fique visivel">
       <head>
         <HeadContent />
       </head>
