@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "pagoumorou",
+      "version": "0.1.0",
+      "title": "PagouMorou"
+    },
+    "tools": [
+      {
+        "name": "search_properties",
+        "title": "Buscar imóveis",
+        "description": "Busca imóveis residenciais para alugar no catálogo do PagouMorou, com filtros por texto, cidade, bairro, faixa de aluguel, dormitórios e mobília.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Texto livre: título, bairro, cidade ou rua.",
+              "type": "string"
+            },
+            "city": {
+              "description": "Filtra pela cidade, ex: São Paulo.",
+              "type": "string"
+            },
+            "neighborhood": {
+              "description": "Filtra pelo nome do bairro, ex: Pinheiros.",
+              "type": "string"
+            },
+            "minRent": {
+              "description": "Aluguel mínimo em reais.",
+              "type": "number"
+            },
+            "maxRent": {
+              "description": "Aluguel máximo em reais.",
+              "type": "number"
+            },
+            "bedrooms": {
+              "description": "Número mínimo de dormitórios.",
+              "type": "number"
+            },
+            "furnished": {
+              "description": "Somente imóveis mobiliados.",
+              "type": "boolean"
+            },
+            "limit": {
+              "description": "Máximo de resultados (padrão 10).",
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_property",
+        "title": "Detalhes do imóvel",
+        "description": "Retorna os detalhes completos de um imóvel do PagouMorou a partir do seu id, incluindo características, comodidades e avaliações públicas.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Identificador do imóvel, ex: apt-1."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_neighborhoods",
+        "title": "Listar bairros",
+        "description": "Lista os bairros atendidos pelo PagouMorou com aluguel médio, destaques e quantidade de imóveis disponíveis.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "city": {
+              "description": "Filtra os bairros por cidade.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
