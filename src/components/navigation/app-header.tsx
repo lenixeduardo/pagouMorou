@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Bell, Menu, Plus } from "lucide-react";
+import { Bell, Menu, Settings } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { SearchInput } from "@/components/forms";
@@ -64,9 +64,13 @@ export function AppHeader() {
                     >
                       <Menu className="size-4 text-text-secondary" />
                       <Avatar className="size-8">
-                        <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
-                          {currentUser.name.slice(0, 1)}
-                        </AvatarFallback>
+                        {isAuthenticated && user?.avatar ? (
+                          <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
+                            {(isAuthenticated ? user?.name : currentUser.name).slice(0, 1)}
+                          </AvatarFallback>
+                        )}
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
@@ -81,6 +85,12 @@ export function AppHeader() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/anunciar">Anunciar imóvel</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/configuracoes" className="flex items-center gap-2">
+                        <Settings className="size-4" />
+                        Configurações
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     {isAuthenticated ? (
