@@ -7,13 +7,15 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode, Suspense } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/layout/app-shell";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { Toaster } from "@/components/ui/sonner";
+import { BrandLoader } from "@/components/loading/brand-loader";
+import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 function NotFoundComponent() {
   return (
@@ -75,6 +77,15 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+function LoadingComponent() {
+  return (
+    <div className="flex flex-col gap-12 pt-8">
+      <BrandLoader className="py-12" />
+      <SkeletonCardGrid count={6} />
+    </div>
+  );
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -117,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="agora adicione ao nav o novo logotipo">
+    <html lang="faça um loader personalizado que aparece uma chave uma casa uma porta enquanto carrega as telas, deve possuir skeleton.">
       <head>
         <HeadContent />
       </head>
@@ -136,8 +147,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AppShell>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <Suspense fallback={<LoadingComponent />}>
+            <Outlet />
+          </Suspense>
         </AppShell>
         <Toaster />
       </ThemeProvider>
