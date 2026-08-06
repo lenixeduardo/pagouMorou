@@ -58,29 +58,11 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
       >
         <div className="relative mb-12 flex items-center justify-center">
           <motion.div
-            initial={{ rotate: -5 }}
-            animate={{ rotate: 5 }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut"
-            }}
-            className="relative"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <motion.div
-              initial={{ scale: 0.96 }}
-              animate={{ scale: 1 }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut"
-              }}
-              className="flex items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50 p-12"
-            >
-              <Logo size="lg" className="scale-150" />
-            </motion.div>
+            <Logo size="lg" className="scale-150" />
           </motion.div>
         </div>
 
