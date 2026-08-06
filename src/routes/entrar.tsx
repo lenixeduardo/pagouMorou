@@ -79,9 +79,9 @@ function EntrarPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex flex-col md:flex-row overflow-x-hidden">
+    <main className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
       {/* Coluna Esquerda - Autenticação (42%) */}
-      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] min-h-screen md:h-screen z-10 bg-white order-2 md:order-1">
+      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] h-screen overflow-y-auto z-10 bg-white order-2 md:order-1">
         <motion.div 
           className="max-w-[490px] w-full mx-auto"
           variants={containerVariants}
