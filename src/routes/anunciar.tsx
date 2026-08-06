@@ -32,8 +32,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/anunciar")({
   head: () => ({
     meta: [
-      { title: "Anunciar imóvel | PagouMorou" },
-      { name: "description", content: "Cadastre seu imóvel em poucos minutos e alugue sem burocracia." },
+      { title: "Anunciar Imóvel | PagouMorou" },
+      { name: "description", content: "Publique seu anúncio no PagouMorou e alugue seu imóvel rapidamente sem burocracia." },
     ],
   }),
   component: AnunciarPage,

@@ -12,10 +12,10 @@ import logoAsset from "@/assets/logo.asset.json";
 export const Route = createFileRoute("/cadastro")({
   head: () => ({
     meta: [
-      { title: "Criar conta | PagouMorou" },
-      { name: "description", content: "Crie sua conta gratuita e alugue um apartamento sem fiador." },
-      { property: "og:title", content: "Criar conta | PagouMorou" },
-      { property: "og:description", content: "Cadastro rápido para alugar sem burocracia." },
+      { title: "Criar Conta | PagouMorou" },
+      { name: "description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
+      { property: "og:title", content: "Criar Conta | PagouMorou" },
+      { property: "og:description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
       { property: "og:image", content: logoAsset.url },
     ],
   }),
