@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
-
+import { motion } from "framer-motion";
 import { primaryNav } from "@/config/navigation";
 
 export function BottomNav() {
   return (
-    <nav
+    <motion.nav
+      initial={{ y: 80 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
       aria-label="Navegação inferior"
       className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/80 shadow-lg backdrop-blur-2xl md:hidden"
     >
