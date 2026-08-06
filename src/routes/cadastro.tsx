@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Mail, ArrowRight, MapPin, Star, TrendingUp, User, LockKeyhole } from "lucide-react";
@@ -50,11 +50,16 @@ const itemVariants = {
 function CadastroPage() {
   const [loading, setLoading] = useState(false);
   const [userType, setUserType] = useState<"inquilino" | "proprietario">("inquilino");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+    // Simula criação de conta e redireciona para o perfil logado
+    setTimeout(() => {
+      setLoading(false);
+      navigate({ to: "/perfil" });
+    }, 1500);
   };
 
   return (
@@ -126,6 +131,10 @@ function CadastroPage() {
 
             <Field label="Senha" id="password">
               <PasswordInput id="password" placeholder="Mínimo 8 caracteres" required />
+            </Field>
+
+            <Field label="Confirmar Senha" id="confirm-password">
+              <PasswordInput id="confirm-password" placeholder="Repita sua senha" required />
             </Field>
 
             <Button 
