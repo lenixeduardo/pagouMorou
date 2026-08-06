@@ -53,9 +53,14 @@ export function AppHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" aria-label="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto">
-                <Avatar className="size-7">
-                  <AvatarFallback className="text-caption">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
+                aria-label="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto"
+              >
+                <Menu className="size-4 text-text-secondary" />
+                <Avatar className="size-8">
+                  <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
                     {currentUser.name.slice(0, 1)}
                   </AvatarFallback>
                 </Avatar>
