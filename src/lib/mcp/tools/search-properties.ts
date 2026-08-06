@@ -54,6 +54,10 @@ export default defineTool({
     furnished: z.boolean().optional().describe("Somente imóveis mobiliados."),
     limit: z.number().optional().describe("Máximo de resultados (padrão 10)."),
   },
+  outputSchema: {
+    count: z.number(),
+    results: z.array(z.record(z.string(), z.unknown())),
+  },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: (input) => {
     const limit = Math.min(Math.max(input.limit ?? 10, 1), 50);

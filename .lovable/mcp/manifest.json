@@ -59,7 +59,29 @@
             }
           }
         },
-        "outputSchema": null
+        "outputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "number"
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              }
+            }
+          },
+          "required": [
+            "count",
+            "results"
+          ]
+        }
       },
       {
         "name": "get_property",
@@ -84,7 +106,22 @@
             "id"
           ]
         },
-        "outputSchema": null
+        "outputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "property"
+          ]
+        }
       },
       {
         "name": "list_neighborhoods",
@@ -105,7 +142,29 @@
             }
           }
         },
-        "outputSchema": null
+        "outputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "number"
+            },
+            "neighborhoods": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              }
+            }
+          },
+          "required": [
+            "count",
+            "neighborhoods"
+          ]
+        }
       }
     ]
   }

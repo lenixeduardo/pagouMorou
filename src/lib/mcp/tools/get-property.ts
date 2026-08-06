@@ -10,6 +10,9 @@ export default defineTool({
   inputSchema: {
     id: z.string().min(1).describe("Identificador do imóvel, ex: apt-1."),
   },
+  outputSchema: {
+    property: z.record(z.string(), z.unknown()),
+  },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ id }) => {
     const apartment = apartments.find((item) => item.id === id);

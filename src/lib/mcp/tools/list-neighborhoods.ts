@@ -10,6 +10,10 @@ export default defineTool({
   inputSchema: {
     city: z.string().optional().describe("Filtra os bairros por cidade."),
   },
+  outputSchema: {
+    count: z.number(),
+    neighborhoods: z.array(z.record(z.string(), z.unknown())),
+  },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ city }) => {
     const items = neighborhoods
