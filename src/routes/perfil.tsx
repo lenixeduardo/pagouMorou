@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
+import { calculateTenantScore, calculateOwnerScore, getScoreColor, getScoreLabel } from "@/lib/score";
 import { ShieldCheck, TrendingUp, AlertTriangle } from "lucide-react";
 import { useEffect, useState, ChangeEvent } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
@@ -123,6 +123,7 @@ function PerfilPage() {
   };
 
   const tenantScore = calculateTenantScore(mockUserForScore as any);
+  const ownerScore = calculateOwnerScore(mockUserForScore as any, myApartments);
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -276,6 +277,32 @@ function PerfilPage() {
                         tenantScore >= 400 ? "bg-warning" : "bg-danger"
                       )}
                       style={{ width: `${(tenantScore / 1000) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {isOwner && (
+                <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-caption font-bold text-text-secondary">Owner Score</span>
+                    <ShieldCheck className={cn("size-5", getScoreColor(ownerScore))} />
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <p className={cn("text-3xl font-bold", getScoreColor(ownerScore))}>{ownerScore}</p>
+                    <span className="text-xs font-medium text-text-secondary">/ 1000</span>
+                  </div>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                    Reputação {getScoreLabel(ownerScore)}
+                  </p>
+                  <div className="absolute bottom-0 left-0 h-1 bg-surface-secondary w-full">
+                    <div 
+                      className={cn("h-full transition-all duration-1000", 
+                        ownerScore >= 800 ? "bg-success" : 
+                        ownerScore >= 600 ? "bg-primary" : 
+                        ownerScore >= 400 ? "bg-warning" : "bg-danger"
+                      )}
+                      style={{ width: `${(ownerScore / 1000) * 100}%` }}
                     />
                   </div>
                 </div>
