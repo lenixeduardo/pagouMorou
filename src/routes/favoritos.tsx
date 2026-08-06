@@ -18,7 +18,7 @@ export const Route = createFileRoute("/favoritos")({
 
 function FavoritosPage() {
   return (
-    <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui.">
+    <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui." component="main">
       <EmptyState
         icon={Heart}
         title="Nenhum favorito ainda"

@@ -12,9 +12,11 @@ interface PageProps {
   children?: ReactNode;
   className?: string;
   fullWidth?: boolean;
+  component?: "main" | "div";
 }
 
-export function Page({ title, description, actions, children, className, fullWidth }: PageProps) {
+export function Page({ title, description, actions, children, className, fullWidth, component = "div" }: PageProps) {
+  const Component = motion[component];
   const content = (
     <>
       {(title || actions) && (
@@ -33,13 +35,13 @@ export function Page({ title, description, actions, children, className, fullWid
   );
 
   return (
-    <motion.div
+    <Component
       initial="hidden"
       animate="visible"
       variants={slideUp}
       className={cn("py-8 md:py-12", className)}
     >
       {fullWidth ? content : <Container>{content}</Container>}
-    </motion.div>
+    </Component>
   );
 }

@@ -21,6 +21,7 @@ function AgentIntegrationsPage() {
   return (
     <Page 
       className="pb-20 pt-10"
+      component="main"
     >
       <div className="container mx-auto px-6 max-w-4xl">
         <motion.div 

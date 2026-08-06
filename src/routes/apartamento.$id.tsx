@@ -42,7 +42,7 @@ function ApartamentoPage() {
   }
 
   return (
-    <Page fullWidth className="pb-20">
+    <Page fullWidth className="pb-20" component="main">
       <div className="container mx-auto px-6 pt-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
           <div className="space-y-8">

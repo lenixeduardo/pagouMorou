@@ -120,7 +120,7 @@ function BuscarPage() {
   const hasActiveFilters = type !== "Todos" || bedrooms !== null || minPrice > 0 || maxPrice < 20000 || q !== "";
 
   return (
-    <Page fullWidth className="pb-20">
+    <Page fullWidth className="pb-20" component="main">
       <div className="container mx-auto px-6 pt-10">
         <div className="mb-8">
           <div className="relative max-w-2xl">

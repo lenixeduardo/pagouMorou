@@ -18,7 +18,7 @@ export const Route = createFileRoute("/mensagens")({
 
 function MensagensPage() {
   return (
-    <Page title="Mensagens" description="As conversas com proprietários ficarão aqui.">
+    <Page title="Mensagens" description="As conversas com proprietários ficarão aqui." component="main">
       <EmptyState
         icon={MessageCircle}
         title="Sem conversas por enquanto"
