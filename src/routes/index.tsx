@@ -204,13 +204,10 @@ function HomePage() {
           </div>
         </section>
 
-        {/* Featured Section */}
-        <section className="mb-20">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-heading">Destaques</h2>
-              <p className="text-text-secondary">Os imóveis mais desejados selecionados para você.</p>
-            </div>
+        <section className="mb-20 mt-20">
+          <div className="mb-12">
+            <h2 className="text-[32px] font-bold tracking-tight mb-2">Imóveis em destaque</h2>
+            <p className="text-text-secondary text-lg">Os imóveis mais desejados selecionados para você.</p>
           </div>
 
           <motion.div
