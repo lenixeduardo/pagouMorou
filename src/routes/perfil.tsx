@@ -173,6 +173,12 @@ function PerfilPage() {
                   {currentUser.verified && (
                     <Verified className="size-5 fill-primary text-white" />
                   )}
+                  {isOwner && ownerScore >= 800 && (
+                    <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200 flex items-center gap-1">
+                      <Star className="size-3 fill-amber-700" />
+                      Top Proprietário
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-sm text-text-secondary">{user?.email}</p>
                 
