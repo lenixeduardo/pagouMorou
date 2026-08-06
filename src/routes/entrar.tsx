@@ -71,9 +71,9 @@ function EntrarPage() {
         type: "inquilino"
       });
 
-      // Redireciona para a página inicial após 1.5s de sucesso
+      // Redireciona para a página de busca após 1.5s de sucesso
       setTimeout(() => {
-        navigate({ to: "/" });
+        navigate({ to: "/buscar" });
       }, 1500);
     }, 2000);
   };
