@@ -74,7 +74,8 @@ function HomePage() {
               <div className="relative flex-1">
                 <SearchInput 
                   placeholder="Onde você quer morar?" 
-                  className="h-14 border-none bg-transparent pl-12 text-foreground focus-visible:ring-0" 
+                  className="h-14 border-none bg-transparent pl-12 text-foreground focus-visible:ring-0"
+                  onFocus={() => window.location.href = '/buscar'}
                 />
               </div>
               <Button size="lg" className="h-14 px-8 text-lg font-medium md:w-auto" asChild>
