@@ -56,7 +56,7 @@ function HomePage() {
         >
           <motion.h1
             variants={fadeIn}
-            className="mb-6 text-display font-bold tracking-tight text-white md:text-6xl"
+            className="mb-6 text-display font-bold tracking-tight text-white"
           >
             Alugou. Pagou. Morou.
           </motion.h1>
@@ -105,11 +105,13 @@ function HomePage() {
       </section>
 
       <div className="container mx-auto mt-16 px-6">
-        {/* Featured Section - Bento Grid Style */}
+        {/* Featured Section */}
         <section className="mb-20">
-          <div className="mb-8 px-4 md:px-0">
-            <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Destaques</h2>
-            <p className="text-text-secondary font-medium">Os imóveis mais desejados selecionados para você.</p>
+          <div className="mb-8 flex items-end justify-between px-4 md:px-0">
+            <div>
+              <h2 className="mb-2 text-heading">Destaques</h2>
+              <p className="text-text-secondary">Os imóveis mais desejados selecionados para você.</p>
+            </div>
           </div>
 
           <motion.div
@@ -117,31 +119,26 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 px-4 md:px-0"
           >
-            {featuredApartments.map((apt, idx) => (
-              <div key={apt.id} className={cn(
-                "group relative overflow-hidden rounded-3xl border border-border bg-card transition-all hover:border-primary/50",
-                idx === 0 ? "md:col-span-2 md:row-span-2" : ""
-              )}>
-                <PropertyCard apartment={apt} />
-              </div>
+            {featuredApartments.map((apt) => (
+              <PropertyCard key={apt.id} apartment={apt} />
             ))}
           </motion.div>
         </section>
 
-        {/* Categories / Neighborhoods (Simple) */}
+        {/* Categories / Neighborhoods */}
         <section className="mb-20">
-          <h2 className="mb-8 px-4 text-display text-4xl font-extrabold uppercase tracking-tighter md:px-0">Explore por bairro</h2>
+          <h2 className="mb-8 px-4 text-heading md:px-0">Explore por bairro</h2>
           <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4 md:px-0">
             {neighborhoods.map((nb) => (
               <Link
                 key={nb.id}
                 to="/buscar"
-                className="group flex flex-col items-center justify-center rounded-3xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:bg-primary/5 hover:shadow-xl"
+                className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-md"
               >
-                <span className="mb-1 text-display text-xl font-bold uppercase tracking-tight text-foreground group-hover:text-primary">{nb.name}</span>
-                <span className="text-xs font-semibold text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
+                <span className="mb-1 text-title group-hover:text-primary">{nb.name}</span>
+                <span className="text-caption text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
               </Link>
             ))}
           </div>
@@ -151,8 +148,8 @@ function HomePage() {
         <section>
           <div className="mb-8 flex items-end justify-between">
             <div className="px-4 md:px-0">
-              <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Novos anúncios</h2>
-              <p className="text-text-secondary font-medium">Explore as últimas unidades disponíveis na plataforma.</p>
+              <h2 className="mb-2 text-heading">Novos anúncios</h2>
+              <p className="text-text-secondary">Explore as últimas unidades disponíveis na plataforma.</p>
             </div>
           </div>
 

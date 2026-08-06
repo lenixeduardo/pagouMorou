@@ -11,8 +11,8 @@
 
 @theme {
   --font-sans:
-    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+    "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
 
   --spacing-1: 4px;
   --spacing-2: 8px;
