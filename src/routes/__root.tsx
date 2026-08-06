@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="teste">
+    <html lang="faça a tela de login do app, deve conter um chaveiro e uma chave como logotipo so ajuste para PagouMorou a escrita">
       <head>
         <HeadContent />
       </head>

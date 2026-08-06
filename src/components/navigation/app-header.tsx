@@ -78,7 +78,7 @@ export function AppHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" aria-label="teste">
+              <Button variant="outline" size="icon" aria-label="faça a tela de login do app, deve conter um chaveiro e uma chave como logotipo so ajuste para PagouMorou a escrita">
                 <Avatar className="size-7">
                   <AvatarFallback className="text-caption">
                     {currentUser.name.slice(0, 1)}
