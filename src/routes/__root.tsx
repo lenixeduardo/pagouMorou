@@ -111,7 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Dancing+Script:wght@600&display=swap",
       },
       {
         rel: "stylesheet",
@@ -134,7 +134,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
         <HeadContent />
       </head>
       <body>
