@@ -7,7 +7,7 @@ import { container, item } from "@/lib/motion";
 export function HeroSection() {
   const propertyImages = [
     "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop", // Cozinha planejada
-    "https://images.unsplash.com/photo-1505691938895-1758d7eaa511?q=80&w=2070&auto=format&fit=crop", // Quarto e cama ao centro
+    "https://images.unsplash.com/photo-1616594192358-af7521cd47a0?q=80&w=2070&auto=format&fit=crop", // Quarto e cama ao centro (alternativa estável)
     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"  // Prédio comercial/residencial moderno
   ];
 
@@ -24,33 +24,48 @@ export function HeroSection() {
               animate="animate"
               className="flex flex-col gap-3 mb-12"
             >
-              <motion.div variants={item} className="flex items-center gap-3 bg-white border border-border rounded-2xl p-4 shadow-sm max-w-[200px] hover-lift">
-                <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Sparkles className="size-4" />
+              <motion.div variants={item} className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-sm max-w-[220px] hover-lift group">
+                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <div className="relative">
+                    <Building2 className="size-5" />
+                    <Sparkles className="size-2 absolute -top-1 -right-1 text-primary group-hover:text-white" />
+                  </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold">Imóveis</p>
-                  <p className="text-[10px] text-text-secondary">Verificados</p>
+                  <p className="text-xs font-bold text-foreground">Imóveis</p>
+                  <p className="text-[10px] text-text-secondary uppercase tracking-wider font-medium">100% Verificados</p>
                 </div>
               </motion.div>
               
-              <motion.div variants={item} className="flex items-center gap-3 bg-white border border-border rounded-2xl p-4 shadow-sm max-w-[200px] hover-lift ml-4">
-                <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Search className="size-4" />
+              <motion.div variants={item} className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-sm max-w-[220px] hover-lift ml-6 group">
+                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <div className="relative">
+                    <Search className="size-5" />
+                    <motion.div 
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="size-1.5 rounded-full bg-primary absolute -bottom-0.5 -right-0.5 border border-white group-hover:bg-white"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold">Localização</p>
-                  <p className="text-[10px] text-text-secondary">Precisa</p>
+                  <p className="text-xs font-bold text-foreground">Localização</p>
+                  <p className="text-[10px] text-text-secondary uppercase tracking-wider font-medium">Bairros Premium</p>
                 </div>
               </motion.div>
 
-              <motion.div variants={item} className="flex items-center gap-3 bg-white border border-border rounded-2xl p-4 shadow-sm max-w-[200px] hover-lift">
-                <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <FileSignature className="size-4" />
+              <motion.div variants={item} className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-sm max-w-[220px] hover-lift group">
+                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <div className="relative">
+                    <FileSignature className="size-5" />
+                    <div className="absolute -top-1 -right-1 flex gap-0.5">
+                      <div className="size-1 rounded-full bg-primary group-hover:bg-white" />
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold">Negociação</p>
-                  <p className="text-[10px] text-text-secondary">Simplificada</p>
+                  <p className="text-xs font-bold text-foreground">Negociação</p>
+                  <p className="text-[10px] text-text-secondary uppercase tracking-wider font-medium">Direto & Simples</p>
                 </div>
               </motion.div>
             </motion.div>
