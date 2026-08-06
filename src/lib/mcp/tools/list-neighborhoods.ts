@@ -1,6 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { apartments, neighborhoods } from "@/mock";
+import { listNeighborhoodStats } from "@/lib/api/neighborhoods";
+import { createPublicSupabase } from "@/lib/supabase/server";
 
 export default defineTool({
   name: "list_neighborhoods",
@@ -15,24 +16,18 @@ export default defineTool({
     neighborhoods: z.array(z.record(z.string(), z.unknown())),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: ({ city }) => {
-    const items = neighborhoods
-      .filter((neighborhood) =>
-        city ? neighborhood.city.toLowerCase().includes(city.toLowerCase()) : true,
-      )
-      .map((neighborhood) => ({
-        id: neighborhood.id,
-        name: neighborhood.name,
-        city: neighborhood.city,
-        state: neighborhood.state,
-        averageRent: neighborhood.averageRent,
-        highlights: neighborhood.highlights,
-        availableProperties: apartments.filter(
-          (apartment) =>
-            apartment.address.neighborhoodId === neighborhood.id &&
-            apartment.status === "available",
-        ).length,
-      }));
+  handler: async ({ city }) => {
+    const stats = await listNeighborhoodStats(createPublicSupabase(), city);
+
+    const items = stats.map((neighborhood) => ({
+      id: neighborhood.id,
+      name: neighborhood.name,
+      city: neighborhood.city,
+      state: neighborhood.state,
+      averageRent: neighborhood.averageRent,
+      highlights: neighborhood.highlights,
+      availableProperties: neighborhood.availableProperties,
+    }));
 
     return {
       content: [

@@ -89,7 +89,7 @@ export function PropertyCard({
           <h3 className="text-title line-clamp-2 text-foreground">
             <Link
               to="/apartamento/$id"
-              params={{ id: apartment.id }}
+              params={{ id: apartment.slug }}
               className="outline-none after:absolute after:inset-0 after:content-['']"
             >
               {apartment.title}
