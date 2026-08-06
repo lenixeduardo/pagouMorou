@@ -23,9 +23,9 @@ export const Route = createFileRoute("/buscar")({
       q: (search["q"] as string) || "",
     };
   },
-  head: ({ search }) => ({
+  head: () => ({
     meta: [
-      { title: `Resultados para "${(search as any).q || "Imóveis"}" | PagouMorou` },
+      { title: "Buscar apartamentos para alugar | PagouMorou" },
       {
         name: "description",
         content: "Filtre apartamentos por bairro, preço e características e alugue sem burocracia.",
