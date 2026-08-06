@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="essa é a imagem ajuste.">
+    <html lang="agora adicione ao nav o novo logotipo">
       <head>
         <HeadContent />
       </head>
