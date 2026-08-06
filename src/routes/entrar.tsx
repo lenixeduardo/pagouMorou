@@ -88,8 +88,8 @@ function EntrarPage() {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="mb-16">
-            <Logo size="lg" className="w-[200px] md:w-[260px]" />
+          <motion.div variants={itemVariants} className="mb-8 md:mb-16">
+            <Logo size="lg" className="w-[280px] md:w-[260px] mx-auto md:mx-0" />
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-6">
