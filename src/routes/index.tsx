@@ -17,12 +17,12 @@ export const Route = createFileRoute("/")({
       { title: "PagouMorou: Aluguel Residencial Descomplicado e Seguro" },
       {
         name: "description",
-        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos diretamente para uma experiência de locação ágil, digital e transparente.",
+        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos direto, com contrato digital e locação ágil e transparente.",
       },
       { property: "og:title", content: "PagouMorou: Aluguel Residencial Descomplicado e Seguro" },
       {
         property: "og:description",
-        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos diretamente para uma experiência de locação ágil, digital e transparente.",
+        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos direto, com contrato digital e locação ágil e transparente.",
       },
     ],
     links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
