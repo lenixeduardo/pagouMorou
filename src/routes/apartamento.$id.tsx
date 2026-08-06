@@ -9,15 +9,15 @@ import { Page } from "@/components/layout/page";
 export const Route = createFileRoute("/apartamento/$id")({
   head: () => ({
     meta: [
-      { title: "Detalhes do apartamento | PagouMorou" },
+      { title: "Detalhes do Imóvel | PagouMorou" },
       {
         name: "description",
-        content: "Fotos, valores, características e negociação direta com o proprietário.",
+        content: "Veja fotos, valores e fale direto com o proprietário deste imóvel no PagouMorou.",
       },
-      { property: "og:title", content: "Detalhes do apartamento | PagouMorou" },
+      { property: "og:title", content: "Detalhes do Imóvel | PagouMorou" },
       {
         property: "og:description",
-        content: "Veja tudo sobre o apartamento e negocie direto com o proprietário.",
+        content: "Veja fotos, valores e fale direto com o proprietário deste imóvel no PagouMorou.",
       },
     ],
   }),

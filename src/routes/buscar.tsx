@@ -25,15 +25,15 @@ export const Route = createFileRoute("/buscar")({
   },
   head: () => ({
     meta: [
-      { title: "Buscar apartamentos para alugar | PagouMorou" },
+      { title: "Buscar Imóveis | PagouMorou" },
       {
         name: "description",
-        content: "Filtre apartamentos por bairro, preço e características e alugue sem burocracia.",
+        content: "Explore centenas de apartamentos e casas prontos para morar. Filtre por bairro e preço no PagouMorou.",
       },
-      { property: "og:title", content: "Buscar apartamentos | PagouMorou" },
+      { property: "og:title", content: "Buscar Imóveis | PagouMorou" },
       {
         property: "og:description",
-        content: "Encontre apartamentos residenciais para alugar direto com o proprietário.",
+        content: "Explore centenas de apartamentos e casas prontos para morar. Filtre por bairro e preço no PagouMorou.",
       },
     ],
   }),

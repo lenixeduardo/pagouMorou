@@ -28,8 +28,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/perfil")({
   head: () => ({
     meta: [
-      { title: "Meu perfil | PagouMorou" },
-      { name: "description", content: "Gerencie seus dados, contratos e anúncios de aluguel." },
+      { title: "Meu Perfil | PagouMorou" },
+      { name: "description", content: "Gerencie seus dados, contratos e anúncios de aluguel no painel do usuário PagouMorou." },
     ],
   }),
   component: PerfilPage,

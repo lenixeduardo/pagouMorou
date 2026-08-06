@@ -12,10 +12,10 @@ import logoAsset from "@/assets/logo.asset.json";
 export const Route = createFileRoute("/entrar")({
   head: () => ({
     meta: [
-      { title: "Entrar na sua conta | PagouMorou" },
-      { name: "description", content: "Acesse sua conta para negociar e assinar contratos digitais." },
+      { title: "Entrar | PagouMorou" },
+      { name: "description", content: "Acesse sua conta PagouMorou para gerenciar seus aluguéis e contratos." },
       { property: "og:title", content: "Entrar | PagouMorou" },
-      { property: "og:description", content: "Acesse o PagouMorou e alugue sem burocracia." },
+      { property: "og:description", content: "Acesse sua conta PagouMorou para gerenciar seus aluguéis e contratos." },
       { property: "og:image", content: logoAsset.url },
     ],
   }),

@@ -14,16 +14,16 @@ import { container, fadeIn, stagger } from "@/lib/motion";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PagouMorou — Alugue apartamentos sem burocracia" },
+      { title: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
       {
         name: "description",
         content:
-          "Descubra apartamentos, negocie direto com o proprietário e assine o contrato digital no PagouMorou.",
+          "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
       },
-      { property: "og:title", content: "PagouMorou — Alugue apartamentos sem burocracia" },
+      { property: "og:title", content: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
       {
         property: "og:description",
-        content: "Marketplace brasileiro de aluguel residencial. Alugou. Pagou. Morou.",
+        content: "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
       },
     ],
     links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
