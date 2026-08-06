@@ -16,7 +16,7 @@ export const Route = createFileRoute("/buscar")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       type: (search["type"] as string) || "Todos",
-      bedrooms: search["bedrooms"] ? String(search["bedrooms"]) : null,
+      bedrooms: (search["bedrooms"] as string) || undefined,
       minPrice: Number(search["minPrice"]) || 0,
       maxPrice: Number(search["maxPrice"]) || 20000,
       sort: (search["sort"] as string) || "relevance",
