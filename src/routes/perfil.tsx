@@ -11,7 +11,8 @@ import {
   Verified,
   Building2,
   Calendar,
-  MapPin
+  MapPin,
+  Bot
 } from "lucide-react";
 import { motion } from "framer-motion";
 
