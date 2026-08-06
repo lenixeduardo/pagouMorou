@@ -14,15 +14,15 @@ import { FAQSection } from "@/components/sections/faq-section";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
+      { title: "PagouMorou: Aluguel Residencial Descomplicado e Seguro" },
       {
         name: "description",
-        content: "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
+        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos diretamente para uma experiência de locação ágil, digital e transparente.",
       },
-      { property: "og:title", content: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
+      { property: "og:title", content: "PagouMorou: Aluguel Residencial Descomplicado e Seguro" },
       {
         property: "og:description",
-        content: "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
+        content: "Alugue seu próximo lar sem burocracia no PagouMorou. Conectamos proprietários e inquilinos diretamente para uma experiência de locação ágil, digital e transparente.",
       },
     ],
     links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
