@@ -52,7 +52,7 @@ function HomePage() {
                 Próximos de tudo que importa: transporte, mercados, escolas, lazer e muito mais.
               </p>
               <Button size="lg" className="bg-primary hover:bg-primary-hover text-white rounded-full px-8 py-6 font-bold shadow-lg" asChild>
-                <Link to="/buscar">
+                <Link to="/entrar">
                   Ver imóveis
                   <Plus className="ml-2 size-4 rotate-45" />
                 </Link>
