@@ -26,6 +26,8 @@ export function calculateTenantScore(user: Partial<User>): number {
   if (factors.chatResponseTime === "low") score -= 100;
   if (factors.chatResponseTime === "medium") score -= 50;
 
+  if (factors.kycVerified) score += 100;
+
   return Math.max(0, Math.min(1000, score));
 }
 
