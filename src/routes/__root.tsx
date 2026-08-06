@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="Ajustar os estados de hover e focus para todos os botões conforme a nova paleta.">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
