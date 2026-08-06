@@ -1,18 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from "lucide-react";
+import { ViktorHero } from "@/components/motionsites/ViktorHero";
+import { PricingCard } from "@/components/motionsites/PricingCard";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import footerAsset from "@/assets/footer.asset.json";
-import { FAQSection } from "@/components/sections/faq-section";
-
+import { Link } from "@tanstack/react-router";
+import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
-import { Button } from "@/components/ui/button";
-import { SearchInput } from "@/components/forms/search-input";
 import { apartments, neighborhoods } from "@/mock";
-import { ViktorHero } from "@/components/motionsites/ViktorHero";
 import { container } from "@/lib/motion";
+import footerAsset from "@/assets/footer.asset.json";
+import { FAQSection } from "@/components/sections/faq-section";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,8 +18,7 @@ export const Route = createFileRoute("/")({
       { title: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
       {
         name: "description",
-        content:
-          "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
+        content: "Encontre apartamentos e casas para alugar no PagouMorou. Negociação direta com proprietários, contratos digitais seguros e zero fiador.",
       },
       { property: "og:title", content: "PagouMorou: Aluguel Residencial Direto e Sem Burocracia" },
       {
@@ -38,19 +35,82 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { toggleFavorite, isFavorite } = useFavorites();
   const featuredApartments = apartments.slice(0, 3);
-  const recentApartments = apartments.slice(0, 4);
 
   return (
-    <Page fullWidth className="bg-background pb-20 pt-0" component="main">
-      {/* Hero Section - Viktor Oddy Style */}
+    <Page fullWidth className="bg-white pb-20 pt-0" component="main">
       <ViktorHero />
+
+      {/* Testimonial Quote Section */}
+      <section className="py-24 px-6 max-w-4xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="flex justify-center mb-8"
+        >
+          <Quote className="w-8 h-8 text-[#051A24]" />
+        </motion.div>
+        
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-[#0D212C] tracking-tight mb-6"
+        >
+          "Mudei a forma como as pessoas alugam no Brasil para criar a plataforma que eu sempre quis usar"
+        </motion.h2>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="italic text-sm text-[#273C46] mb-12"
+        >
+          Viktor Oddy, Fundador
+        </motion.p>
+
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale">
+          <span className="text-2xl font-bold text-slate-900">PagouMorou</span>
+          <span className="text-2xl font-bold text-slate-900">QuintoAndar</span>
+          <span className="text-2xl font-bold text-slate-900">Airbnb</span>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-24 px-6 bg-slate-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:max-w-5xl md:ml-auto">
+            <PricingCard
+              title="Anúncio Mensal"
+              description={"Sua propriedade em destaque.\nSuporte direto com nosso time."}
+              price="R$ 99"
+              priceLabel="Por Mês"
+              dark
+            >
+              <Button className="w-full bg-white text-[#051A24] rounded-full hover:bg-slate-100">Começar agora</Button>
+              <Button variant="ghost" className="w-full text-white/70 hover:text-white">Como funciona</Button>
+            </PricingCard>
+
+            <PricingCard
+              title="Gestão Completa"
+              description={"Escopo fixo, tempo garantido.\nMesmo time, mesmos padrões."}
+              price="R$ 499"
+              priceLabel="Mínimo"
+            >
+              <Button className="w-full bg-[#051A24] text-white rounded-full hover:bg-[#0D212C]">Solicitar consultoria</Button>
+            </PricingCard>
+          </div>
+        </div>
+      </section>
 
       <div className="container mx-auto mt-16 px-6">
         {/* Featured Section */}
         <section className="mb-20">
-          <div className="mb-8 flex items-end justify-between px-4 md:px-0">
+          <div className="mb-8 flex items-end justify-between">
             <div>
-              <h2 className="mb-2 text-heading">Destaques</h2>
+              <h2 className="mb-2 text-heading" style={{ fontFamily: "'PP Mondwest', serif" }}>Destaques</h2>
               <p className="text-text-secondary">Os imóveis mais desejados selecionados para você.</p>
             </div>
           </div>
@@ -60,7 +120,7 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 px-4 md:px-0"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {featuredApartments.map((apt) => (
               <PropertyCard 
@@ -73,76 +133,7 @@ function HomePage() {
           </motion.div>
         </section>
 
-        {/* Categories / Neighborhoods */}
-        <section className="mb-20">
-          <h2 className="mb-8 px-4 text-heading md:px-0">Explore por bairro</h2>
-          <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4 md:px-0">
-            {neighborhoods.map((nb) => (
-              <Link
-                key={nb.id}
-                to="/buscar"
-                search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}
-                className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-md"
-              >
-                <span className="mb-1 text-title group-hover:text-primary">{nb.name}</span>
-                <span className="text-caption text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* All Listings Section */}
-        <section>
-          <div className="mb-8 flex items-end justify-between">
-            <div className="px-4 md:px-0">
-              <h2 className="mb-2 text-heading">Novos anúncios</h2>
-              <p className="text-text-secondary">Explore as últimas unidades disponíveis na plataforma.</p>
-            </div>
-          </div>
-
-          <motion.div
-            variants={container}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {recentApartments.map((apt) => (
-              <PropertyCard 
-                key={apt.id} 
-                apartment={apt} 
-                favorite={isFavorite(apt.id)}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
-          </motion.div>
-
-          <div className="mt-12 text-center">
-            <Button size="lg" variant="outline" className="h-12 px-10 font-bold" asChild>
-              <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
-                Carregar mais imóveis
-              </Link>
-            </Button>
-          </div>
-
-          <FAQSection />
-
-          <div className="mt-20 border-t border-border pt-12 mb-12">
-            <div className="flex flex-col items-center justify-center text-center">
-              <div className="mb-4 rounded-full bg-surface-secondary p-4 text-primary">
-                <FileText className="size-8" />
-              </div>
-              <h3 className="text-xl font-bold">Documentação do Projeto</h3>
-              <p className="mt-2 max-w-md text-text-secondary">
-                Acesse o documento descritivo das telas atuais para referências de design e mockups.
-              </p>
-              <Button variant="link" className="mt-2 font-bold text-primary" asChild>
-                <a href="/src/docs/telas_referencia.md" target="_blank">Ver Documentação (Markdown)</a>
-              </Button>
-            </div>
-          </div>
-
-        </section>
+        <FAQSection />
       </div>
       
       {/* Footer Branding Asset */}
@@ -156,3 +147,4 @@ function HomePage() {
     </Page>
   );
 }
+import { createFileRoute } from "@tanstack/react-router";
