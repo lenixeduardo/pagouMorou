@@ -13,6 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@/hooks/use-auth";
+import { useNotifications } from "@/hooks/use-notifications";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Page } from "@/components/layout/page";
@@ -50,6 +51,7 @@ const STEPS = [
 
 function AnunciarPage() {
   const { isAuthenticated } = useAuthStore();
+  const { addNotification } = useNotifications();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +73,12 @@ function AnunciarPage() {
     // Simular envio
     setTimeout(() => {
       setIsSubmitting(false);
+      addNotification({
+        kind: "system",
+        title: "Anúncio publicado!",
+        description: "Seu imóvel foi enviado para análise e em breve estará online.",
+        href: "/perfil",
+      });
       setCurrentStep(STEPS.length); // Ir para sucesso
     }, 2000);
   };
