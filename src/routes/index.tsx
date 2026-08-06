@@ -24,6 +24,8 @@ export const Route = createFileRoute("/")({
         content: "Marketplace brasileiro de aluguel residencial. Alugou. Pagou. Morou.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
+    lang: "pt-BR",
   }),
   component: HomePage,
 });
