@@ -132,16 +132,16 @@ function HomePage() {
 
         {/* Categories / Neighborhoods (Simple) */}
         <section className="mb-20">
-          <h2 className="mb-8 text-display text-3xl font-bold">Explore por bairro</h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <h2 className="mb-8 px-4 text-display text-4xl font-extrabold uppercase tracking-tighter md:px-0">Explore por bairro</h2>
+          <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4 md:px-0">
             {neighborhoods.map((nb) => (
               <Link
                 key={nb.id}
                 to="/buscar"
-                className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-white p-6 transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
+                className="group flex flex-col items-center justify-center rounded-3xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:bg-primary/5 hover:shadow-xl"
               >
-                <span className="mb-1 text-lg font-bold text-foreground group-hover:text-primary">{nb.name}</span>
-                <span className="text-sm text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
+                <span className="mb-1 text-display text-xl font-bold uppercase tracking-tight text-foreground group-hover:text-primary">{nb.name}</span>
+                <span className="text-xs font-semibold text-text-secondary">Média {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(nb.averageRent)}</span>
               </Link>
             ))}
           </div>
@@ -150,9 +150,9 @@ function HomePage() {
         {/* All Listings Section */}
         <section>
           <div className="mb-8 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-display text-3xl font-bold">Novos anúncios</h2>
-              <p className="text-text-secondary">Explore as últimas unidades disponíveis na plataforma.</p>
+            <div className="px-4 md:px-0">
+              <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Novos anúncios</h2>
+              <p className="text-text-secondary font-medium">Explore as últimas unidades disponíveis na plataforma.</p>
             </div>
           </div>
 
@@ -161,7 +161,7 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           >
             {recentApartments.map((apt) => (
               <PropertyCard key={apt.id} apartment={apt} />
