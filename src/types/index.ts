@@ -21,6 +21,17 @@ export interface User {
   role: UserRole;
   verified: boolean;
   memberSince: string;
+  score?: number;
+  scoreFactors?: {
+    lowStability?: boolean;
+    contractBreach?: boolean;
+    positiveOwnerReviews?: number; // 0-100
+    latePayments?: number;
+    incompleteDocs?: boolean;
+    incompleteProfile?: boolean;
+    noAvatar?: boolean;
+    chatResponseTime?: "low" | "medium" | "high";
+  };
 }
 
 export type ApartmentStatus = "available" | "reserved" | "rented";

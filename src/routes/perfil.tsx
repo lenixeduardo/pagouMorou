@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
+import { ShieldCheck, TrendingUp, AlertTriangle } from "lucide-react";
 import { useEffect, useState, ChangeEvent } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
@@ -102,6 +104,25 @@ function PerfilPage() {
   // Simula os imóveis do usuário (se for proprietário)
   const userProperties = apartments.slice(0, 2);
   const isOwner = user?.type === 'proprietario';
+  const isTenant = user?.type === 'inquilino';
+
+  // Mock de dados para score se não existirem
+  const mockUserForScore = {
+    ...user,
+    avatarUrl: user?.avatarUrl,
+    scoreFactors: user?.scoreFactors || {
+      lowStability: false,
+      contractBreach: false,
+      positiveOwnerReviews: 85,
+      latePayments: 0,
+      incompleteDocs: false,
+      incompleteProfile: false,
+      noAvatar: !user?.avatarUrl,
+      chatResponseTime: "high"
+    }
+  };
+
+  const tenantScore = calculateTenantScore(mockUserForScore as any);
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -232,21 +253,107 @@ function PerfilPage() {
           </motion.aside>
 
           <motion.div variants={fadeIn} className="flex-1 space-y-8">
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            {/* Stats & Score */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {isTenant && (
+                <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-caption font-bold text-text-secondary">Tenant Score</span>
+                    <ShieldCheck className={cn("size-5", getScoreColor(tenantScore))} />
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <p className={cn("text-3xl font-bold", getScoreColor(tenantScore))}>{tenantScore}</p>
+                    <span className="text-xs font-medium text-text-secondary">/ 1000</span>
+                  </div>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                    Perfil {getScoreLabel(tenantScore)}
+                  </p>
+                  <div className="absolute bottom-0 left-0 h-1 bg-surface-secondary w-full">
+                    <div 
+                      className={cn("h-full transition-all duration-1000", 
+                        tenantScore >= 800 ? "bg-success" : 
+                        tenantScore >= 600 ? "bg-primary" : 
+                        tenantScore >= 400 ? "bg-warning" : "bg-danger"
+                      )}
+                      style={{ width: `${(tenantScore / 1000) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <span className="text-caption font-bold text-text-secondary">Meus Anúncios</span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{myApartments.length}</p>}
+                <span className="text-caption font-bold text-text-secondary">
+                  {isOwner ? "Meus Anúncios" : "Imóveis Alugados"}
+                </span>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{isOwner ? myApartments.length : 0}</p>}
               </div>
+              
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Propostas</span>
                 {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{receivedProposals.length}</p>}
               </div>
-              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <span className="text-caption font-bold text-text-secondary">Mensagens</span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">1</p>}
-              </div>
+
+              {isOwner && (
+                <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+                  <span className="text-caption font-bold text-text-secondary">Mensagens</span>
+                  {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">1</p>}
+                </div>
+              )}
             </div>
+
+            {isTenant && (
+              <Card className="border-border overflow-hidden">
+                <CardHeader className="bg-surface-secondary/30 pb-4">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="size-5 text-primary" />
+                    <CardTitle className="text-lg">Como melhorar seu Score?</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Seu score ajuda proprietários a confiarem em você para alugar mais rápido.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <CheckCircle2 className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Mantenha pagamentos em dia</p>
+                        <p className="text-xs text-text-secondary">Pagamentos pontuais são o fator mais importante.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className={cn("rounded-full p-1.5", mockUserForScore.scoreFactors.incompleteProfile ? "bg-warning/10 text-warning" : "bg-success/10 text-success")}>
+                        {mockUserForScore.scoreFactors.incompleteProfile ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Complete seu perfil</p>
+                        <p className="text-xs text-text-secondary">Adicione fotos e valide seus documentos.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-primary/10 p-1.5 text-primary">
+                        <MessageSquare className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Responda rápido no chat</p>
+                        <p className="text-xs text-text-secondary">Interação ágil melhora sua reputação.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-info/10 p-1.5 text-info">
+                        <TrendingUp className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Histórico de permanência</p>
+                        <p className="text-xs text-text-secondary">Evite quebras de contrato ou curtas estadias.</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             <Tabs defaultValue="anuncios" className="w-full" onValueChange={setActiveTab}>
               <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">

@@ -7,6 +7,16 @@ interface User {
   name: string;
   avatarUrl?: string;
   type: 'inquilino' | 'proprietario';
+  scoreFactors?: {
+    lowStability?: boolean;
+    contractBreach?: boolean;
+    positiveOwnerReviews?: number;
+    latePayments?: number;
+    incompleteDocs?: boolean;
+    incompleteProfile?: boolean;
+    noAvatar?: boolean;
+    chatResponseTime?: "low" | "medium" | "high";
+  };
 }
 
 interface AuthState {
