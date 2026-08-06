@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="Implementar as seções de destaque e listagem de imóveis na Home conforme especificado no Design Spec.\n\nValidar a responsividade do layout em dispositivos móveis (390x844).">
+    <html lang="corrija os imoveis com imagens quebradas">
       <head>
         <HeadContent />
       </head>
