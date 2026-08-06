@@ -13,7 +13,7 @@ export function calculateTenantScore(user: Partial<User>): number {
 
   if (factors.incompleteProfile) score -= 100;
   if (factors.noAvatar || !user.avatarUrl) score -= 50;
-  if (factors.incompleteDocs) score -= 150;
+  if (factors.incompleteDocs) score -= 200; // Penalidade aumentada para KYC incompleto
   if (factors.lowStability || factors.contractBreach) score -= 200;
   
   const latePaymentPenalty = (factors.latePayments || 0) * 100;
@@ -25,6 +25,8 @@ export function calculateTenantScore(user: Partial<User>): number {
 
   if (factors.chatResponseTime === "low") score -= 100;
   if (factors.chatResponseTime === "medium") score -= 50;
+
+  if (factors.kycVerified) score += 100;
 
   return Math.max(0, Math.min(1000, score));
 }
