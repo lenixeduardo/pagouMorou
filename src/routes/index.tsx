@@ -2,7 +2,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Quote, Sparkles, Building2, FileSignature, FileText } from "lucide-react";
+import { Quote, Sparkles, Building2, FileSignature, FileText, Plus, MapPin, Search, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
