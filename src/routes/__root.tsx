@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="reverta as mudanças feitas no logotipo e deixe da mesma maneira que estava da criação inciial, ajuste o verde background do item section a esquerda para que fique um pouco mais proximo na paleta de verde">
+    <html lang="essa é a imagem ajuste.">
       <head>
         <HeadContent />
       </head>
