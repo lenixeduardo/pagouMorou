@@ -6,7 +6,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegação inferior"
-      className="fixed inset-x-4 bottom-4 z-40 rounded-3xl border border-border bg-background/80 shadow-2xl backdrop-blur-2xl md:hidden"
+      className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/80 shadow-lg backdrop-blur-2xl md:hidden"
     >
       <ul className="flex items-stretch justify-around px-2 py-1">
         {primaryNav.map((item) => (
@@ -16,7 +16,7 @@ export function BottomNav() {
               activeOptions={{ exact: item.exact }}
               activeProps={{ className: "text-primary" }}
               inactiveProps={{ className: "text-text-secondary" }}
-              className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-md px-1 py-2 transition-colors"
+              className="flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-2 transition-colors"
             >
               <item.icon className="size-5" aria-hidden />
               <span className="text-[11px] font-medium leading-none">{item.label}</span>
