@@ -209,7 +209,6 @@ export const apartments: Apartment[] = [
     reviewsCount: 9,
     createdAt: "2026-07-19T18:45:00.000Z",
   },
-  },
   {
     id: "apt-5",
     title: "Flat moderno próximo à Praça da Liberdade",
