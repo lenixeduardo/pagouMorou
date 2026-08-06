@@ -38,7 +38,7 @@ export function AppHeader() {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 justify-self-end">
+        <div className="flex items-center gap-2 justify-self-end">
           <Button variant="ghost" size="sm" className="hidden lg:inline-flex" asChild>
             <Link to="/anunciar">
               <Plus aria-hidden />

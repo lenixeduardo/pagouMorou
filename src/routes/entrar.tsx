@@ -24,7 +24,7 @@ export const Route = createFileRoute("/entrar")({
 
 function EntrarPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row pb-[env(safe-area-inset-bottom)]">
       {/* Lado Esquerdo - Visual/Branding */}
       <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/5 pattern-grid" />
