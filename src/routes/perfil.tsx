@@ -328,53 +328,53 @@ function PerfilPage() {
               )}
             </div>
 
-            {isTenant && (
+            {isOwner && (
               <Card className="border-border overflow-hidden">
                 <CardHeader className="bg-surface-secondary/30 pb-4">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="size-5 text-primary" />
-                    <CardTitle className="text-lg">Como melhorar seu Score?</CardTitle>
+                    <CardTitle className="text-lg">Dicas para seu Owner Score</CardTitle>
                   </div>
                   <CardDescription>
-                    Seu score ajuda proprietários a confiarem em você para alugar mais rápido.
+                    Anúncios completos e respostas rápidas atraem inquilinos melhores e aumentam sua visibilidade.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-success/10 p-1.5 text-success">
-                        <CheckCircle2 className="size-4" />
+                        <Camera className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Mantenha pagamentos em dia</p>
-                        <p className="text-xs text-text-secondary">Pagamentos pontuais são o fator mais importante.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className={cn("rounded-full p-1.5", mockUserForScore.scoreFactors.incompleteProfile ? "bg-warning/10 text-warning" : "bg-success/10 text-success")}>
-                        {mockUserForScore.scoreFactors.incompleteProfile ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Complete seu perfil</p>
-                        <p className="text-xs text-text-secondary">Adicione fotos e valide seus documentos.</p>
+                        <p className="text-sm font-bold">Capriche nas fotos</p>
+                        <p className="text-xs text-text-secondary">Anúncios com 5+ fotos de alta qualidade têm 3x mais propostas.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-primary/10 p-1.5 text-primary">
-                        <MessageSquare className="size-4" />
+                        <FileText className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Responda rápido no chat</p>
-                        <p className="text-xs text-text-secondary">Interação ágil melhora sua reputação.</p>
+                        <p className="text-sm font-bold">Descrição completa</p>
+                        <p className="text-xs text-text-secondary">Inclua pontos de interesse, detalhes dos cômodos e itens da mobília.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-info/10 p-1.5 text-info">
-                        <TrendingUp className="size-4" />
+                        <Clock className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Histórico de permanência</p>
-                        <p className="text-xs text-text-secondary">Evite quebras de contrato ou curtas estadias.</p>
+                        <p className="text-sm font-bold">Rapidez é fundamental</p>
+                        <p className="text-xs text-text-secondary">Responda chats e revise propostas em menos de 24h.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <Verified className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Documentação em dia</p>
+                        <p className="text-xs text-text-secondary">Proprietários verificados transmitem mais confiança e segurança.</p>
                       </div>
                     </div>
                   </div>
