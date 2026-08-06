@@ -6,18 +6,18 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-button text-button cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-button text-button cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover",
-        primary: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover",
-        secondary: "bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft/70",
+        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md",
+        primary: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md",
+        secondary: "bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft/80",
         outline:
-          "border border-border bg-background shadow-xs hover:bg-surface-secondary hover:border-muted",
-        ghost: "hover:bg-surface-secondary text-foreground",
-        destructive: "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90",
-        link: "text-primary underline-offset-4 hover:underline px-0",
+          "border border-border bg-background shadow-xs hover:bg-surface-secondary hover:border-primary/30 hover:shadow-sm",
+        ghost: "hover:bg-surface-secondary text-foreground hover:text-primary",
+        destructive: "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90 hover:shadow-md",
+        link: "text-primary underline-offset-4 hover:underline hover:text-primary-hover px-0",
       },
       size: {
         default: "h-11 px-5",
