@@ -1,5 +1,4 @@
-import { ViktorHero } from "@/components/motionsites/ViktorHero";
-import { PricingCard } from "@/components/motionsites/PricingCard";
+import { HeroSection } from "@/components/sections/hero-section";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -38,79 +37,41 @@ function HomePage() {
 
   return (
     <Page fullWidth className="bg-white pb-20 pt-0" component="main">
-      <ViktorHero />
-
-      {/* Testimonial Quote Section */}
-      <section className="py-24 px-6 max-w-4xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="flex justify-center mb-8"
-        >
-          <Quote className="w-8 h-8 text-[#051A24]" />
-        </motion.div>
-        
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-[#0D212C] tracking-tight mb-6"
-        >
-          "Mudei a forma como as pessoas alugam no Brasil para criar a plataforma que eu sempre quis usar"
-        </motion.h2>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="italic text-sm text-[#273C46] mb-12"
-        >
-          Viktor Oddy, Fundador
-        </motion.p>
-
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale">
-          <span className="text-2xl font-bold text-slate-900">PagouMorou</span>
-          <span className="text-2xl font-bold text-slate-900">QuintoAndar</span>
-          <span className="text-2xl font-bold text-slate-900">Airbnb</span>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-24 px-6 bg-slate-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:max-w-5xl md:ml-auto">
-            <PricingCard
-              title="Anúncio Mensal"
-              description={"Sua propriedade em destaque.\nSuporte direto com nosso time."}
-              price="R$ 99"
-              priceLabel="Por Mês"
-              dark
-            >
-              <Button className="w-full bg-white text-[#051A24] rounded-full hover:bg-slate-100 font-semibold h-12">Começar agora</Button>
-              <Button variant="ghost" className="w-full text-white/70 hover:text-white h-12">Como funciona</Button>
-            </PricingCard>
-
-            <PricingCard
-              title="Gestão Completa"
-              description={"Escopo fixo, tempo garantido.\nMesmo time, mesmos padrões."}
-              price="R$ 499"
-              priceLabel="Mínimo"
-            >
-              <Button className="w-full bg-[#051A24] text-white rounded-full hover:bg-[#0D212C] font-semibold h-12">Solicitar consultoria</Button>
-            </PricingCard>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       <div className="container mx-auto mt-16 px-6">
+        {/* Why PagouMorou */}
+        <section className="mb-24 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div className="flex flex-col items-center">
+              <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
+                <Building2 className="size-10" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Direto com Dono</h3>
+              <p className="text-text-secondary">Elimine intermediários e negocie as melhores condições diretamente com quem decide.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
+                <FileSignature className="size-10" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Contrato Digital</h3>
+              <p className="text-text-secondary">Assinatura digital rápida e segura, com validade jurídica e reconhecimento facial.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
+                <Sparkles className="size-10" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Sem Fiador</h3>
+              <p className="text-text-secondary">Nossa análise de crédito inteligente substitui a necessidade de fiador ou caução pesada.</p>
+            </div>
+          </div>
+        </section>
+
         {/* Featured Section */}
         <section className="mb-20">
           <div className="mb-8 flex items-end justify-between">
             <div>
-              <h2 className="mb-2 text-heading" style={{ fontFamily: "'PP Mondwest', serif" }}>Destaques</h2>
+              <h2 className="mb-2 text-heading">Destaques</h2>
               <p className="text-text-secondary">Os imóveis mais desejados selecionados para você.</p>
             </div>
           </div>
