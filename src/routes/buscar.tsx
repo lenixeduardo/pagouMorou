@@ -8,7 +8,8 @@ import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { fadeIn, staggerContainer } from "@/lib/motion";
+import { fadeIn, stagger as staggerContainer } from "@/lib/motion";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/buscar")({
   head: () => ({
@@ -212,10 +213,11 @@ function BuscarPage() {
                     icon={SearchX}
                     title="Nenhum imóvel encontrado"
                     description="Tente ajustar seus filtros para encontrar o que procura."
-                    action={{
-                      label: "Limpar todos os filtros",
-                      onClick: clearFilters
-                    }}
+                    action={
+                      <Button variant="outline" onClick={clearFilters} className="mt-4">
+                        Limpar todos os filtros
+                      </Button>
+                    }
                   />
                 </motion.div>
               )}
