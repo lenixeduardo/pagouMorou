@@ -26,8 +26,8 @@ function EntrarPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
       {/* Lado Esquerdo - Visual/Branding */}
-      <div className="hidden md:flex md:w-1/2 bg-surface-secondary items-center justify-center p-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/5 pattern-grid" />
+      <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/5 pattern-grid" />
         <motion.div 
           variants={fade}
           initial="initial"
@@ -37,12 +37,12 @@ function EntrarPage() {
           <img 
             src={logoAsset.url} 
             alt="PagouMorou Logo" 
-            className="w-full h-auto mb-8 rounded-3xl shadow-xl"
+            className="w-full h-auto mb-8 rounded-3xl shadow-2xl"
           />
-          <h2 className="text-3xl font-display font-bold text-text mb-4">
+          <h2 className="text-3xl font-display font-bold text-white mb-4">
             Alugue sem fiador e sem complicação.
           </h2>
-          <p className="text-secondary-text text-lg">
+          <p className="text-white/80 text-lg">
             A plataforma que conecta proprietários e inquilinos de forma direta e segura.
           </p>
         </motion.div>
