@@ -1,36 +1,35 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import logoAsset from "@/assets/pagoumorou-logo.png.asset.json";
 
 interface LogoProps {
   className?: string;
-  withSlogan?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "custom";
+  width?: number;
 }
 
-export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) {
-  const sizeClasses = {
-    sm: "text-xl",
-    md: "text-2xl",
-    lg: "text-3xl",
+export function Logo({ className, size = "md", width }: LogoProps) {
+  const widthMap = {
+    sm: 160,
+    md: 200,
+    lg: 260,
+    custom: width || 260,
   };
+
+  const selectedWidth = widthMap[size as keyof typeof widthMap] || widthMap.md;
 
   return (
     <Link 
       to="/" 
-      className={cn("flex flex-col items-start gap-0 group transition-all duration-300", className)} 
+      className={cn("block", className)} 
       aria-label="PagouMorou"
     >
-      <span className={cn(
-        "font-signature text-primary tracking-tight leading-none transition-transform duration-300 group-hover:scale-105", 
-        sizeClasses[size]
-      )}>
-        PagouMorou
-      </span>
-      {withSlogan && (
-        <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-text-secondary mt-1 opacity-80">
-          Alugou. Pagou. Morou.
-        </span>
-      )}
+      <img 
+        src={logoAsset.url} 
+        alt="PagouMorou" 
+        style={{ width: selectedWidth }}
+        className="h-auto object-contain"
+      />
     </Link>
   );
 }
