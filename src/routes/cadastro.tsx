@@ -96,7 +96,7 @@ function CadastroPage() {
 
           <motion.div variants={itemVariants} className="space-y-6">
             <h1 className="text-[42px] md:text-[48px] lg:text-[72px] font-bold text-[#101C31] leading-[1] md:leading-[0.98] tracking-[-0.045em]">
-              Criar sua<br />conta
+              Criar sua conta
             </h1>
             <p className="text-[20px] text-[#667085] font-normal leading-[1.55] mt-6 mb-8">
               Junte-se ao PagouMorou e encontre seu lar ideal sem burocracia.

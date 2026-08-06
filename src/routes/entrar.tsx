@@ -105,7 +105,7 @@ function EntrarPage() {
               Bem-vindo
             </h1>
             <p className="text-[20px] text-[#667085] font-normal leading-[1.55] mt-6 mb-10">
-              Entre para continuar sua busca<br className="hidden md:block" /> pelo próximo lar.
+              Entre para continuar sua busca pelo próximo lar.
             </p>
           </motion.div>
 
