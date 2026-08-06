@@ -11,13 +11,13 @@ export const Route = createFileRoute("/mensagens")({
       {
         name: "description",
         content:
-          "Converse diretamente com proprietários ou inquilinos pelo chat do PagouMorou. Negociação rápida e sem burocracia.",
+          "Converse direto com proprietários e inquilinos pelo chat do PagouMorou: combine visitas, negocie valores e feche o aluguel de forma rápida e sem burocracia.",
       },
       { property: "og:title", content: "Mensagens | PagouMorou" },
       {
         property: "og:description",
         content:
-          "Converse diretamente com proprietários ou inquilinos pelo chat do PagouMorou. Negociação rápida e sem burocracia.",
+          "Converse direto com proprietários e inquilinos pelo chat do PagouMorou: combine visitas, negocie valores e feche o aluguel de forma rápida e sem burocracia.",
       },
     ],
   }),
