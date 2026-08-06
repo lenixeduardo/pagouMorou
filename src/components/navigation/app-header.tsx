@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Bell, Menu, Settings, CheckCircle2, MessageSquare, DollarSign } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { Logo } from "@/components/shared/logo";
 import { SearchInput } from "@/components/forms";
