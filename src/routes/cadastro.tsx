@@ -1,112 +1,222 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Mail, ArrowRight, MapPin, Star, TrendingUp, User, LockKeyhole } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/forms/password-input";
 import { Field } from "@/components/forms/field";
-import { fade, slideUp } from "@/lib/motion";
 import { Logo } from "@/components/shared/logo";
+import { Spinner } from "@/components/ui/spinner";
+import apartmentAsset from "@/assets/login-apartment.png.asset.json";
 
 export const Route = createFileRoute("/cadastro")({
   head: () => ({
     meta: [
       { title: "Criar Conta | PagouMorou" },
-      { name: "description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
+      { name: "description", content: "Cadastre-se no PagouMorou para encontrar seu próximo lar." },
       { property: "og:title", content: "Criar Conta | PagouMorou" },
-      { property: "og:description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
-      { property: "og:image", content: "/favicon.png" },
+      { property: "og:description", content: "Cadastre-se no PagouMorou para encontrar seu próximo lar." },
+      { property: "og:image", content: apartmentAsset.url },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CadastroPage,
 });
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+  },
+};
+
 function CadastroPage() {
+  const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState<"inquilino" | "proprietario">("inquilino");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => setLoading(false), 2000);
+  };
+
   return (
-    <main className="min-h-screen bg-background flex flex-col md:flex-row-reverse pb-[env(safe-area-inset-bottom)]">
-      {/* Lado Direito - Visual/Branding (Invertido no Cadastro) */}
-      <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/5 pattern-dots" />
+    <main className="min-h-screen bg-white flex flex-col md:flex-row-reverse overflow-x-hidden">
+      {/* Coluna Esquerda (que fica na direita no Desktop) - Formulário */}
+      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] min-h-screen z-10 bg-white order-2 md:order-1">
         <motion.div 
-          variants={fade}
-          initial="initial"
-          animate="animate"
-          className="relative z-10 max-w-md text-center"
+          className="max-w-[490px] w-full mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <div className="w-full h-48 mb-8 rounded-3xl shadow-2xl bg-white flex items-center justify-center p-8">
-            <Logo size="lg" className="scale-150" />
-          </div>
-          <h2 className="text-3xl font-display font-bold text-white mb-4">
-            Junte-se à revolução do aluguel.
-          </h2>
-          <p className="text-white/80 text-lg">
-            Cadastre-se para encontrar seu próximo lar ou anunciar seu imóvel com total segurança.
-          </p>
+          <motion.div variants={itemVariants} className="mb-12">
+            <Logo size="lg" className="w-[200px] md:w-[260px]" />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h1 className="text-[42px] md:text-[48px] lg:text-[72px] font-bold text-[#101C31] leading-[1] md:leading-[0.98] tracking-[-0.045em]">
+              Criar sua<br />conta
+            </h1>
+            <p className="text-[20px] text-[#667085] font-normal leading-[1.55] mt-6 mb-8">
+              Junte-se ao PagouMorou e encontre seu lar ideal sem burocracia.
+            </p>
+          </motion.div>
+
+          <motion.form variants={itemVariants} onSubmit={handleSubmit} className="space-y-5">
+            <div className="flex p-1 bg-[#F8FAF9] rounded-2xl mb-6">
+              <button
+                type="button"
+                onClick={() => setUserType("inquilino")}
+                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${
+                  userType === "inquilino" 
+                    ? "bg-white text-[#0F9B4D] shadow-sm" 
+                    : "text-[#667085] hover:text-[#101828]"
+                }`}
+              >
+                Sou Inquilino
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType("proprietario")}
+                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${
+                  userType === "proprietario" 
+                    ? "bg-white text-[#0F9B4D] shadow-sm" 
+                    : "text-[#667085] hover:text-[#101828]"
+                }`}
+              >
+                Sou Proprietário
+              </button>
+            </div>
+
+            <Field label="Nome completo" id="name">
+              <div className="relative">
+                <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-[#0F9B4D]">
+                  <User size={21} />
+                </div>
+                <Input id="name" placeholder="Seu nome completo" className="pl-[54px]" required />
+              </div>
+            </Field>
+
+            <Field label="E-mail" id="email">
+              <div className="relative">
+                <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-[#0F9B4D]">
+                  <Mail size={21} />
+                </div>
+                <Input id="email" type="email" placeholder="seu@email.com" className="pl-[54px]" required />
+              </div>
+            </Field>
+
+            <Field label="Senha" id="password">
+              <PasswordInput id="password" placeholder="Mínimo 8 caracteres" required />
+            </Field>
+
+            <Button 
+              type="submit" 
+              className="w-full h-[62px] rounded-[14px] bg-gradient-to-r from-[#0A8F43] to-[#11A84F] text-white text-[17px] font-semibold gap-[14px] shadow-[0_12px_30px_rgba(11,135,63,0.18)] hover:shadow-[0_16px_34px_rgba(11,135,63,0.24)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all mt-4"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Spinner className="text-white" />
+                  <span>Criando conta...</span>
+                </>
+              ) : (
+                <>
+                  <span>Explorar meu próximo lar</span>
+                  <ArrowRight size={20} />
+                </>
+              )}
+            </Button>
+
+            <div className="relative py-4 flex items-center gap-4">
+              <div className="flex-1 h-px bg-[#E4E7EC]" />
+              <span className="text-[14px] text-[#667085]">ou</span>
+              <div className="flex-1 h-px bg-[#E4E7EC]" />
+            </div>
+
+            <Button 
+              type="button"
+              variant="outline"
+              className="w-full h-[60px] rounded-[14px] border-[#D9DEE7] bg-white text-[#101828] text-[16px] font-medium hover:bg-[#F9FAFB] transition-all"
+            >
+              <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-3" />
+              Continuar com Google
+            </Button>
+
+            <p className="text-center text-[15px] text-[#667085] mt-6">
+              Já possui uma conta?{" "}
+              <Link to="/entrar" className="text-[#0B873F] font-semibold underline underline-offset-4">
+                Fazer login
+              </Link>
+            </p>
+          </motion.form>
         </motion.div>
       </div>
 
-      {/* Lado Esquerdo - Formulário */}
-      <div className="flex-1 flex flex-col p-6 md:p-12 lg:p-20 justify-center">
-        <div className="max-w-md w-full mx-auto">
-          <motion.div variants={slideUp} initial="initial" animate="animate">
-            <Link 
-              to="/" 
-              className="inline-flex items-center text-sm text-secondary-text hover:text-primary transition-colors mb-8 group"
-            >
-              <ChevronLeft className="w-4 h-4 mr-1 transition-transform group-hover:-translate-x-1" />
-              Voltar para o início
-            </Link>
-
-            <div className="md:hidden mb-8 flex items-start justify-center">
-               <Logo size="md" />
-            </div>
-
-            <h1 className="text-3xl font-display font-bold text-text mb-2">Criar conta</h1>
-            <p className="text-secondary-text mb-8">
-              Escolha como você quer começar no PagouMorou.
-            </p>
-
-            <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <Button variant="outline" className="h-20 flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary-soft">
-                  <span className="font-bold">Sou Inquilino</span>
-                  <span className="text-xs text-secondary-text">Quero alugar</span>
-                </Button>
-                <Button variant="outline" className="h-20 flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary-soft">
-                  <span className="font-bold">Sou Proprietário</span>
-                  <span className="text-xs text-secondary-text">Quero anunciar</span>
-                </Button>
+      {/* Coluna Direita (que fica na esquerda no Desktop) - Imagem do imóvel */}
+      <div className="relative w-full md:w-[58%] h-[320px] md:h-screen overflow-hidden order-1 md:order-2">
+        <motion.img 
+          src={apartmentAsset.url} 
+          alt="Apartamento moderno em São Paulo" 
+          className="w-full h-full object-cover object-center"
+          initial={{ scale: 1.035 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.8, ease: "easeOut" }}
+        />
+        
+        <div className="hidden md:block">
+          <motion.div 
+            className="absolute left-[6%] bottom-[8%] w-[min(420px,46%)] p-8 rounded-[28px] bg-white/78 backdrop-blur-[20px] border border-white/65 shadow-[0_24px_60px_rgba(17,24,39,0.16)]"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: 1, 
+              y: [0, -4, 0],
+            }}
+            transition={{ 
+              opacity: { duration: 0.8, delay: 0.5 },
+              y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+            }}
+          >
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="text-[#0F9B4D]" size={20} />
+                <span className="text-[20px] font-bold text-[#101828]">Vila Mariana</span>
+              </div>
+              
+              <div className="text-[17px] text-[#475467]">
+                Apartamento • 2 dormitórios
               </div>
 
-              <Field label="Nome Completo" id="name">
-                <Input id="name" placeholder="Seu nome" className="h-12 px-4" />
-              </Field>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[38px] font-bold text-[#087A3B]">R$ 3.250</span>
+                <span className="text-[18px] font-medium text-[#344054]">/ mês</span>
+              </div>
 
-              <Field label="E-mail" id="email">
-                <Input id="email" type="email" placeholder="seu@email.com" className="h-12 px-4" />
-              </Field>
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={19} className="fill-[#FFC800] text-[#FFC800]" />
+                ))}
+              </div>
 
-              <Field label="Senha" id="password">
-                <PasswordInput id="password" placeholder="Mínimo 8 caracteres" className="h-12 px-4" />
-              </Field>
-
-              <p className="text-xs text-secondary-text mt-4">
-                Ao criar uma conta, você concorda com nossos{" "}
-                <Link to="/" className="text-primary hover:underline">Termos de Uso</Link> e{" "}
-                <Link to="/" className="text-primary hover:underline">Política de Privacidade</Link>.
-              </p>
-
-              <Button type="submit" className="w-full h-14 text-lg font-bold mt-4" size="lg">
-                Criar minha conta
-              </Button>
-            </form>
-
-            <div className="mt-6 md:mt-8 text-center text-secondary-text">
-              Já tem uma conta?{" "}
-              <Link to="/entrar" className="text-primary font-bold hover:underline">
-                Faça login
-              </Link>
+              <div className="flex items-center gap-2 pt-2 border-t border-black/5">
+                <TrendingUp size={14} className="text-[#0B873F]" />
+                <span className="text-[14px] font-semibold text-[#0B873F]">Muito procurado nesta semana</span>
+              </div>
             </div>
           </motion.div>
         </div>
