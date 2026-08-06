@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
+import { calculateTenantScore, calculateOwnerScore, getScoreColor, getScoreLabel } from "@/lib/score";
 import { ShieldCheck, TrendingUp, AlertTriangle } from "lucide-react";
 import { useEffect, useState, ChangeEvent } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
@@ -123,6 +123,7 @@ function PerfilPage() {
   };
 
   const tenantScore = calculateTenantScore(mockUserForScore as any);
+  const ownerScore = calculateOwnerScore(mockUserForScore as any, myApartments);
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -280,6 +281,32 @@ function PerfilPage() {
                   </div>
                 </div>
               )}
+
+              {isOwner && (
+                <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-caption font-bold text-text-secondary">Owner Score</span>
+                    <ShieldCheck className={cn("size-5", getScoreColor(ownerScore))} />
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <p className={cn("text-3xl font-bold", getScoreColor(ownerScore))}>{ownerScore}</p>
+                    <span className="text-xs font-medium text-text-secondary">/ 1000</span>
+                  </div>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                    Reputação {getScoreLabel(ownerScore)}
+                  </p>
+                  <div className="absolute bottom-0 left-0 h-1 bg-surface-secondary w-full">
+                    <div 
+                      className={cn("h-full transition-all duration-1000", 
+                        ownerScore >= 800 ? "bg-success" : 
+                        ownerScore >= 600 ? "bg-primary" : 
+                        ownerScore >= 400 ? "bg-warning" : "bg-danger"
+                      )}
+                      style={{ width: `${(ownerScore / 1000) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
               
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">
@@ -300,6 +327,60 @@ function PerfilPage() {
                 </div>
               )}
             </div>
+
+            {isOwner && (
+              <Card className="border-border overflow-hidden">
+                <CardHeader className="bg-surface-secondary/30 pb-4">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="size-5 text-primary" />
+                    <CardTitle className="text-lg">Dicas para seu Owner Score</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Anúncios completos e respostas rápidas atraem inquilinos melhores e aumentam sua visibilidade.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <Camera className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Capriche nas fotos</p>
+                        <p className="text-xs text-text-secondary">Anúncios com 5+ fotos de alta qualidade têm 3x mais propostas.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-primary/10 p-1.5 text-primary">
+                        <FileText className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Descrição completa</p>
+                        <p className="text-xs text-text-secondary">Inclua pontos de interesse, detalhes dos cômodos e itens da mobília.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-info/10 p-1.5 text-info">
+                        <Clock className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Rapidez é fundamental</p>
+                        <p className="text-xs text-text-secondary">Responda chats e revise propostas em menos de 24h.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <Verified className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Documentação em dia</p>
+                        <p className="text-xs text-text-secondary">Proprietários verificados transmitem mais confiança e segurança.</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {isTenant && (
               <Card className="border-border overflow-hidden">
