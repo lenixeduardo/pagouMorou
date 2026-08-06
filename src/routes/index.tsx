@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, FileSignature, Search, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
