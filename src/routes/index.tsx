@@ -3,6 +3,7 @@ import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import footerAsset from "@/assets/footer.asset.json";
+import { FAQSection } from "@/components/sections/faq-section";
 
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
