@@ -20,13 +20,13 @@ export const Route = createFileRoute("/favoritos")({
       {
         name: "description",
         content:
-          "Visualize seus imóveis favoritos no PagouMorou. Compare opções e escolha seu próximo endereço com facilidade.",
+          "Veja os imóveis que você favoritou no PagouMorou, compare preço, bairro e distância do metrô e escolha seu próximo endereço com tranquilidade.",
       },
       { property: "og:title", content: "Meus favoritos | PagouMorou" },
       {
         property: "og:description",
         content:
-          "Visualize seus imóveis favoritos no PagouMorou. Compare opções e escolha seu próximo endereço com facilidade.",
+          "Veja os imóveis que você favoritou no PagouMorou, compare preço, bairro e distância do metrô e escolha seu próximo endereço com tranquilidade.",
       },
     ],
   }),

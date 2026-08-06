@@ -50,7 +50,13 @@ export const Route = createFileRoute("/perfil")({
       {
         name: "description",
         content:
-          "Gerencie seu perfil, anúncios e propostas no PagouMorou. Tudo o que você precisa para sua locação em um só lugar.",
+          "Gerencie seu perfil, anúncios, propostas e score de reputação no PagouMorou. Tudo o que você precisa para alugar ou anunciar em um só lugar.",
+      },
+      { property: "og:title", content: "Meu Perfil | PagouMorou" },
+      {
+        property: "og:description",
+        content:
+          "Gerencie seu perfil, anúncios, propostas e score de reputação no PagouMorou. Tudo o que você precisa para alugar ou anunciar em um só lugar.",
       },
     ],
   }),

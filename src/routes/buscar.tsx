@@ -14,12 +14,18 @@ import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 export const Route = createFileRoute("/buscar")({
   head: () => ({
-    title: "Explorar Imóveis | PagouMorou",
     meta: [
+      { title: "Explorar Imóveis para Alugar | PagouMorou" },
       {
         name: "description",
         content:
-          "Busque seu próximo lar entre os melhores imóveis selecionados no PagouMorou. Aluguel direto, seguro e digital.",
+          "Busque seu próximo lar entre os imóveis selecionados do PagouMorou: filtre por bairro, preço e metrô e negocie direto com o proprietário, sem burocracia.",
+      },
+      { property: "og:title", content: "Explorar Imóveis para Alugar | PagouMorou" },
+      {
+        property: "og:description",
+        content:
+          "Busque seu próximo lar entre os imóveis selecionados do PagouMorou: filtre por bairro, preço e metrô e negocie direto com o proprietário, sem burocracia.",
       },
     ],
   }),

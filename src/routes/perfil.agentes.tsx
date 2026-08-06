@@ -18,6 +18,12 @@ export const Route = createFileRoute("/perfil/agentes")({
         content:
           "Gerencie conexões seguras para agentes de IA no PagouMorou. Use o protocolo MCP para automatizar sua gestão imobiliária.",
       },
+      { property: "og:title", content: "Integrações de Agentes | PagouMorou" },
+      {
+        property: "og:description",
+        content:
+          "Gerencie conexões seguras para agentes de IA no PagouMorou. Use o protocolo MCP para automatizar sua gestão imobiliária.",
+      },
     ],
   }),
   component: AgentIntegrationsPage,

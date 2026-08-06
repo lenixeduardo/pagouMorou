@@ -41,6 +41,12 @@ export const Route = createFileRoute("/anunciar")({
         content:
           "Publique seu anúncio no PagouMorou e alugue seu imóvel rapidamente. Conectamos você aos melhores inquilinos sem burocracia.",
       },
+      { property: "og:title", content: "Anunciar Imóvel | PagouMorou" },
+      {
+        property: "og:description",
+        content:
+          "Publique seu anúncio no PagouMorou e alugue seu imóvel rapidamente. Conectamos você aos melhores inquilinos sem burocracia.",
+      },
     ],
   }),
   component: AnunciarPage,

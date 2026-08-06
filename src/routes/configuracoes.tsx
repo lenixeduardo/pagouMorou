@@ -24,11 +24,17 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/configuracoes")({
   head: () => ({
     meta: [
-      { title: "Configurações | PagouMorou" },
+      { title: "Configurações da Conta | PagouMorou" },
       {
         name: "description",
         content:
-          "Ajuste suas preferências de conta, segurança e notificações no PagouMorou para uma experiência personalizada.",
+          "Ajuste suas preferências de conta, dados pessoais, segurança e notificações no PagouMorou e deixe sua experiência de locação totalmente personalizada.",
+      },
+      { property: "og:title", content: "Configurações da Conta | PagouMorou" },
+      {
+        property: "og:description",
+        content:
+          "Ajuste suas preferências de conta, dados pessoais, segurança e notificações no PagouMorou e deixe sua experiência de locação totalmente personalizada.",
       },
     ],
   }),
