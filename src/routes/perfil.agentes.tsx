@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useAuthStore } from "@/hooks/use-auth";
 import { Bot, Key, Shield, Plus, Info, ExternalLink, ChevronLeft } from "lucide-react";
 import { Page } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
@@ -18,6 +20,16 @@ export const Route = createFileRoute("/perfil/agentes")({
 });
 
 function AgentIntegrationsPage() {
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate({ to: "/entrar" });
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) return null;
   return (
     <Page 
       className="pb-20 pt-10"

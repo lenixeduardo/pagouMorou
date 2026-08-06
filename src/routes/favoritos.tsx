@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useAuthStore } from "@/hooks/use-auth";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/use-favorites";
 import { apartments } from "@/mock";
@@ -22,6 +24,17 @@ export const Route = createFileRoute("/favoritos")({
 });
 
 function FavoritosPage() {
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate({ to: "/entrar" });
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) return null;
+
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const favoriteApartments = apartments.filter((apt) => favorites.includes(apt.id));
 
