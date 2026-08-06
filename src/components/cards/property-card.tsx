@@ -62,6 +62,15 @@ export function PropertyCard({
         >
           {statusLabel[apartment.status]}
         </Badge>
+        {apartment.rating >= 4.8 && (
+          <Badge
+            variant="default"
+            className="absolute left-3 top-10 rounded-full bg-amber-500 text-white border-none shadow-sm flex items-center gap-1 py-0.5"
+          >
+            <Star className="size-3 fill-white" />
+            Top Proprietário
+          </Badge>
+        )}
         {onToggleFavorite ? (
           <button
             type="button"

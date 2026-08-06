@@ -22,7 +22,8 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  Plus
+  Plus,
+  Star
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -172,6 +173,12 @@ function PerfilPage() {
                   <h2 className="text-xl font-bold">{user?.name}</h2>
                   {currentUser.verified && (
                     <Verified className="size-5 fill-primary text-white" />
+                  )}
+                  {isOwner && ownerScore >= 800 && (
+                    <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200 flex items-center gap-1">
+                      <Star className="size-3 fill-amber-700" />
+                      Top Proprietário
+                    </Badge>
                   )}
                 </div>
                 <p className="text-sm text-text-secondary">{user?.email}</p>
