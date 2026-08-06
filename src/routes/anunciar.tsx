@@ -8,8 +8,7 @@ import {
   Info, 
   CheckCircle2,
   Camera,
-  Coins,
-  FileText
+  Coins
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -128,9 +127,9 @@ function AnunciarPage() {
                 className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
               >
                 <div className="grid gap-6 md:grid-cols-2">
-                  <Field label="Tipo de imóvel" required>
+                  <Field id="type" label="Tipo de imóvel" required>
                     <Select defaultValue="apartamento">
-                      <SelectTrigger className="h-12 rounded-xl">
+                      <SelectTrigger id="type" className="h-12 rounded-xl">
                         <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
                       <SelectContent>
@@ -142,9 +141,9 @@ function AnunciarPage() {
                     </Select>
                   </Field>
 
-                  <Field label="Quartos" required>
+                  <Field id="rooms" label="Quartos" required>
                     <Select defaultValue="1">
-                      <SelectTrigger className="h-12 rounded-xl">
+                      <SelectTrigger id="rooms" className="h-12 rounded-xl">
                         <SelectValue placeholder="Qtd. quartos" />
                       </SelectTrigger>
                       <SelectContent>
@@ -157,15 +156,17 @@ function AnunciarPage() {
                   </Field>
                 </div>
 
-                <Field label="Título do anúncio" description="Destaque o que seu imóvel tem de melhor." required>
+                <Field id="title" label="Título do anúncio" hint="Destaque o que seu imóvel tem de melhor." required>
                   <Input 
+                    id="title"
                     placeholder="Ex: Apartamento ensolarado perto do metrô" 
                     className="h-12 rounded-xl"
                   />
                 </Field>
 
-                <Field label="Descrição detalhada" required>
+                <Field id="description" label="Descrição detalhada" required>
                   <Textarea 
+                    id="description"
                     placeholder="Fale sobre o imóvel, condomínio e região..." 
                     className="min-h-[150px] rounded-xl"
                   />
@@ -174,19 +175,19 @@ function AnunciarPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center space-x-2">
                     <Checkbox id="pet" />
-                    <label htmlFor="pet" className="text-sm font-medium leading-none">Aceita pets</label>
+                    <label htmlFor="pet" className="text-sm font-medium leading-none cursor-pointer">Aceita pets</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="parking" />
-                    <label htmlFor="parking" className="text-sm font-medium leading-none">Vaga de garagem</label>
+                    <label htmlFor="parking" className="text-sm font-medium leading-none cursor-pointer">Vaga de garagem</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="furnished" />
-                    <label htmlFor="furnished" className="text-sm font-medium leading-none">Mobiliado</label>
+                    <label htmlFor="furnished" className="text-sm font-medium leading-none cursor-pointer">Mobiliado</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="pool" />
-                    <label htmlFor="pool" className="text-sm font-medium leading-none">Piscina</label>
+                    <label htmlFor="pool" className="text-sm font-medium leading-none cursor-pointer">Piscina</label>
                   </div>
                 </div>
               </motion.div>
@@ -203,32 +204,32 @@ function AnunciarPage() {
               >
                 <div className="grid gap-6 md:grid-cols-3">
                   <div className="md:col-span-1">
-                    <Field label="CEP" required>
-                      <Input placeholder="00000-000" className="h-12 rounded-xl" />
+                    <Field id="zip" label="CEP" required>
+                      <Input id="zip" placeholder="00000-000" className="h-12 rounded-xl" />
                     </Field>
                   </div>
                   <div className="md:col-span-2">
-                    <Field label="Endereço" required>
-                      <Input placeholder="Rua, Avenida, etc." className="h-12 rounded-xl" />
+                    <Field id="address" label="Endereço" required>
+                      <Input id="address" placeholder="Rua, Avenida, etc." className="h-12 rounded-xl" />
                     </Field>
                   </div>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                  <Field label="Bairro" required>
-                    <Input placeholder="Ex: Pinheiros" className="h-12 rounded-xl" />
+                  <Field id="neighborhood" label="Bairro" required>
+                    <Input id="neighborhood" placeholder="Ex: Pinheiros" className="h-12 rounded-xl" />
                   </Field>
-                  <Field label="Cidade" required>
-                    <Input placeholder="Ex: São Paulo" className="h-12 rounded-xl" />
+                  <Field id="city" label="Cidade" required>
+                    <Input id="city" placeholder="Ex: São Paulo" className="h-12 rounded-xl" />
                   </Field>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                  <Field label="Número" required>
-                    <Input placeholder="123" className="h-12 rounded-xl" />
+                  <Field id="number" label="Número" required>
+                    <Input id="number" placeholder="123" className="h-12 rounded-xl" />
                   </Field>
-                  <Field label="Complemento">
-                    <Input placeholder="Apto 42, Bloco B" className="h-12 rounded-xl" />
+                  <Field id="complement" label="Complemento">
+                    <Input id="complement" placeholder="Apto 42, Bloco B" className="h-12 rounded-xl" />
                   </Field>
                 </div>
               </motion.div>
@@ -279,31 +280,31 @@ function AnunciarPage() {
                 className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
               >
                 <div className="grid gap-6 md:grid-cols-2">
-                  <Field label="Aluguel mensal" required>
+                  <Field id="rent" label="Aluguel mensal" required>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
-                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                      <Input id="rent" placeholder="0,00" className="h-12 rounded-xl pl-12" />
                     </div>
                   </Field>
-                  <Field label="Condomínio" required>
+                  <Field id="condo" label="Condomínio" required>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
-                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                      <Input id="condo" placeholder="0,00" className="h-12 rounded-xl pl-12" />
                     </div>
                   </Field>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                  <Field label="IPTU (Mensal)" required>
+                  <Field id="iptu" label="IPTU (Mensal)" required>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
-                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                      <Input id="iptu" placeholder="0,00" className="h-12 rounded-xl pl-12" />
                     </div>
                   </Field>
-                  <Field label="Seguro Incêndio (Estimado)">
+                  <Field id="insurance" label="Seguro Incêndio (Estimado)">
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
-                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" readOnly />
+                      <Input id="insurance" placeholder="0,00" className="h-12 rounded-xl pl-12" readOnly />
                     </div>
                   </Field>
                 </div>
