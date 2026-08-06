@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useAuthStore } from "@/hooks/use-auth";
 import { 
   UserCircle, 
   Settings, 
@@ -36,9 +38,20 @@ export const Route = createFileRoute("/perfil")({
 });
 
 function PerfilPage() {
+  const { isAuthenticated, user, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate({ to: "/entrar" });
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) return null;
+
   // Simula os imóveis do usuário (se for proprietário)
   const userProperties = apartments.slice(0, 2);
-  const isOwner = true;
+  const isOwner = user?.type === 'proprietario';
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -60,15 +73,15 @@ function PerfilPage() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="mt-4 flex items-center gap-1.5">
-                  <h2 className="text-xl font-bold">{currentUser.name}</h2>
+                  <h2 className="text-xl font-bold">{user?.name}</h2>
                   {currentUser.verified && (
                     <Verified className="size-5 fill-primary text-white" />
                   )}
                 </div>
-                <p className="text-sm text-text-secondary">{currentUser.email}</p>
+                <p className="text-sm text-text-secondary">{user?.email}</p>
                 
                 <Badge variant="secondary" className="mt-4 rounded-full px-4 py-1">
-                  {currentUser.role === 'owner' ? 'Proprietário' : 'Inquilino'}
+                  {user?.type === 'proprietario' ? 'Proprietário' : 'Inquilino'}
                 </Badge>
               </div>
 
@@ -128,7 +141,10 @@ function PerfilPage() {
                 <ChevronRight className="size-4" />
               </button>
               <div className="my-2 h-px bg-border mx-2" />
-              <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-danger transition-all hover:bg-danger/5">
+              <button 
+                onClick={() => logout()}
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-danger transition-all hover:bg-danger/5 text-left"
+              >
                 <LogOut className="size-5" />
                 Sair da conta
               </button>

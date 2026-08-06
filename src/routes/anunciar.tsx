@@ -10,7 +10,9 @@ import {
   Camera,
   Coins
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useAuthStore } from "@/hooks/use-auth";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Page } from "@/components/layout/page";
@@ -47,8 +49,18 @@ const STEPS = [
 ];
 
 function AnunciarPage() {
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate({ to: "/entrar" });
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) return null;
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, STEPS.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
