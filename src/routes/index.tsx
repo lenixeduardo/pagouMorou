@@ -11,7 +11,8 @@ import { Page } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/forms/search-input";
 import { apartments, neighborhoods } from "@/mock";
-import { container, fadeIn, stagger } from "@/lib/motion";
+import { ViktorHero } from "@/components/motionsites/ViktorHero";
+import { container } from "@/lib/motion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,72 +42,8 @@ function HomePage() {
 
   return (
     <Page fullWidth className="bg-background pb-20 pt-0" component="main">
-      {/* Hero / Search Section */}
-      <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[60vh]">
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
-          <div className="grid h-full w-full grid-cols-6 grid-rows-6 opacity-20">
-            {Array.from({ length: 36 }).map((_, i) => (
-              <div key={i} className="border-[0.5px] border-white/30" />
-            ))}
-          </div>
-        </div>
-
-        <motion.div
-          variants={stagger}
-          initial="initial"
-          animate="animate"
-          className="container relative z-10 mx-auto max-w-4xl"
-        >
-          <motion.h1
-            variants={fadeIn}
-            className="mb-6 text-display font-bold tracking-tight text-white"
-          >
-            Alugou. Pagou. Morou.
-          </motion.h1>
-          <motion.p
-            variants={fadeIn}
-            className="mx-auto mb-10 max-w-2xl text-xl text-white/80"
-          >
-            Encontre o seu próximo lar em minutos. Negociação direta, contrato digital e zero burocracia.
-          </motion.p>
-
-          <motion.div
-            variants={fadeIn}
-            className="mx-auto max-w-2xl rounded-3xl bg-card p-2 shadow-2xl ring-1 ring-border"
-          >
-            <div className="flex flex-col gap-2 md:flex-row">
-              <div className="relative flex-1">
-                <SearchInput 
-                  placeholder="Onde você quer morar?" 
-                  className="h-14 border-none bg-transparent pl-12 text-foreground focus-visible:ring-0"
-                  onFocus={() => window.location.href = '/buscar'}
-                />
-              </div>
-              <Button size="lg" className="h-14 px-8 text-lg font-medium md:w-auto" asChild>
-                <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
-                  Buscar
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={fadeIn}
-            className="mt-8 flex flex-wrap justify-center gap-4 text-sm font-medium text-white/80"
-          >
-            <span className="flex items-center gap-1.5">
-              <Sparkles className="size-4" /> Sem fiador
-            </span>
-            <span className="flex items-center gap-1.5">
-              <FileSignature className="size-4" /> Contrato Digital
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Building2 className="size-4" /> Direto com Dono
-            </span>
-          </motion.div>
-        </motion.div>
-      </section>
+      {/* Hero Section - Viktor Oddy Style */}
+      <ViktorHero />
 
       <div className="container mx-auto mt-16 px-6">
         {/* Featured Section */}
