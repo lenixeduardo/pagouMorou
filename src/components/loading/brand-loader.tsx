@@ -1,7 +1,34 @@
-import { motion } from "framer-motion";
-import { Key, Home, DoorOpen } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Search, MapPin, Building2, Home, Trees, Train, 
+  KeyRound, Wallet, ShieldCheck, BadgeCheck, Camera, 
+  Store, School, Car, HeartHandshake, Sparkles 
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 import logoData from "@/assets/logo.asset.json";
+
+const LOADING_MESSAGES = [
+  { text: "Buscando imóveis disponíveis para você...", icon: Search },
+  { text: "Encontrando bairros que combinam com seu estilo de vida...", icon: MapPin },
+  { text: "Verificando proximidade com estações de metrô e transporte...", icon: Train },
+  { text: "Procurando imóveis próximos a mercados, farmácias e serviços...", icon: Store },
+  { text: "Avaliando qualidade da região e áreas verdes...", icon: Trees },
+  { text: "Comparando imóveis dentro do seu orçamento...", icon: Wallet },
+  { text: "Verificando disponibilidade dos imóveis...", icon: KeyRound },
+  { text: "Carregando fotos de alta qualidade...", icon: Camera },
+  { text: "Selecionando os melhores anúncios...", icon: BadgeCheck },
+  { text: "Comparando custo-benefício entre as opções...", icon: Building2 },
+  { text: "Calculando tempo até seu trabalho...", icon: Car },
+  { text: "Encontrando apartamentos prontos para morar...", icon: Home },
+  { text: "Buscando casas em condomínios seguros...", icon: ShieldCheck },
+  { text: "Localizando imóveis próximos a escolas...", icon: School },
+  { text: "Descobrindo bairros com boa infraestrutura...", icon: Building2 },
+  { text: "Verificando facilidade de acesso e mobilidade...", icon: Car },
+  { text: "Encontrando um lugar que você vai chamar de lar...", icon: HeartHandshake },
+  { text: "Quase lá! Preparando as melhores opções para você...", icon: Sparkles },
+];
 
 interface BrandLoaderProps {
   className?: string;
@@ -9,6 +36,18 @@ interface BrandLoaderProps {
 }
 
 export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentMessage = LOADING_MESSAGES[currentIndex] || LOADING_MESSAGES[0];
+  const Icon = currentMessage.icon;
+
   if (isSplash) {
     return (
       <motion.div 
@@ -18,7 +57,6 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
         className={cn("fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white", className)}
       >
         <div className="relative mb-12 flex items-center justify-center">
-          {/* Logo with swinging key effect */}
           <motion.div
             initial={{ rotate: -5 }}
             animate={{ rotate: 5 }}
@@ -39,7 +77,7 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
                 repeatType: "reverse",
                 ease: "easeInOut"
               }}
-              className="flex size-32 items-center justify-center rounded-3xl bg-white shadow-xl"
+              className="flex size-32 items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50"
             >
               <img 
                 src={logoData.url} 
@@ -50,76 +88,98 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
           </motion.div>
         </div>
 
-        {/* Cinematic Counter */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-0.5 w-48 overflow-hidden rounded-full bg-surface-secondary">
+        <div className="max-w-[480px] w-full px-8 flex flex-col items-center gap-6">
+          <AnimatePresence mode="wait">
             <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ 
+                opacity: { duration: 0.3 },
+                y: { duration: 0.3 }
+              }}
+              className="flex flex-col items-center gap-[18px]"
+            >
+              <div className="flex items-center gap-4">
+                <Spinner size={24} className="text-primary" />
+                <motion.div
+                  animate={{ translateY: [0, -2, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Icon className="size-6 text-primary" strokeWidth={1.5} />
+                </motion.div>
+              </div>
+              
+              <div className="text-center space-y-1">
+                <p className="text-neutral-900 font-medium leading-tight">
+                  {currentMessage.text}
+                </p>
+                <p className="text-neutral-500 text-sm">
+                  PagouMorou está trabalhando para você
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="w-full max-w-[240px] h-1 bg-neutral-100 rounded-full overflow-hidden">
+            <motion.div
+              key={`progress-${currentIndex}`}
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 2.5, ease: "easeInOut" }}
+              transition={{ duration: 2.8, ease: "linear" }}
               className="h-full bg-primary"
             />
           </div>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="font-mono text-xs tracking-widest text-text-secondary"
-          >
-            PAGOU MOROU — CINEMATIC EXPERIENCE
-          </motion.div>
         </div>
       </motion.div>
     );
   }
 
-  const iconVariants = {
-    initial: { scale: 0, opacity: 0, y: 10 },
-    animate: (i: number) => ({
-      scale: 1,
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.4,
-        duration: 0.6,
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        repeatDelay: 0.8
-      }
-    })
-  };
-
-  const icons = [
-    { icon: Key, color: "text-amber-500" },
-    { icon: Home, color: "text-primary" },
-    { icon: DoorOpen, color: "text-blue-600" }
-  ];
-
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-6", className)}>
-      <div className="flex items-center gap-8">
-        {icons.map(({ icon: Icon, color }, i) => (
-          <motion.div
-            key={i}
-            custom={i}
-            variants={iconVariants}
-            initial="initial"
-            animate="animate"
-            className={cn("p-4 rounded-2xl bg-surface-secondary shadow-sm", color)}
-          >
-            <Icon className="size-10" strokeWidth={1.5} />
-          </motion.div>
-        ))}
-      </div>
-      
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="text-label text-text-secondary tracking-widest uppercase"
-      >
-        Carregando PagouMorou...
-      </motion.div>
+    <div className={cn("flex flex-col items-center justify-center max-w-[480px] mx-auto p-8 text-center bg-transparent", className)}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ 
+            opacity: { duration: 0.3 },
+            y: { duration: 0.3 }
+          }}
+          className="flex flex-col items-center gap-[18px] w-full"
+        >
+          <div className="flex items-center gap-4 justify-center">
+            <Spinner size={24} className="text-primary" />
+            <motion.div
+              animate={{ translateY: [0, -2, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Icon className="size-6 text-primary" strokeWidth={1.5} />
+            </motion.div>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-neutral-900 font-medium leading-tight">
+              {currentMessage.text}
+            </p>
+            <p className="text-neutral-500 text-sm">
+              Processando sua solicitação...
+            </p>
+          </div>
+
+          <div className="w-full max-w-[200px] h-1 bg-neutral-100 rounded-full overflow-hidden mt-2 mx-auto">
+            <motion.div
+              key={`progress-inner-${currentIndex}`}
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2.8, ease: "linear" }}
+              className="h-full bg-primary"
+            />
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
-
