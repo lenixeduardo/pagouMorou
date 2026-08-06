@@ -1,13 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { ViktorHero } from "@/components/motionsites/ViktorHero";
 import { PricingCard } from "@/components/motionsites/PricingCard";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
-import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Quote, Sparkles, Building2, FileSignature, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
-import { apartments, neighborhoods } from "@/mock";
+import { apartments } from "@/mock";
 import { container } from "@/lib/motion";
 import footerAsset from "@/assets/footer.asset.json";
 import { FAQSection } from "@/components/sections/faq-section";
@@ -89,8 +89,8 @@ function HomePage() {
               priceLabel="Por Mês"
               dark
             >
-              <Button className="w-full bg-white text-[#051A24] rounded-full hover:bg-slate-100">Começar agora</Button>
-              <Button variant="ghost" className="w-full text-white/70 hover:text-white">Como funciona</Button>
+              <Button className="w-full bg-white text-[#051A24] rounded-full hover:bg-slate-100 font-semibold h-12">Começar agora</Button>
+              <Button variant="ghost" className="w-full text-white/70 hover:text-white h-12">Como funciona</Button>
             </PricingCard>
 
             <PricingCard
@@ -99,7 +99,7 @@ function HomePage() {
               price="R$ 499"
               priceLabel="Mínimo"
             >
-              <Button className="w-full bg-[#051A24] text-white rounded-full hover:bg-[#0D212C]">Solicitar consultoria</Button>
+              <Button className="w-full bg-[#051A24] text-white rounded-full hover:bg-[#0D212C] font-semibold h-12">Solicitar consultoria</Button>
             </PricingCard>
           </div>
         </div>
@@ -134,6 +134,21 @@ function HomePage() {
         </section>
 
         <FAQSection />
+
+        <div className="mt-20 border-t border-border pt-12 mb-12">
+          <div className="flex flex-col items-center justify-center text-center">
+            <div className="mb-4 rounded-full bg-surface-secondary p-4 text-primary">
+              <FileText className="size-8" />
+            </div>
+            <h3 className="text-xl font-bold">Documentação do Projeto</h3>
+            <p className="mt-2 max-w-md text-text-secondary">
+              Acesse o documento descritivo das telas atuais para referências de design e mockups.
+            </p>
+            <Button variant="link" className="mt-2 font-bold text-primary" asChild>
+              <a href="/src/docs/telas_referencia.md" target="_blank">Ver Documentação (Markdown)</a>
+            </Button>
+          </div>
+        </div>
       </div>
       
       {/* Footer Branding Asset */}
@@ -147,4 +162,3 @@ function HomePage() {
     </Page>
   );
 }
-
