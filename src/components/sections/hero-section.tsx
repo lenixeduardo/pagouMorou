@@ -120,64 +120,6 @@ export function HeroSection() {
           </div>
         </div>
       </div>
-
-      {/* Cinematic Image Marquee with animated camera effects */}
-      <div className="w-full mt-16 md:mt-24 mb-12 overflow-hidden bg-white py-4">
-        <div className="flex w-[200%] animate-marquee">
-          <div className="flex w-1/2 justify-around">
-            {propertyImages.map((src, i) => (
-              <div key={i} className="relative h-[280px] md:h-[450px] w-[350px] md:w-[600px] mx-3 rounded-2xl overflow-hidden shadow-xl">
-                <motion.img 
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    x: [0, -20, 0]
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                  src={src} 
-                  alt="" 
-                  className="absolute inset-0 size-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </div>
-            ))}
-          </div>
-          <div className="flex w-1/2 justify-around">
-            {propertyImages.map((src, i) => (
-              <div key={`dup-${i}`} className="relative h-[280px] md:h-[450px] w-[350px] md:w-[600px] mx-3 rounded-2xl overflow-hidden shadow-xl">
-                <motion.img 
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    x: [0, -20, 0]
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                  src={src} 
-                  alt="" 
-                  className="absolute inset-0 size-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          animation: marquee 60s linear infinite;
-        }
-      `}} />
     </section>
   );
 }
