@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { Search, Sparkles, FileSignature, Building2 } from "lucide-react";
+import { Search, Sparkles, FileSignature, Building2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { container, item } from "@/lib/motion";
 
