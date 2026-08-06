@@ -24,7 +24,7 @@ export const Route = createFileRoute("/cadastro")({
 
 function CadastroPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row-reverse">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row-reverse pb-[env(safe-area-inset-bottom)]">
       {/* Lado Direito - Visual/Branding (Invertido no Cadastro) */}
       <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/5 pattern-dots" />
@@ -69,7 +69,7 @@ function CadastroPage() {
               Escolha como você quer começar no PagouMorou.
             </p>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <Button variant="outline" className="h-20 flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary-soft">
                   <span className="font-bold">Sou Inquilino</span>
@@ -104,7 +104,7 @@ function CadastroPage() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center text-secondary-text">
+            <div className="mt-6 md:mt-8 text-center text-secondary-text">
               Já tem uma conta?{" "}
               <Link to="/entrar" className="text-primary font-bold hover:underline">
                 Faça login

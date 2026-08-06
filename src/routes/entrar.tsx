@@ -24,7 +24,7 @@ export const Route = createFileRoute("/entrar")({
 
 function EntrarPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row pb-[env(safe-area-inset-bottom)]">
       {/* Lado Esquerdo - Visual/Branding */}
       <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/5 pattern-grid" />
@@ -69,7 +69,7 @@ function EntrarPage() {
               Insira seus dados para acessar sua conta.
             </p>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4 md:space-y-6" onSubmit={(e) => e.preventDefault()}>
               <Field label="E-mail" id="email">
                 <Input 
                   id="email" 
@@ -102,7 +102,7 @@ function EntrarPage() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center text-secondary-text">
+            <div className="mt-6 md:mt-8 text-center text-secondary-text">
               Ainda não tem uma conta?{" "}
               <Link to="/cadastro" className="text-primary font-bold hover:underline">
                 Crie uma agora
