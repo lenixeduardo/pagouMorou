@@ -8,7 +8,7 @@ interface FavoritesState {
 }
 
 export const useFavorites = create<FavoritesState>()(
-  persist(
+  persist<FavoritesState>(
     (set, get) => ({
       favorites: [],
       toggleFavorite: (id: string) => {
