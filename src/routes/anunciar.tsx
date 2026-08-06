@@ -55,6 +55,34 @@ function AnunciarPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [description, setDescription] = useState("");
+  const [descriptionValidation, setDescriptionValidation] = useState({
+    hasLocation: false,
+    hasPOI: false,
+    hasRooms: false,
+    hasFurnished: false,
+    score: 0
+  });
+
+  useEffect(() => {
+    const desc = description.toLowerCase();
+    const validation = {
+      hasLocation: desc.includes("local") || desc.includes("bairro") || desc.includes("rua") || desc.includes("próximo a"),
+      hasPOI: desc.includes("metrô") || desc.includes("shopping") || desc.includes("parque") || desc.includes("mercado") || desc.includes("escola"),
+      hasRooms: desc.includes("quarto") || desc.includes("suíte") || desc.includes("sala") || desc.includes("cozinha") || desc.includes("banheiro"),
+      hasFurnished: desc.length > 50 && (desc.includes("cama") || desc.includes("sofá") || desc.includes("geladeira") || desc.includes("armário") || desc.includes("mesa")),
+      score: 0
+    };
+
+    let score = 0;
+    if (validation.hasLocation) score += 25;
+    if (validation.hasPOI) score += 25;
+    if (validation.hasRooms) score += 25;
+    if (validation.hasFurnished) score += 25;
+    validation.score = score;
+
+    setDescriptionValidation(validation);
+  }, [description]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -187,9 +215,52 @@ function AnunciarPage() {
                 <Field id="description" label="Descrição detalhada" required>
                   <Textarea 
                     id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     placeholder="Fale sobre o imóvel, condomínio e região..." 
                     className="min-h-[150px] rounded-xl"
                   />
+                  {description.length > 0 && (
+                    <div className="mt-3 space-y-2 rounded-xl bg-surface-secondary/50 p-4 border border-border">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">Qualidade da Descrição</span>
+                        <span className={cn(
+                          "text-xs font-bold px-2 py-0.5 rounded-full",
+                          descriptionValidation.score >= 75 ? "bg-success/10 text-success" : 
+                          descriptionValidation.score >= 50 ? "bg-warning/10 text-warning" : "bg-danger/10 text-danger"
+                        )}>
+                          {descriptionValidation.score}%
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex items-center gap-2">
+                          <div className={cn("size-2 rounded-full", descriptionValidation.hasLocation ? "bg-success" : "bg-border")} />
+                          <span className="text-xs text-text-secondary">Localização</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className={cn("size-2 rounded-full", descriptionValidation.hasPOI ? "bg-success" : "bg-border")} />
+                          <span className="text-xs text-text-secondary">Pontos de interesse</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className={cn("size-2 rounded-full", descriptionValidation.hasRooms ? "bg-success" : "bg-border")} />
+                          <span className="text-xs text-text-secondary">Detalhes dos cômodos</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className={cn("size-2 rounded-full", descriptionValidation.hasFurnished ? "bg-success" : "bg-border")} />
+                          <span className="text-xs text-text-secondary">Itens/Mobília</span>
+                        </div>
+                      </div>
+                      {descriptionValidation.score < 100 && (
+                        <p className="text-[10px] text-text-secondary mt-2 italic">
+                          Dica: Adicione detalhes sobre o {
+                            !descriptionValidation.hasLocation ? "bairro/rua" : 
+                            !descriptionValidation.hasPOI ? "metrô ou comércio próximo" :
+                            !descriptionValidation.hasRooms ? "tamanho dos quartos/sala" : "móveis inclusos"
+                          } para melhorar seu score.
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </Field>
 
                 <div className="grid grid-cols-2 gap-4">
