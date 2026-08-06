@@ -6,8 +6,9 @@ export function useInViewAnimation(threshold = 0.1) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
           setIsInView(true);
           observer.unobserve(entry.target);
         }
