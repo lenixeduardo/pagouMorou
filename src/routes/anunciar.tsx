@@ -66,7 +66,7 @@ function AnunciarPage() {
   const isSuccess = currentStep === STEPS.length;
 
   return (
-    <Page className="pb-20 pt-10">
+    <Page className="pb-20 pt-10" component="main">
       <div className="mx-auto max-w-3xl">
         {!isSuccess && (
           <div className="mb-12">
