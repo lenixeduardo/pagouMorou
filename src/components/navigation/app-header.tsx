@@ -5,6 +5,7 @@ import { Bell, Menu, Plus } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import { SearchInput } from "@/components/forms";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/hooks/use-auth";
 import { primaryNav } from "@/config/navigation";
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { currentUser, notifications } from "@/mock";
 
 export function AppHeader() {
+  const { isAuthenticated, user, logout } = useAuthStore();
   const unread = notifications.filter((n) => !n.read).length;
   const location = useLocation();
   const isAuthPage = location.pathname === "/entrar" || location.pathname === "/cadastro";
@@ -43,7 +45,7 @@ export function AppHeader() {
           {/* "Explorar imóveis" button removed per user request */}
 
           {/* User profile menu and notifications hidden on homepage per request */}
-          {location.pathname !== "/" ? (
+          {isAuthenticated || location.pathname !== "/" ? (
             <>
               <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
                 <Bell aria-hidden />
@@ -68,7 +70,7 @@ export function AppHeader() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-lg">
-                  <DropdownMenuLabel className="text-label">{currentUser.name}</DropdownMenuLabel>
+                  <DropdownMenuLabel className="text-label">{isAuthenticated ? user?.name : currentUser.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/perfil">Meu perfil</Link>
@@ -80,12 +82,20 @@ export function AppHeader() {
                     <Link to="/anunciar">Anunciar imóvel</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/entrar">Entrar</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/cadastro">Criar conta</Link>
-                  </DropdownMenuItem>
+                  {isAuthenticated ? (
+                    <DropdownMenuItem onClick={() => logout()}>
+                      Sair
+                    </DropdownMenuItem>
+                  ) : (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/entrar">Entrar</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/cadastro">Criar conta</Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
