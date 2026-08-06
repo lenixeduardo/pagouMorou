@@ -45,7 +45,7 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const currentMessage = LOADING_MESSAGES[currentIndex];
+  const currentMessage = LOADING_MESSAGES[currentIndex] || LOADING_MESSAGES[0];
   const Icon = currentMessage.icon;
 
   if (isSplash) {
