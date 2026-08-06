@@ -180,6 +180,12 @@ function PerfilPage() {
                       Top Proprietário
                     </Badge>
                   )}
+                  {isTenant && tenantScore >= 800 && (
+                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200 flex items-center gap-1">
+                      <Star className="size-3 fill-emerald-700" />
+                      Top Inquilino
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-sm text-text-secondary">{user?.email}</p>
                 
