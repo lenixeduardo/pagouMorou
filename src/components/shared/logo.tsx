@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import logoData from "@/assets/logo-brand-sheet.png.asset.json";
 
 interface LogoProps {
   className?: string;
@@ -9,18 +8,27 @@ interface LogoProps {
 }
 
 export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) {
+  const sizeClasses = {
+    sm: "text-xl",
+    md: "text-2xl",
+    lg: "text-3xl",
+  };
+
   return (
-    <Link to="/" className={cn("flex items-center gap-2.5", className)} aria-label="PagouMorou">
-      <div className="flex items-center overflow-hidden h-10 w-[200px]">
-        <img 
-          src={logoData.url} 
-          alt="PagouMorou Logo" 
-          className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]"
-        />
-      </div>
+    <Link 
+      to="/" 
+      className={cn("flex flex-col items-start gap-0 group transition-all duration-300", className)} 
+      aria-label="PagouMorou"
+    >
+      <span className={cn(
+        "font-signature text-primary tracking-tight leading-none transition-transform duration-300 group-hover:scale-105", 
+        sizeClasses[size]
+      )}>
+        PagouMorou
+      </span>
       {withSlogan && (
-        <span className="flex flex-col leading-none">
-          <span className="text-caption text-text-secondary mt-1">Alugou. Pagou. Morou.</span>
+        <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-text-secondary mt-1 opacity-80">
+          Alugou. Pagou. Morou.
         </span>
       )}
     </Link>
