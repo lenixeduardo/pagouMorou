@@ -82,7 +82,7 @@ function HomePage() {
                 />
               </div>
               <Button size="lg" className="h-14 px-8 text-lg font-medium md:w-auto" asChild>
-                <Link to="/buscar">
+                <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
                   Buscar
                 </Link>
               </Button>
@@ -137,6 +137,7 @@ function HomePage() {
               <Link
                 key={nb.id}
                 to="/buscar"
+                search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}
                 className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-md"
               >
                 <span className="mb-1 text-title group-hover:text-primary">{nb.name}</span>
@@ -169,7 +170,7 @@ function HomePage() {
 
           <div className="mt-12 text-center">
             <Button size="lg" variant="outline" className="h-12 px-10 font-bold" asChild>
-              <Link to="/buscar">
+              <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
                 Carregar mais imóveis
               </Link>
             </Button>

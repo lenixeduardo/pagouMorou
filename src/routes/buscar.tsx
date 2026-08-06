@@ -117,7 +117,7 @@ function BuscarPage() {
     setLocalQuery("");
   };
 
-  const hasActiveFilters = type !== "Todos" || bedrooms !== null || minPrice > 0 || maxPrice < 20000 || q !== "";
+  const hasActiveFilters = type !== "Todos" || bedrooms !== undefined || minPrice > 0 || maxPrice < 20000 || q !== "";
 
   return (
     <Page fullWidth className="pb-20" component="main">

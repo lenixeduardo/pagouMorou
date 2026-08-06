@@ -35,7 +35,7 @@ function ApartamentoPage() {
           icon={Building2}
           title="Imóvel não encontrado"
           description="O anúncio que você está procurando não existe ou foi removido."
-          action={<Button asChild><Link to="/buscar">Voltar para busca</Link></Button>}
+          action={<Button asChild><Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>Voltar para busca</Link></Button>}
         />
       </Page>
     );
