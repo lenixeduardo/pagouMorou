@@ -40,12 +40,7 @@ export function AppHeader() {
         </div>
 
         <div className="flex items-center gap-2 justify-self-end">
-          <Button size="sm" className="hidden lg:inline-flex bg-primary hover:bg-primary-hover text-white rounded-full px-5" asChild>
-            <Link to="/entrar">
-              Explorar imóveis
-              <Plus className="ml-2 size-4 rotate-45" aria-hidden />
-            </Link>
-          </Button>
+          {/* "Explorar imóveis" button removed per user request */}
 
           {/* User profile menu and notifications hidden on homepage per request */}
           {location.pathname !== "/" ? (

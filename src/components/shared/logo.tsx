@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import logoData from "@/assets/logo.asset.json";
+import logoData from "@/assets/logo-brand-sheet.png.asset.json";
 
 interface LogoProps {
   className?: string;
