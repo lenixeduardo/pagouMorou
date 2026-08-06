@@ -20,6 +20,12 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Env files (secrets) — .env.local etc. already match *.local above,
+# this is belt-and-suspenders so a bare .env is never committed either.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

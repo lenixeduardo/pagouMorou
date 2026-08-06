@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/hooks/use-auth";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/use-favorites";
-import { apartments } from "@/mock";
+import { apartmentsByIdsQueryOptions } from "@/lib/queries/apartments";
 import { PropertyCard } from "@/components/cards/property-card";
 import { motion } from "framer-motion";
 import { container, fadeIn } from "@/lib/motion";
@@ -11,7 +12,6 @@ import { container, fadeIn } from "@/lib/motion";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
 import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
-
 
 export const Route = createFileRoute("/favoritos")({
   head: () => ({
@@ -36,30 +36,25 @@ export const Route = createFileRoute("/favoritos")({
 function FavoritosPage() {
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { data: favoriteApartments = [], isLoading } = useQuery(
+    apartmentsByIdsQueryOptions(favorites),
+  );
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
-      return;
     }
-    
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => {
-      clearTimeout(timer);
-    };
   }, [isAuthenticated, navigate]);
-
-
-
 
   if (!isAuthenticated) return null;
 
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const favoriteApartments = apartments.filter((apt) => favorites.includes(apt.id));
-
   return (
-    <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui." component="main">
+    <Page
+      title="Favoritos"
+      description="Seus apartamentos salvos aparecerão aqui."
+      component="main"
+    >
       {isLoading ? (
         <SkeletonCardGrid count={4} />
       ) : favoriteApartments.length > 0 ? (

@@ -37,6 +37,8 @@ export interface User {
 
 export type ApartmentStatus = "available" | "reserved" | "rented";
 
+export type PropertyType = "apartamento" | "casa" | "studio" | "loft" | "kitnet" | "cobertura";
+
 export interface ApartmentFeatures {
   bedrooms: number;
   bathrooms: number;
@@ -49,9 +51,11 @@ export interface ApartmentFeatures {
 
 export interface Apartment {
   id: ID;
+  slug: string;
   title: string;
   description: string;
   status: ApartmentStatus;
+  propertyType: PropertyType;
   rent: number;
   condoFee: number;
   iptu: number;
@@ -60,6 +64,7 @@ export interface Apartment {
     street: string;
     number: string;
     neighborhoodId: ID;
+    neighborhoodName: string;
     city: string;
     state: string;
     zipCode: string;
@@ -69,6 +74,7 @@ export interface Apartment {
   ownerId: ID;
   rating: number;
   reviewsCount: number;
+  metroDistanceM?: number;
   createdAt: string;
 }
 
