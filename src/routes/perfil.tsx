@@ -36,8 +36,8 @@ export const Route = createFileRoute("/perfil")({
 
 function PerfilPage() {
   // Simula os imóveis do usuário (se for proprietário)
-  const userProperties = apartments.filter(apt => apt.ownerId === currentUser.id || apt.ownerId === 'user-2');
-  const isOwner = currentUser.role === "owner" || userProperties.length > 0;
+  const userProperties = apartments.slice(0, 2);
+  const isOwner = true;
 
   return (
     <Page className="pb-20 pt-10">
