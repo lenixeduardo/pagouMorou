@@ -185,7 +185,7 @@ function EntrarPage() {
       </div>
 
       {/* Coluna Direita - Imagem do imóvel (58%) */}
-      <div className="relative w-full md:w-[58%] h-[320px] md:h-screen overflow-hidden order-1 md:order-2">
+      <div className="relative w-full md:w-[58%] h-screen overflow-hidden order-1 md:order-2">
         <motion.img 
           src={apartmentAsset.url} 
           alt="Apartamento moderno em São Paulo" 
