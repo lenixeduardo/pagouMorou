@@ -78,7 +78,7 @@ export function AppHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" aria-label="km">
+              <Button variant="outline" size="icon" aria-label="ok">
                 <Avatar className="size-7">
                   <AvatarFallback className="text-caption">
                     {currentUser.name.slice(0, 1)}
