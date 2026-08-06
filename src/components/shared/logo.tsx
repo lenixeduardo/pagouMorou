@@ -26,8 +26,7 @@ export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) 
           />
         </div>
         <span 
-          style={{ fontFamily: "'PP Mondwest', serif" }}
-          className="text-2xl font-bold tracking-tight text-[#051A24]"
+          className="text-2xl font-bold tracking-tight text-primary"
         >
           PagouMorou
         </span>
