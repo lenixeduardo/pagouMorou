@@ -43,27 +43,45 @@ function HomePage() {
         {/* Why PagouMorou */}
         <section className="mb-24 py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-            <div className="flex flex-col items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center"
+            >
               <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
                 <Building2 className="size-10" />
               </div>
               <h3 className="mb-4 text-2xl font-bold">Direto com Dono</h3>
               <p className="text-text-secondary">Elimine intermediários e negocie as melhores condições diretamente com quem decide.</p>
-            </div>
-            <div className="flex flex-col items-center">
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center"
+            >
               <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
                 <FileSignature className="size-10" />
               </div>
               <h3 className="mb-4 text-2xl font-bold">Contrato Digital</h3>
               <p className="text-text-secondary">Assinatura digital rápida e segura, com validade jurídica e reconhecimento facial.</p>
-            </div>
-            <div className="flex flex-col items-center">
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center"
+            >
               <div className="mb-6 rounded-3xl bg-primary/10 p-6 text-primary">
                 <Sparkles className="size-10" />
               </div>
               <h3 className="mb-4 text-2xl font-bold">Sem Fiador</h3>
               <p className="text-text-secondary">Nossa análise de crédito inteligente substitui a necessidade de fiador ou caução pesada.</p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -113,13 +131,21 @@ function HomePage() {
       </div>
       
       {/* Footer Branding Asset */}
-      <div className="w-full mt-10 overflow-hidden pointer-events-none select-none">
-        <img 
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 0.8, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full mt-10 overflow-hidden pointer-events-none select-none"
+      >
+        <motion.img 
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           src={footerAsset.url} 
           alt="" 
-          className="w-full object-cover max-h-[200px] opacity-80" 
+          className="w-full object-cover max-h-[200px]" 
         />
-      </div>
+      </motion.div>
     </Page>
   );
 }
