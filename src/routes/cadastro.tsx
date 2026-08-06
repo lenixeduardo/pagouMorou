@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/forms/password-input";
 import { Field } from "@/components/forms/field";
 import { fade, slideUp } from "@/lib/motion";
-import logoAsset from "@/assets/logo.asset.json";
+import logoAsset from "@/assets/logo-brand-sheet.png.asset.json";
 
 export const Route = createFileRoute("/cadastro")({
   head: () => ({
