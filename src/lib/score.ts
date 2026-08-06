@@ -4,7 +4,8 @@ import { User, Apartment } from "@/types";
  * Calcula o score do inquilino (0 a 1000) baseado em diversos fatores.
  */
 export function calculateTenantScore(user: Partial<User>): number {
-  let score = 800; // Começamos com uma base neutra/boa
+  let score = 850; // Aumentado a base para inquilinos excelentes atingirem scores mais altos
+
   
   if (!user.scoreFactors) return score;
 
