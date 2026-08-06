@@ -67,7 +67,6 @@ function HomePage() {
           </div>
         </section>
 
-      <div className="container mx-auto mt-16 px-6">
         {/* Featured Section */}
         <section className="mb-20">
           <div className="mb-8 flex items-end justify-between">
