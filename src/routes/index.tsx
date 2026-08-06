@@ -69,7 +69,7 @@ function HomePage() {
 
           <motion.div
             variants={fadeIn}
-            className="mx-auto max-w-2xl rounded-2xl bg-white p-2 shadow-xl ring-1 ring-black/5"
+            className="mx-auto max-w-2xl rounded-3xl bg-card p-2 shadow-2xl ring-1 ring-border"
           >
             <div className="flex flex-col gap-2 md:flex-row">
               <div className="relative flex-1">
