@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnunciarRouteImport } from './routes/anunciar'
 import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
 import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as MensagensRouteImport } from './routes/mensagens'
@@ -38,6 +39,11 @@ const BuscarRoute = BuscarRouteImport.update({
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EntrarRoute = EntrarRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/anunciar': typeof AnunciarRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
+  '/configuracoes': typeof ConfiguracoesRoute
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/anunciar': typeof AnunciarRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
+  '/configuracoes': typeof ConfiguracoesRoute
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/anunciar': typeof AnunciarRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
+  '/configuracoes': typeof ConfiguracoesRoute
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/anunciar'
     | '/buscar'
     | '/cadastro'
+    | '/configuracoes'
     | '/entrar'
     | '/favoritos'
     | '/mensagens'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/anunciar'
     | '/buscar'
     | '/cadastro'
+    | '/configuracoes'
     | '/entrar'
     | '/favoritos'
     | '/mensagens'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/anunciar'
     | '/buscar'
     | '/cadastro'
+    | '/configuracoes'
     | '/entrar'
     | '/favoritos'
     | '/mensagens'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AnunciarRoute: typeof AnunciarRoute
   BuscarRoute: typeof BuscarRoute
   CadastroRoute: typeof CadastroRoute
+  ConfiguracoesRoute: typeof ConfiguracoesRoute
   EntrarRoute: typeof EntrarRoute
   FavoritosRoute: typeof FavoritosRoute
   MensagensRoute: typeof MensagensRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/cadastro'
       fullPath: '/cadastro'
       preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/entrar': {
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnunciarRoute: AnunciarRoute,
   BuscarRoute: BuscarRoute,
   CadastroRoute: CadastroRoute,
+  ConfiguracoesRoute: ConfiguracoesRoute,
   EntrarRoute: EntrarRoute,
   FavoritosRoute: FavoritosRoute,
   MensagensRoute: MensagensRoute,
@@ -259,3 +280,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
