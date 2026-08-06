@@ -6,9 +6,9 @@ import { container, item } from "@/lib/motion";
 
 export function HeroSection() {
   const propertyImages = [
-    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1600585154340-be6199f7d009?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?q=80&w=2070&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1536376074432-8f274fa4265d?q=80&w=2070&auto=format&fit=crop", // Studio moderno
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop", // Apartamento Pinheiros
+    "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?q=80&w=2070&auto=format&fit=crop"  // Loft/Varanda Savassi
   ];
 
   return (
