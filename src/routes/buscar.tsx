@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, Building2, MapPin, Sparkles } from "lucide-react";
@@ -9,6 +9,8 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
+
 
 export const Route = createFileRoute("/buscar")({
   head: () => ({
@@ -24,6 +26,13 @@ function SearchPage() {
   const { toggleFavorite, isFavorite } = useFavorites();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("Todos");
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simular carregamento inicial para mostrar esqueletos
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filters = ["Todos", "Apartamentos", "Casas", "Studios", "Lofts"];
 
@@ -44,6 +53,7 @@ function SearchPage() {
 
   const carousel1 = filteredApartments.slice(0, 5);
   const carousel2 = filteredApartments.slice(5, 10);
+
 
   return (
     <Page fullWidth className="bg-white pb-20 pt-6" component="main">
@@ -111,7 +121,13 @@ function SearchPage() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-            {carousel1.length > 0 ? (
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="min-w-[320px] md:min-w-[380px]">
+                  <SkeletonCardGrid count={1} />
+                </div>
+              ))
+            ) : carousel1.length > 0 ? (
               carousel1.map((apt) => (
                 <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
                   <PropertyCard 
@@ -122,7 +138,7 @@ function SearchPage() {
                 </div>
               ))
             ) : (
-              <p className="text-muted-foreground py-10">Nenhum imóvel encontrado.</p>
+              <p className="text-muted-foreground py-10 px-4">Nenhum imóvel encontrado.</p>
             )}
           </div>
         </section>
@@ -177,7 +193,13 @@ function SearchPage() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-            {carousel2.length > 0 ? (
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="min-w-[320px] md:min-w-[380px]">
+                  <SkeletonCardGrid count={1} />
+                </div>
+              ))
+            ) : carousel2.length > 0 ? (
               carousel2.map((apt) => (
                 <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
                   <PropertyCard 
@@ -188,7 +210,7 @@ function SearchPage() {
                 </div>
               ))
             ) : (
-              <p className="text-muted-foreground py-10">Continue explorando mais bairros.</p>
+              <p className="text-muted-foreground py-10 px-4">Continue explorando mais bairros.</p>
             )}
           </div>
         </section>
