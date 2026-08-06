@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn, stagger as staggerContainer } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useFavorites } from "@/hooks/use-favorites";
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -44,6 +45,7 @@ type PropertyType = "Todos" | "Studio" | "Apartamento";
 type SortOption = "relevance" | "price_asc" | "price_desc";
 
 function BuscarPage() {
+  const { toggleFavorite, isFavorite } = useFavorites();
   const { type, bedrooms, minPrice, maxPrice, sort, q } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -291,7 +293,11 @@ function BuscarPage() {
                 >
                   {filteredApartments.map((apt) => (
                     <motion.div key={apt.id} variants={fadeIn}>
-                      <PropertyCard apartment={apt} />
+                      <PropertyCard 
+                        apartment={apt} 
+                        favorite={isFavorite(apt.id)}
+                        onToggleFavorite={toggleFavorite}
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
