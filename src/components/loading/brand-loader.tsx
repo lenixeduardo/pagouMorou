@@ -77,12 +77,12 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
                 repeatType: "reverse",
                 ease: "easeInOut"
               }}
-              className="flex size-32 items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50"
+              className="flex size-32 items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50 overflow-hidden"
             >
               <img 
                 src={logoData.url} 
                 alt="PagouMorou Logo" 
-                className="size-20 object-contain" 
+                className="h-[280%] object-contain -translate-y-[2%]" 
               />
             </motion.div>
           </motion.div>
