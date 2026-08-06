@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building2, FileSignature, Search, Sparkles } from "lucide-react";
+import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -172,6 +172,22 @@ function HomePage() {
               </Link>
             </Button>
           </div>
+
+          <div className="mt-20 border-t border-border pt-12 mb-12">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="mb-4 rounded-full bg-surface-secondary p-4 text-primary">
+                <FileText className="size-8" />
+              </div>
+              <h3 className="text-xl font-bold">Documentação do Projeto</h3>
+              <p className="mt-2 max-w-md text-text-secondary">
+                Acesse o documento descritivo das telas atuais para referências de design e mockups.
+              </p>
+              <Button variant="link" className="mt-2 font-bold text-primary" asChild>
+                <a href="/src/docs/telas_referencia.md" target="_blank">Ver Documentação (Markdown)</a>
+              </Button>
+            </div>
+          </div>
+
         </section>
       </div>
     </Page>
