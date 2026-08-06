@@ -20,13 +20,13 @@ export const Route = createFileRoute("/entrar")({
       {
         name: "description",
         content:
-          "Acesse sua conta no PagouMorou para gerenciar seus imóveis ou continuar sua busca pelo lar ideal.",
+          "Acesse sua conta no PagouMorou para gerenciar seus anúncios, acompanhar propostas ou continuar a busca pelo lar ideal com negociação direta e sem burocracia.",
       },
       { property: "og:title", content: "Entrar | PagouMorou" },
       {
         property: "og:description",
         content:
-          "Acesse sua conta no PagouMorou para gerenciar seus imóveis ou continuar sua busca pelo lar ideal.",
+          "Acesse sua conta no PagouMorou para gerenciar seus anúncios, acompanhar propostas ou continuar a busca pelo lar ideal com negociação direta e sem burocracia.",
       },
       { property: "og:image", content: apartmentAsset.url },
       { name: "twitter:card", content: "summary_large_image" },
