@@ -50,9 +50,12 @@ function PerfilPage() {
       navigate({ to: "/entrar" });
     } else {
       const timer = setTimeout(() => setIsLoading(false), 1500);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [isAuthenticated, navigate]);
+
 
 
   if (!isAuthenticated) return null;
@@ -192,7 +195,9 @@ function PerfilPage() {
               </div>
 
               {isLoading ? (
-                <SkeletonCardGrid count={2} className="grid-cols-1 sm:grid-cols-2" />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <SkeletonCardGrid count={2} />
+                </div>
               ) : userProperties.length > 0 ? (
                 <motion.div 
                   variants={container}
