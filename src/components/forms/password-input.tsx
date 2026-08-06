@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -12,19 +12,26 @@ export const PasswordInput = React.forwardRef<
 
   return (
     <div className="relative">
+      <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-[#0F9B4D]">
+        <LockKeyhole size={21} strokeWidth={2} />
+      </div>
       <Input
         ref={ref}
         type={visible ? "text" : "password"}
-        className={cn("pr-11", className)}
+        className={cn("pl-[54px] pr-[54px]", className)}
         {...props}
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        aria-label={visible ? "Ocultar senha" : "Mostrar senha"}
-        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-surface-secondary hover:text-foreground"
+        aria-label={visible ? "Ocultar senha" : "Exibir senha"}
+        className="absolute right-[18px] top-1/2 -translate-y-1/2 rounded-full p-1 text-[#98A2B3] transition-colors hover:text-[#101828]"
       >
-        {visible ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
+        {visible ? (
+          <EyeOff size={21} strokeWidth={2} aria-hidden />
+        ) : (
+          <Eye size={21} strokeWidth={2} aria-hidden />
+        )}
       </button>
     </div>
   );
