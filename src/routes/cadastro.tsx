@@ -182,47 +182,7 @@ function CadastroPage() {
           transition={{ duration: 1.8, ease: "easeOut" }}
         />
         
-        <div className="hidden md:block">
-          <motion.div 
-            className="absolute left-[6%] bottom-[8%] w-[min(420px,46%)] p-8 rounded-[28px] bg-white/78 backdrop-blur-[20px] border border-white/65 shadow-[0_24px_60px_rgba(17,24,39,0.16)]"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              y: [0, -4, 0],
-            }}
-            transition={{ 
-              opacity: { duration: 0.8, delay: 0.5 },
-              y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-            }}
-          >
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="text-[#0F9B4D]" size={20} />
-                <span className="text-[20px] font-bold text-[#101828]">Vila Mariana</span>
-              </div>
-              
-              <div className="text-[17px] text-[#475467]">
-                Apartamento • 2 dormitórios
-              </div>
-
-              <div className="flex items-baseline gap-1">
-                <span className="text-[38px] font-bold text-[#087A3B]">R$ 3.250</span>
-                <span className="text-[18px] font-medium text-[#344054]">/ mês</span>
-              </div>
-
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={19} className="fill-[#FFC800] text-[#FFC800]" />
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2 pt-2 border-t border-black/5">
-                <TrendingUp size={14} className="text-[#0B873F]" />
-                <span className="text-[14px] font-semibold text-[#0B873F]">Muito procurado nesta semana</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        {/* Div flutuante removida */}
       </div>
     </main>
   );
