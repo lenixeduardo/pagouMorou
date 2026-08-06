@@ -82,7 +82,7 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
               <img 
                 src={logoData.url} 
                 alt="PagouMorou Logo" 
-                className="h-[280%] object-contain -translate-y-[2%]" 
+                className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]" 
               />
             </motion.div>
           </motion.div>

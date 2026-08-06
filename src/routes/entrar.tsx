@@ -38,7 +38,7 @@ function EntrarPage() {
             <img 
               src={logoAsset.url} 
               alt="PagouMorou Logo" 
-              className="h-[280%] w-auto object-contain -translate-y-[2%] -translate-x-[2%]"
+              className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]"
             />
           </div>
           <h2 className="text-3xl font-display font-bold text-white mb-4">
@@ -62,8 +62,8 @@ function EntrarPage() {
               Voltar para o início
             </Link>
 
-            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start w-[180px]">
-               <img src={logoAsset.url} alt="Logo" className="h-[280%] w-auto object-contain -translate-y-[2%] -translate-x-[2%]" />
+            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start w-[200px]">
+               <img src={logoAsset.url} alt="Logo" className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]" />
             </div>
 
             <h1 className="text-3xl font-display font-bold text-text mb-2">Bem-vindo de volta</h1>
