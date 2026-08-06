@@ -37,6 +37,11 @@ export const stagger: Variants = {
 
 export const container = stagger;
 
+export const item: Variants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
+};
+
 export const fadeIn = fade;
 
 export const staggerChildren = (staggerDelay = 0.06): Variants => ({
