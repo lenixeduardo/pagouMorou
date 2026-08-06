@@ -180,6 +180,12 @@ function PerfilPage() {
                       Top Proprietário
                     </Badge>
                   )}
+                  {isTenant && tenantScore >= 800 && (
+                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200 flex items-center gap-1">
+                      <Star className="size-3 fill-emerald-700" />
+                      Top Inquilino
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-sm text-text-secondary">{user?.email}</p>
                 
@@ -394,48 +400,48 @@ function PerfilPage() {
                 <CardHeader className="bg-surface-secondary/30 pb-4">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="size-5 text-primary" />
-                    <CardTitle className="text-lg">Como melhorar seu Score?</CardTitle>
+                    <CardTitle className="text-lg">Como ser um Top Inquilino?</CardTitle>
                   </div>
                   <CardDescription>
-                    Seu score ajuda proprietários a confiarem em você para alugar mais rápido.
+                    Um score alto garante prioridade nas propostas e melhores condições de locação.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-success/10 p-1.5 text-success">
-                        <CheckCircle2 className="size-4" />
+                        <Calendar className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Mantenha pagamentos em dia</p>
-                        <p className="text-xs text-text-secondary">Pagamentos pontuais são o fator mais importante.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className={cn("rounded-full p-1.5", mockUserForScore.scoreFactors.incompleteProfile ? "bg-warning/10 text-warning" : "bg-success/10 text-success")}>
-                        {mockUserForScore.scoreFactors.incompleteProfile ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Complete seu perfil</p>
-                        <p className="text-xs text-text-secondary">Adicione fotos e valide seus documentos.</p>
+                        <p className="text-sm font-bold">Estabilidade é chave</p>
+                        <p className="text-xs text-text-secondary">Evite quebras de contrato e permaneça mais tempo nos imóveis.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-primary/10 p-1.5 text-primary">
-                        <MessageSquare className="size-4" />
+                        <CheckCircle2 className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Responda rápido no chat</p>
-                        <p className="text-xs text-text-secondary">Interação ágil melhora sua reputação.</p>
+                        <p className="text-sm font-bold">Pagamentos em dia</p>
+                        <p className="text-xs text-text-secondary">Mantenha seu histórico de aluguel impecável e sem atrasos.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-info/10 p-1.5 text-info">
-                        <TrendingUp className="size-4" />
+                        <Star className="size-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">Histórico de permanência</p>
-                        <p className="text-xs text-text-secondary">Evite quebras de contrato ou curtas estadias.</p>
+                        <p className="text-sm font-bold">Boas avaliações</p>
+                        <p className="text-xs text-text-secondary">Seja um bom morador e receba ótimas recomendações de proprietários.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <UserCircle className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Perfil completo</p>
+                        <p className="text-xs text-text-secondary">Avatar, documentos e perfil 100% preenchidos aumentam sua confiança.</p>
                       </div>
                     </div>
                   </div>
