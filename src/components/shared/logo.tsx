@@ -29,8 +29,6 @@ export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) 
           Pagou<span className="text-primary">Morou</span>
         </span>
       </div>
-        className={cn("object-contain w-auto", sizes[size])} 
-      />
       {withSlogan && (
         <span className="flex flex-col leading-none">
           <span className="text-caption text-text-secondary mt-1">Alugou. Pagou. Morou.</span>
