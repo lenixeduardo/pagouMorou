@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Mail, ArrowRight, MapPin, Star, TrendingUp } from "lucide-react";
@@ -51,6 +51,7 @@ const itemVariants = {
 function EntrarPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +60,10 @@ function EntrarPage() {
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
+      // Redireciona para a página inicial após 1.5s de sucesso
+      setTimeout(() => {
+        navigate({ to: "/" });
+      }, 1500);
     }, 2000);
   };
 
@@ -164,7 +169,7 @@ function EntrarPage() {
                 </Button>
 
                 <p className="text-center text-[15px] text-[#667085] mt-[30px]">
-                  Limpar o cache do navegador para visualizar o novo favicon imediatamente.{" "}
+                  Ainda não possui uma conta?{" "}
                   <Link to="/cadastro" className="text-[#0B873F] font-semibold underline underline-offset-4">
                     Criar conta gratuitamente
                   </Link>
