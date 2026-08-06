@@ -1,10 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, MapPin, Maximize } from "lucide-react";
+import { Building2, MapPin, Maximize, Send, MessageSquare } from "lucide-react";
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useAuthStore } from "@/hooks/use-auth";
+import { useProposals } from "@/hooks/use-proposals";
+import { useNotifications } from "@/hooks/use-notifications";
+import { useChat } from "@/hooks/use-chat";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
@@ -31,7 +37,55 @@ function ApartamentoPage() {
   const { id } = Route.useParams();
   const apartment = apartments.find((a) => a.id === id);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { user, isAuthenticated } = useAuthStore();
+  const { addProposal } = useProposals();
+  const { addNotification } = useNotifications();
+  const { sendMessage } = useChat();
+  
+  const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
+  const [chatMessage, setChatMessage] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const favorite = apartment ? isFavorite(apartment.id) : false;
+
+  const handleProposal = () => {
+    if (!isAuthenticated) {
+      toast.error("Você precisa estar logado para fazer uma proposta.");
+      return;
+    }
+    
+    addProposal({
+      apartmentId: apartment!.id,
+      tenantId: user!.id,
+      tenantName: user!.name,
+      rentAmount: apartment!.rent,
+    });
+
+    addNotification({
+      kind: "contract",
+      title: "Proposta enviada",
+      description: `Sua proposta para ${apartment!.title} foi enviada ao proprietário.`,
+      href: "/perfil",
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!chatMessage.trim()) return;
+    if (!isAuthenticated) {
+      toast.error("Você precisa estar logado para enviar mensagens.");
+      return;
+    }
+
+    sendMessage(`conv-${apartment!.id}`, user!.id, chatMessage);
+    addNotification({
+      kind: "message",
+      title: "Mensagem enviada",
+      description: `Você enviou uma mensagem sobre o imóvel ${apartment!.title}.`,
+      href: "/mensagens",
+    });
+    setChatMessage("");
+    toast.success("Mensagem enviada!");
+  };
 
   if (!apartment) {
     return (
@@ -127,12 +181,37 @@ function ApartamentoPage() {
                 </div>
               </div>
 
-              <Button className="w-full h-14 text-lg font-bold rounded-2xl shadow-md transition-all active:scale-[0.98]">
+              <Button 
+                className="w-full h-14 text-lg font-bold rounded-2xl shadow-md transition-all active:scale-[0.98]"
+                onClick={handleProposal}
+              >
                 Quero alugar
               </Button>
-              <Button variant="outline" className="mt-3 w-full h-14 text-lg font-bold rounded-2xl border-border">
-                Falar com proprietário
-              </Button>
+              
+              <div className="mt-4 space-y-3">
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Tire suas dúvidas..." 
+                    className="h-12 rounded-xl"
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                  />
+                  <Button 
+                    size="icon" 
+                    className="h-12 w-12 shrink-0 rounded-xl"
+                    onClick={handleSendMessage}
+                  >
+                    <Send className="size-5" />
+                  </Button>
+                </div>
+                <Button 
+                  variant="outline" 
+                  className="w-full h-12 font-bold rounded-xl border-border flex items-center gap-2"
+                >
+                  <MessageSquare className="size-4" />
+                  Falar com proprietário
+                </Button>
+              </div>
             </div>
           </aside>
         </div>
