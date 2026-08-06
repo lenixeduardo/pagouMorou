@@ -64,11 +64,11 @@ export function AppHeader() {
                     >
                       <Menu className="size-4 text-text-secondary" />
                       <Avatar className="size-8">
-                        {isAuthenticated && user?.avatar ? (
-                          <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
+                        {isAuthenticated && user?.avatarUrl ? (
+                          <img src={user.avatarUrl} alt={user.name} className="h-full w-full object-cover" />
                         ) : (
                           <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
-                            {(isAuthenticated ? user?.name : currentUser.name).slice(0, 1)}
+                            {(isAuthenticated ? (user?.name || "U") : currentUser.name).slice(0, 1)}
                           </AvatarFallback>
                         )}
                       </Avatar>
