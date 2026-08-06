@@ -60,6 +60,7 @@ function ApartamentoPage() {
               />
             </div>
 
+            <div className="space-y-4">
               <div className="flex items-center justify-between gap-4">
                 <h1 className="text-display text-4xl font-bold">{apartment.title}</h1>
                 <Button
