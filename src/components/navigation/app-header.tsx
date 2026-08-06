@@ -45,10 +45,10 @@ export function AppHeader() {
         </div>
 
         <div className="flex items-center gap-2 justify-self-end">
-          <Button variant="ghost" size="sm" className="hidden lg:inline-flex" asChild>
-            <Link to="/anunciar">
-              <Plus aria-hidden />
-              Anunciar imóvel
+          <Button size="sm" className="hidden lg:inline-flex bg-primary hover:bg-primary-hover text-white rounded-full px-5" asChild>
+            <Link to="/buscar">
+              Explorar imóveis
+              <Plus className="ml-2 size-4 rotate-45" aria-hidden />
             </Link>
           </Button>
 
