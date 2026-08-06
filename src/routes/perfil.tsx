@@ -22,7 +22,8 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  Plus
+  Plus,
+  Star
 } from "lucide-react";
 import { motion } from "framer-motion";
 
