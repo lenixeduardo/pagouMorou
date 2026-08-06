@@ -68,7 +68,7 @@ function CadastroPage() {
         type: userType
       });
 
-      navigate({ to: "/perfil" });
+      navigate({ to: "/buscar" });
     }, 1500);
   };
 
