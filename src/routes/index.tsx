@@ -175,6 +175,8 @@ function HomePage() {
             </Button>
           </div>
 
+          <FAQSection />
+
           <div className="mt-20 border-t border-border pt-12 mb-12">
             <div className="flex flex-col items-center justify-center text-center">
               <div className="mb-4 rounded-full bg-surface-secondary p-4 text-primary">
