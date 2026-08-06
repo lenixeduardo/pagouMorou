@@ -88,7 +88,7 @@ export const apartments: Apartment[] = [
     rent: 3200,
     condoFee: 540,
     iptu: 120,
-    images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=2070"],
+    images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop"],
     address: {
       street: "Rua Harmonia",
       number: "421",
@@ -121,7 +121,7 @@ export const apartments: Apartment[] = [
     rent: 4500,
     condoFee: 780,
     iptu: 210,
-    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=2080"],
+    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop"],
     address: {
       street: "Rua dos Pinheiros",
       number: "1120",
@@ -153,7 +153,7 @@ export const apartments: Apartment[] = [
     rent: 5200,
     condoFee: 900,
     iptu: 260,
-    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=2070"],
+    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop"],
     address: {
       street: "Rua São Clemente",
       number: "88",
@@ -185,7 +185,7 @@ export const apartments: Apartment[] = [
     rent: 1800,
     condoFee: 320,
     iptu: 80,
-    images: ["https://images.unsplash.com/photo-1536376074432-c26405b63100?auto=format&fit=crop&q=80&w=2070"],
+    images: ["https://images.unsplash.com/photo-1536376074432-c26405b63100?q=80&w=2070&auto=format&fit=crop"],
     address: {
       street: "Rua Antônio de Albuquerque",
       number: "530",

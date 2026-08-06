@@ -58,7 +58,7 @@ export function AppHeader() {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="Implementar as seções de destaque e listagem de imóveis na Home conforme especificado no Design Spec.\n\nValidar a responsividade do layout em dispositivos móveis (390x844)."
+                aria-label="corrija os imoveis com imagens quebradas"
               >
                 <Menu className="size-4 text-text-secondary" />
                 <Avatar className="size-8">
