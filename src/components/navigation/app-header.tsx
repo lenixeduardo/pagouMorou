@@ -1,4 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { Bell, Menu, Plus } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
@@ -23,7 +24,12 @@ export function AppHeader() {
   const isAuthPage = location.pathname === "/entrar" || location.pathname === "/cadastro";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
+    <motion.header 
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+      className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70"
+    >
       <div className="mx-auto grid max-w-app grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 md:px-8">
         <div className="flex min-w-0 items-center gap-3">
           {!isAuthPage && <Logo className="shrink-0" />}
@@ -91,6 +97,6 @@ export function AppHeader() {
           </DropdownMenu>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

@@ -24,6 +24,6 @@ export function BottomNav() {
           </li>
         ))}
       </ul>
-    </nav>
+    </motion.nav>
   );
 }
