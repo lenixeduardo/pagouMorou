@@ -3,6 +3,7 @@ import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import footerAsset from "@/assets/footer.asset.json";
+import { FAQSection } from "@/components/sections/faq-section";
 
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
@@ -173,6 +174,8 @@ function HomePage() {
               </Link>
             </Button>
           </div>
+
+          <FAQSection />
 
           <div className="mt-20 border-t border-border pt-12 mb-12">
             <div className="flex flex-col items-center justify-center text-center">
