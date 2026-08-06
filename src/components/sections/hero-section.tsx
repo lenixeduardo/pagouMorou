@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Search, Sparkles, FileSignature, Building2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { container, item } from "@/lib/motion";
+import rioHeroAsset from "@/assets/hero-center-rio.png.asset.json";
 
 export function HeroSection() {
   const propertyImages = [
@@ -117,7 +118,7 @@ export function HeroSection() {
                 transition={{ duration: 1, delay: 0.4 }}
                 className="relative overflow-hidden rounded-[30px] col-span-1 h-full"
               >
-                <img src={propertyImages[1]} className="absolute inset-0 size-full object-cover" alt="" />
+                <img src={rioHeroAsset.url} className="absolute inset-0 size-full object-cover" alt="Rio de Janeiro" />
               </motion.div>
 
               <motion.div 
