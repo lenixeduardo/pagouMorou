@@ -26,15 +26,22 @@ export const slideLeft: Variants = {
   exit: { opacity: 0, x: -16, transition: { duration: duration.fast, ease: easeOut } },
 };
 
-export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  visible: { opacity: 1, scale: 1, transition: { duration: duration.base, ease: easeOut } },
-  exit: { opacity: 0, scale: 0.98, transition: { duration: duration.fast, ease: easeOut } },
+export const stagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
 };
 
-export const staggerChildren = (stagger = 0.06): Variants => ({
+export const container = stagger;
+
+export const fadeIn = fade;
+
+export const staggerChildren = (staggerDelay = 0.06): Variants => ({
   hidden: {},
-  visible: { transition: { staggerChildren: stagger } },
+  visible: { transition: { staggerChildren: staggerDelay } },
 });
 
 export const hoverLift = {

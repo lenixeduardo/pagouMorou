@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="era pra manter na seção em verde na pagina entrar, era somente no menu de navegação na pagina de entrar que devia sumir">
+    <html lang="Implementar as seções de destaque e listagem de imóveis na Home conforme especificado no Design Spec.\n\nValidar a responsividade do layout em dispositivos móveis (390x844).">
       <head>
         <HeadContent />
       </head>
