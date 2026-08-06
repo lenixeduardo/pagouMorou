@@ -55,6 +55,34 @@ function AnunciarPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [description, setDescription] = useState("");
+  const [descriptionValidation, setDescriptionValidation] = useState({
+    hasLocation: false,
+    hasPOI: false,
+    hasRooms: false,
+    hasFurnished: false,
+    score: 0
+  });
+
+  useEffect(() => {
+    const desc = description.toLowerCase();
+    const validation = {
+      hasLocation: desc.includes("local") || desc.includes("bairro") || desc.includes("rua") || desc.includes("próximo a"),
+      hasPOI: desc.includes("metrô") || desc.includes("shopping") || desc.includes("parque") || desc.includes("mercado") || desc.includes("escola"),
+      hasRooms: desc.includes("quarto") || desc.includes("suíte") || desc.includes("sala") || desc.includes("cozinha") || desc.includes("banheiro"),
+      hasFurnished: desc.length > 50 && (desc.includes("cama") || desc.includes("sofá") || desc.includes("geladeira") || desc.includes("armário") || desc.includes("mesa")),
+      score: 0
+    };
+
+    let score = 0;
+    if (validation.hasLocation) score += 25;
+    if (validation.hasPOI) score += 25;
+    if (validation.hasRooms) score += 25;
+    if (validation.hasFurnished) score += 25;
+    validation.score = score;
+
+    setDescriptionValidation(validation);
+  }, [description]);
 
   useEffect(() => {
     if (!isAuthenticated) {
