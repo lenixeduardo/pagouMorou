@@ -195,24 +195,6 @@ function EntrarPage() {
           transition={{ duration: 1.8, ease: "easeOut" }}
         />
         
-
-        {/* Card Compacto Mobile */}
-        <div className="md:hidden absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg border border-white/50">
-           <div className="flex justify-between items-center">
-              <div>
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <MapPin className="text-[#0F9B4D]" size={16} />
-                  <span className="text-base font-bold text-[#101828]">Vila Mariana</span>
-                </div>
-                <div className="text-xs text-[#475467]">2 dorms • R$ 3.250/mês</div>
-              </div>
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={12} className="fill-[#FFC800] text-[#FFC800]" />
-                ))}
-              </div>
-           </div>
-        </div>
       </div>
     </main>
   );
