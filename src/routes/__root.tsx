@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="recorte a imagem, troque o texto da palavra Paga e troque por Pagou , o fundo do logotipo deve ser verde, gere novamnete a tela de login">
+    <html lang="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto">
       <head>
         <HeadContent />
       </head>

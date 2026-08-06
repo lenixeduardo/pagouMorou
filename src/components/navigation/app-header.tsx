@@ -24,31 +24,6 @@ export function AppHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto grid max-w-app grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 md:px-8">
         <div className="flex min-w-0 items-center gap-3">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Abrir menu">
-                <Menu aria-hidden />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72 p-6">
-              <SheetTitle className="sr-only">Menu</SheetTitle>
-              <Logo withSlogan />
-              <nav className="mt-8 flex flex-col gap-1" aria-label="Navegação principal">
-                {primaryNav.map((item) => (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    activeOptions={{ exact: item.exact }}
-                    activeProps={{ className: "bg-primary-soft text-primary-soft-foreground" }}
-                    className="flex items-center gap-3 rounded-md px-3 py-2.5 text-body text-foreground transition-colors hover:bg-surface-secondary"
-                  >
-                    <item.icon className="size-4" aria-hidden />
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
           <Logo className="shrink-0" />
         </div>
 
@@ -78,7 +53,7 @@ export function AppHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" aria-label="recorte a imagem, troque o texto da palavra Paga e troque por Pagou , o fundo do logotipo deve ser verde, gere novamnete a tela de login">
+              <Button variant="outline" size="icon" aria-label="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto">
                 <Avatar className="size-7">
                   <AvatarFallback className="text-caption">
                     {currentUser.name.slice(0, 1)}
