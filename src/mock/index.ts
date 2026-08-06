@@ -185,7 +185,7 @@ export const apartments: Apartment[] = [
     rent: 1800,
     condoFee: 320,
     iptu: 80,
-    images: ["https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2071&auto=format&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1536376074432-8f274fa4265d?q=80&w=2071&auto=format&fit=crop"],
     address: {
       street: "Rua Antônio de Albuquerque",
       number: "530",
@@ -217,7 +217,7 @@ export const apartments: Apartment[] = [
     rent: 2800,
     condoFee: 450,
     iptu: 150,
-    images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=2070&auto=format&fit=crop"],
     address: {
       street: "Rua Cláudio Manoel",
       number: "1200",
@@ -249,7 +249,7 @@ export const apartments: Apartment[] = [
     rent: 3500,
     condoFee: 600,
     iptu: 180,
-    images: ["https://images.unsplash.com/photo-1560448204-603b3fc33ddc?q=80&w=2070&auto=format&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop"],
     address: {
       street: "Rua Tomé de Souza",
       number: "810",
