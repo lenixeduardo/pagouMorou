@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
 import { 
   UserCircle, 
@@ -26,6 +26,9 @@ import { PropertyCard } from "@/components/cards/property-card";
 import { currentUser, apartments } from "@/mock";
 import { fadeIn, stagger, container } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
+
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -40,12 +43,17 @@ export const Route = createFileRoute("/perfil")({
 function PerfilPage() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
+    } else {
+      const timer = setTimeout(() => setIsLoading(false), 1500);
+      return () => clearTimeout(timer);
     }
   }, [isAuthenticated, navigate]);
+
 
   if (!isAuthenticated) return null;
 
@@ -157,15 +165,15 @@ function PerfilPage() {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Contratos</span>
-                <p className="text-3xl font-bold mt-1">0</p>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">0</p>}
               </div>
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Visitas</span>
-                <p className="text-3xl font-bold mt-1">2</p>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">2</p>}
               </div>
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Mensagens</span>
-                <p className="text-3xl font-bold mt-1">1</p>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">1</p>}
               </div>
             </div>
 
@@ -183,7 +191,9 @@ function PerfilPage() {
                 </Button>
               </div>
 
-              {userProperties.length > 0 ? (
+              {isLoading ? (
+                <SkeletonCardGrid count={2} className="grid-cols-1 sm:grid-cols-2" />
+              ) : userProperties.length > 0 ? (
                 <motion.div 
                   variants={container}
                   initial="initial"
