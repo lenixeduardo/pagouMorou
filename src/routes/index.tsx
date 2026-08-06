@@ -66,7 +66,7 @@ function HomePage() {
           </motion.h1>
           <motion.p
             variants={fadeIn}
-            className="mx-auto mb-10 max-w-2xl text-xl text-white/90"
+            className="mx-auto mb-10 max-w-2xl text-xl text-white/80"
           >
             Encontre o seu próximo lar em minutos. Negociação direta, contrato digital e zero burocracia.
           </motion.p>
