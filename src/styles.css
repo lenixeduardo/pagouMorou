@@ -298,3 +298,7 @@
     box-shadow: var(--shadow-lg);
   }
 }
+
+#lovable-badge {
+  display: none !important;
+}
