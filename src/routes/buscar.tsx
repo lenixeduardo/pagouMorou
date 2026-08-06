@@ -87,7 +87,7 @@ function BuscarPage() {
     }
 
     // Filter by bedrooms
-    if (bedrooms !== null) {
+    if (bedrooms !== undefined) {
       if (bedrooms === "4+") {
         result = result.filter((apt) => apt.features.bedrooms >= 4);
       } else {
@@ -110,7 +110,7 @@ function BuscarPage() {
 
   const clearFilters = () => {
     navigate({
-      search: { type: "Todos", bedrooms: null, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" },
+      search: { type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" },
       replace: true,
     });
     setLocalPriceRange([0, 20000]);
