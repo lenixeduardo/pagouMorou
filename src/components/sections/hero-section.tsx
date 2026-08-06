@@ -116,7 +116,7 @@ export function HeroSection() {
             </div>
             
             {/* Parallax Overlay for depth */}
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-l from-white/10 to-transparent" />
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-l from-[#F9FBF9]/10 to-transparent" />
           </div>
         </div>
       </div>

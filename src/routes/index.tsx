@@ -140,7 +140,7 @@ function HomePage() {
                 <div className="absolute left-6 top-8 bottom-8 w-px bg-border border-dashed border-l" />
                 
                 <div className="flex gap-6 relative">
-                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10">
+                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10 hover-lift cursor-pointer">
                     <Search className="size-5" />
                   </div>
                   <div>
@@ -150,7 +150,7 @@ function HomePage() {
                 </div>
 
                 <div className="flex gap-6 relative">
-                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10">
+                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10 hover-lift cursor-pointer">
                     <Quote className="size-5" />
                   </div>
                   <div>
@@ -160,7 +160,7 @@ function HomePage() {
                 </div>
 
                 <div className="flex gap-6 relative">
-                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10">
+                  <div className="size-12 rounded-full bg-white border border-border flex items-center justify-center text-primary shadow-sm z-10 hover-lift cursor-pointer">
                     <Sparkles className="size-5" />
                   </div>
                   <div>
