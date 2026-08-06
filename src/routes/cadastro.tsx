@@ -34,11 +34,11 @@ function CadastroPage() {
           animate="animate"
           className="relative z-10 max-w-md text-center"
         >
-          <div className="w-full h-48 mb-8 rounded-3xl shadow-2xl overflow-hidden bg-white flex items-center justify-center">
+          <div className="w-full h-48 mb-8 rounded-3xl shadow-2xl overflow-hidden bg-white flex items-center justify-center p-8">
             <img 
               src={logoAsset.url} 
               alt="PagouMorou Logo" 
-              className="h-[280%] object-contain -translate-y-[2%]"
+              className="h-[280%] w-auto object-contain -translate-y-[2%] -translate-x-[2%]"
             />
           </div>
           <h2 className="text-3xl font-display font-bold text-white mb-4">
@@ -62,8 +62,8 @@ function CadastroPage() {
               Voltar para o início
             </Link>
 
-            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start justify-center">
-               <img src={logoAsset.url} alt="Logo" className="h-[280%] object-contain -translate-y-[2%]" />
+            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start justify-center w-[180px] mx-auto">
+               <img src={logoAsset.url} alt="Logo" className="h-[280%] w-auto object-contain -translate-y-[2%] -translate-x-[2%]" />
             </div>
 
             <h1 className="text-3xl font-display font-bold text-text mb-2">Criar conta</h1>
