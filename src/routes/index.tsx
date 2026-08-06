@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
     lang: "pt-BR",
   }),
+  component: HomePage,
 });
 
 function HomePage() {
