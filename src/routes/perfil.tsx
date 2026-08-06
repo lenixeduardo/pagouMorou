@@ -14,7 +14,8 @@ import {
   Building2,
   Calendar,
   MapPin,
-  Bot
+  Bot,
+  Camera
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -41,7 +42,7 @@ export const Route = createFileRoute("/perfil")({
 });
 
 function PerfilPage() {
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, updateUser, logout } = useAuthStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,12 +80,36 @@ function PerfilPage() {
           <motion.aside variants={fadeIn} className="space-y-6">
             <div className="rounded-3xl border border-border bg-white p-6 shadow-sm">
               <div className="flex flex-col items-center text-center">
-                <Avatar className="size-24 border-4 border-surface-secondary">
-                  <AvatarImage src={currentUser.avatarUrl} />
-                  <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
-                    {currentUser.name.slice(0, 1)}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative group">
+                  <Avatar className="size-24 border-4 border-surface-secondary">
+                    <AvatarImage src={user?.avatarUrl || currentUser.avatarUrl} />
+                    <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
+                      {user?.name?.slice(0, 1) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <label 
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-110 active:scale-95"
+                  >
+                    <Camera className="size-4" />
+                    <input 
+                      id="avatar-upload" 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            updateUser({ avatarUrl: reader.result as string });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
                 <div className="mt-4 flex items-center gap-1.5">
                   <h2 className="text-xl font-bold">{user?.name}</h2>
                   {currentUser.verified && (
@@ -109,8 +134,8 @@ function PerfilPage() {
                 </div>
               </div>
 
-              <Button variant="outline" className="mt-8 w-full rounded-xl border-border font-bold">
-                Editar Perfil
+              <Button variant="outline" className="mt-8 w-full rounded-xl border-border font-bold" asChild>
+                <Link to="/configuracoes">Editar Perfil</Link>
               </Button>
             </div>
 
@@ -146,13 +171,19 @@ function PerfilPage() {
                 </div>
                 <ChevronRight className="size-4" />
               </Link>
-              <button className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary">
+              <Link 
+                to="/configuracoes" 
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary",
+                  "hover:text-primary"
+                )}
+              >
                 <div className="flex items-center gap-3">
                   <Settings className="size-5" />
                   Configurações
                 </div>
                 <ChevronRight className="size-4" />
-              </button>
+              </Link>
               <div className="my-2 h-px bg-border mx-2" />
               <button 
                 onClick={() => logout()}
