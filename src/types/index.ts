@@ -30,6 +30,7 @@ export interface User {
     incompleteDocs?: boolean;
     incompleteProfile?: boolean;
     noAvatar?: boolean;
+    kycVerified?: boolean; // Novo campo para validação de documentos
     chatResponseTime?: "low" | "medium" | "high";
   };
 }
