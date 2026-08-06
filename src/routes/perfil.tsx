@@ -140,15 +140,36 @@ function PerfilPage() {
             <div className="rounded-3xl border border-border bg-white p-6 shadow-sm">
               <div className="flex flex-col items-center text-center">
                 <div className="relative group">
-                  <Avatar className="size-24 border-4 border-surface-secondary">
-                    <AvatarImage src={user?.avatarUrl || currentUser.avatarUrl} />
-                    <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
-                      {user?.name?.slice(0, 1) || "U"}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className={cn(
+                    "relative p-1 rounded-full transition-all duration-500",
+                    ((isOwner && ownerScore >= 800) || (isTenant && tenantScore >= 800)) && "bg-gradient-to-tr from-emerald-500 via-emerald-400 to-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                  )}>
+                    {((isOwner && ownerScore >= 800) || (isTenant && tenantScore >= 800)) && (
+                      <div className="absolute inset-x-[-12px] top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-10">
+                        <svg viewBox="0 0 24 24" className="size-10 fill-emerald-600 -rotate-12 opacity-90 drop-shadow-sm">
+                          <path d="M12 21c-4.418 0-8-3.582-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.418-3.582 8-8 8zm0-14c-3.314 0-6 2.686-6 6 0 3.314 2.686 6 6 6s6-2.686 6-6c0-3.314-2.686-6-6-6zM7 13c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zm10 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z" className="hidden" />
+                          <path d="M6 13.5c0-3.3 2-6 5-7.2V4c-4.4 1.2-8 5.4-8 10.4 0 5 3.6 9.2 8 10.4v-2.3c-3-1.2-5-3.9-5-7.2zM13 6.3c3 1.2 5 3.9 5 7.2 0 3.3-2 6-5 7.2v2.3c4.4-1.2 8-5.4 8-10.4s-3.6-9.2-8-10.4v2.3z" />
+                        </svg>
+                        <svg viewBox="0 0 24 24" className="size-10 fill-emerald-600 rotate-12 opacity-90 drop-shadow-sm">
+                          <path d="M6 13.5c0-3.3 2-6 5-7.2V4c-4.4 1.2-8 5.4-8 10.4 0 5 3.6 9.2 8 10.4v-2.3c-3-1.2-5-3.9-5-7.2zM13 6.3c3 1.2 5 3.9 5 7.2 0 3.3-2 6-5 7.2v2.3c4.4-1.2 8-5.4 8-10.4s-3.6-9.2-8-10.4v2.3z" />
+                        </svg>
+                      </div>
+                    )}
+                    <Avatar className={cn(
+                      "size-24 border-4",
+                      ((isOwner && ownerScore >= 800) || (isTenant && tenantScore >= 800)) 
+                        ? "border-emerald-50" 
+                        : "border-surface-secondary"
+                    )}>
+                      <AvatarImage src={user?.avatarUrl || currentUser.avatarUrl} />
+                      <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
+                        {user?.name?.slice(0, 1) || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
                   <label 
                     htmlFor="avatar-upload"
-                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-110 active:scale-95"
+                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-110 active:scale-95 z-20"
                   >
                     <Camera className="size-4" />
                     <input 
@@ -175,15 +196,15 @@ function PerfilPage() {
                     <Verified className="size-5 fill-primary text-white" />
                   )}
                   {isOwner && ownerScore >= 800 && (
-                    <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200 flex items-center gap-1">
-                      <Star className="size-3 fill-amber-700" />
-                      Top Proprietário
+                    <Badge variant="secondary" className="bg-emerald-500 text-white hover:bg-emerald-600 border-none flex items-center gap-1 shadow-sm">
+                      <Star className="size-3 fill-white" />
+                      Top User
                     </Badge>
                   )}
                   {isTenant && tenantScore >= 800 && (
-                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200 flex items-center gap-1">
-                      <Star className="size-3 fill-emerald-700" />
-                      Top Inquilino
+                    <Badge variant="secondary" className="bg-emerald-500 text-white hover:bg-emerald-600 border-none flex items-center gap-1 shadow-sm">
+                      <Star className="size-3 fill-white" />
+                      Top User
                     </Badge>
                   )}
                 </div>
