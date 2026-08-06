@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="faça que na tela de login n apresente o logotipo, mas somente nas demais">
+    <html lang="era pra manter na seção em verde na pagina entrar, era somente no menu de navegação na pagina de entrar que devia sumir">
       <head>
         <HeadContent />
       </head>

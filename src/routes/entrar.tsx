@@ -34,9 +34,11 @@ function EntrarPage() {
           animate="animate"
           className="relative z-10 max-w-md text-center"
         >
-          <div className="w-full aspect-video mb-8 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-2xl">
-            <span className="text-white font-display text-4xl font-bold italic tracking-tighter">PagouMorou</span>
-          </div>
+          <img 
+            src={logoAsset.url} 
+            alt="PagouMorou Logo" 
+            className="w-full h-auto mb-8 rounded-3xl shadow-2xl"
+          />
           <h2 className="text-3xl font-display font-bold text-white mb-4">
             Alugue sem fiador e sem complicação.
           </h2>
@@ -59,7 +61,7 @@ function EntrarPage() {
             </Link>
 
             <div className="md:hidden mb-8">
-               <span className="text-primary font-display text-3xl font-bold italic tracking-tighter">PagouMorou</span>
+               <img src={logoAsset.url} alt="Logo" className="h-12 w-auto mb-4" />
             </div>
 
             <h1 className="text-3xl font-display font-bold text-text mb-2">Bem-vindo de volta</h1>
