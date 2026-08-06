@@ -109,6 +109,16 @@ function PerfilPage() {
                 </div>
                 <ChevronRight className="size-4" />
               </button>
+              <Link 
+                to="/perfil/agentes" 
+                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary"
+              >
+                <div className="flex items-center gap-3">
+                  <Bot className="size-5" />
+                  Agentes (MCP)
+                </div>
+                <ChevronRight className="size-4" />
+              </Link>
               <button className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary">
                 <div className="flex items-center gap-3">
                   <Settings className="size-5" />

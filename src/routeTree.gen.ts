@@ -18,6 +18,7 @@ import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as MensagensRouteImport } from './routes/mensagens'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as ApartamentoIdRouteImport } from './routes/apartamento.$id'
+import { Route as PerfilAgentesRouteImport } from './routes/perfil.agentes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const ApartamentoIdRoute = ApartamentoIdRouteImport.update({
   path: '/apartamento/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerfilAgentesRoute = PerfilAgentesRouteImport.update({
+  id: '/agentes',
+  path: '/agentes',
+  getParentRoute: () => PerfilRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,8 +79,9 @@ export interface FileRoutesByFullPath {
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
-  '/perfil': typeof PerfilRoute
+  '/perfil': typeof PerfilRouteWithChildren
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/perfil/agentes': typeof PerfilAgentesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,8 +91,9 @@ export interface FileRoutesByTo {
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
-  '/perfil': typeof PerfilRoute
+  '/perfil': typeof PerfilRouteWithChildren
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/perfil/agentes': typeof PerfilAgentesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,8 +104,9 @@ export interface FileRoutesById {
   '/entrar': typeof EntrarRoute
   '/favoritos': typeof FavoritosRoute
   '/mensagens': typeof MensagensRoute
-  '/perfil': typeof PerfilRoute
+  '/perfil': typeof PerfilRouteWithChildren
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/perfil/agentes': typeof PerfilAgentesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/mensagens'
     | '/perfil'
     | '/apartamento/$id'
+    | '/perfil/agentes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/mensagens'
     | '/perfil'
     | '/apartamento/$id'
+    | '/perfil/agentes'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/mensagens'
     | '/perfil'
     | '/apartamento/$id'
+    | '/perfil/agentes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,7 +155,7 @@ export interface RootRouteChildren {
   EntrarRoute: typeof EntrarRoute
   FavoritosRoute: typeof FavoritosRoute
   MensagensRoute: typeof MensagensRoute
-  PerfilRoute: typeof PerfilRoute
+  PerfilRoute: typeof PerfilRouteWithChildren
   ApartamentoIdRoute: typeof ApartamentoIdRoute
 }
 
@@ -212,8 +224,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApartamentoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/perfil/agentes': {
+      id: '/perfil/agentes'
+      path: '/agentes'
+      fullPath: '/perfil/agentes'
+      preLoaderRoute: typeof PerfilAgentesRouteImport
+      parentRoute: typeof PerfilRoute
+    }
   }
 }
+
+interface PerfilRouteChildren {
+  PerfilAgentesRoute: typeof PerfilAgentesRoute
+}
+
+const PerfilRouteChildren: PerfilRouteChildren = {
+  PerfilAgentesRoute: PerfilAgentesRoute,
+}
+
+const PerfilRouteWithChildren =
+  PerfilRoute._addFileChildren(PerfilRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -223,9 +253,19 @@ const rootRouteChildren: RootRouteChildren = {
   EntrarRoute: EntrarRoute,
   FavoritosRoute: FavoritosRoute,
   MensagensRoute: MensagensRoute,
-  PerfilRoute: PerfilRoute,
+  PerfilRoute: PerfilRouteWithChildren,
   ApartamentoIdRoute: ApartamentoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
