@@ -3,6 +3,7 @@ import { Building2, MapPin, Maximize, Send, MessageSquare, ShieldCheck, Trending
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
@@ -15,6 +16,8 @@ import { toast } from "sonner";
 import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
 import { motion, AnimatePresence } from "framer-motion";
 import { slideUp, fadeIn } from "@/lib/motion";
+import { EmptyState } from "@/components/feedback/empty-state";
+import { Page } from "@/components/layout/page";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
