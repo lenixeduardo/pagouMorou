@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
+import { useProposals } from "@/hooks/use-proposals";
+import { useNotifications } from "@/hooks/use-notifications";
 import { 
   UserCircle, 
   Settings, 
@@ -15,7 +17,10 @@ import {
   Calendar,
   MapPin,
   Bot,
-  Camera
+  Camera,
+  CheckCircle2,
+  Clock,
+  Plus
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -28,6 +33,9 @@ import { currentUser, apartments } from "@/mock";
 import { fadeIn, stagger, container } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 
@@ -43,8 +51,36 @@ export const Route = createFileRoute("/perfil")({
 
 function PerfilPage() {
   const { isAuthenticated, user, updateUser, logout } = useAuthStore();
+  const { proposals, updateStatus } = useProposals();
+  const { addNotification } = useNotifications();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("anuncios");
+
+  // Meus anúncios
+  const myApartments = apartments.filter(apt => apt.ownerId === user?.id);
+  
+  // Propostas recebidas
+  const receivedProposals = proposals.filter(p => 
+    myApartments.some(apt => apt.id === p.apartmentId)
+  );
+
+  const handleApproveProposal = (id: string) => {
+    updateStatus(id, "approved");
+    const proposal = proposals.find(p => p.id === id);
+    if (proposal) {
+      addNotification({
+        kind: "contract",
+        title: "Proposta Aprovada!",
+        description: `Sua proposta para o imóvel foi aprovada. Prepare os documentos!`,
+        href: "/perfil",
+      });
+    }
+  };
+
+  const handleRejectProposal = (id: string) => {
+    updateStatus(id, "rejected");
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {
