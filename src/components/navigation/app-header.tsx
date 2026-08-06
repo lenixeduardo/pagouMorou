@@ -45,64 +45,66 @@ export function AppHeader() {
           {/* "Explorar imóveis" button removed per user request */}
 
           {/* User profile menu and notifications hidden on homepage per request */}
-          {isAuthenticated || location.pathname !== "/" ? (
-            <>
-              <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
-                <Bell aria-hidden />
-                {unread > 0 ? (
-                  <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
-                ) : null}
-              </Button>
+          {!isAuthPage && (
+            isAuthenticated || location.pathname !== "/" ? (
+              <>
+                <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
+                  <Bell aria-hidden />
+                  {unread > 0 ? (
+                    <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
+                  ) : null}
+                </Button>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                    aria-label="Menu do usuário"
-                  >
-                    <Menu className="size-4 text-text-secondary" />
-                    <Avatar className="size-8">
-                      <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
-                        {currentUser.name.slice(0, 1)}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 rounded-lg">
-                  <DropdownMenuLabel className="text-label">{isAuthenticated ? user?.name : currentUser.name}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/perfil">Meu perfil</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/favoritos">Favoritos</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/anunciar">Anunciar imóvel</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {isAuthenticated ? (
-                    <DropdownMenuItem onClick={() => logout()}>
-                      Sair
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
+                      aria-label="Menu do usuário"
+                    >
+                      <Menu className="size-4 text-text-secondary" />
+                      <Avatar className="size-8">
+                        <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
+                          {currentUser.name.slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 rounded-lg">
+                    <DropdownMenuLabel className="text-label">{isAuthenticated ? user?.name : currentUser.name}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/perfil">Meu perfil</Link>
                     </DropdownMenuItem>
-                  ) : (
-                    <>
-                      <DropdownMenuItem asChild>
-                        <Link to="/entrar">Entrar</Link>
+                    <DropdownMenuItem asChild>
+                      <Link to="/favoritos">Favoritos</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/anunciar">Anunciar imóvel</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {isAuthenticated ? (
+                      <DropdownMenuItem onClick={() => logout()}>
+                        Sair
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/cadastro">Criar conta</Link>
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <Button className="rounded-full px-8 h-11 text-base font-semibold shadow-md hover:shadow-lg transition-all" asChild>
-              <Link to="/entrar">Entrar</Link>
-            </Button>
+                    ) : (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/entrar">Entrar</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/cadastro">Criar conta</Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <Button className="rounded-full px-8 h-11 text-base font-semibold shadow-md hover:shadow-lg transition-all" asChild>
+                <Link to="/entrar">Entrar</Link>
+              </Button>
+            )
           )}
         </div>
       </div>
