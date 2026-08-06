@@ -15,6 +15,8 @@ interface User {
     incompleteDocs?: boolean;
     incompleteProfile?: boolean;
     noAvatar?: boolean;
+    noAvatar?: boolean;
+    kycVerified?: boolean;
     chatResponseTime?: "low" | "medium" | "high";
   };
 }
