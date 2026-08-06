@@ -7,7 +7,7 @@ import { container, item } from "@/lib/motion";
 export function HeroSection() {
   const propertyImages = [
     "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop", // Cozinha planejada
-    "https://images.unsplash.com/photo-1616594192358-af7521cd47a0?q=80&w=2070&auto=format&fit=crop", // Quarto e cama ao centro (alternativa estável)
+    "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop", // Quarto luminoso (nova tentativa estável)
     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"  // Prédio comercial/residencial moderno
   ];
 
