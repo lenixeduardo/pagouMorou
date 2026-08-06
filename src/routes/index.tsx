@@ -38,6 +38,7 @@ function HeroPage() {
 
   return (
     <Page fullWidth className="bg-[#F9FBF9] pb-20 pt-0" component="main">
+      <h1 className="sr-only">PagouMorou - Aluguel Residencial Descomplicado e Seguro</h1>
       <HeroSection />
 
       <div className="container mx-auto px-6 max-w-7xl">
@@ -67,19 +68,19 @@ function HeroPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 className="relative overflow-hidden rounded-3xl col-span-1 row-span-2"
               >
-                <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="" />
+                <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="Casa moderna com arquitetura contemporânea e jardim" />
               </motion.div>
               <div className="grid grid-rows-2 gap-4 col-span-1 row-span-2">
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} className="relative overflow-hidden rounded-2xl">
-                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="" />
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="Interior de apartamento iluminado com decoração moderna" />
                   </motion.div>
                   <motion.div whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} className="relative overflow-hidden rounded-2xl">
-                    <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="" />
+                    <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="Fachada de condomínio residencial com piscina" />
                   </motion.div>
                 </div>
                 <motion.div whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} className="relative overflow-hidden rounded-2xl">
-                  <img src="https://images.unsplash.com/photo-1550133730-695473e544be?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="" />
+                  <img src="https://images.unsplash.com/photo-1550133730-695473e544be?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="Vista aérea de bairro residencial arborizado" />
                 </motion.div>
               </div>
             </div>
@@ -174,7 +175,7 @@ function HeroPage() {
 
             {/* How it works Right Image with Overlays */}
             <div className="relative h-[600px] rounded-[40px] overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="" />
+              <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 size-full object-cover" alt="Sala de estar moderna integrada com cozinha" />
               
               <div className="absolute bottom-8 left-8 right-8 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20">
@@ -222,7 +223,7 @@ function HeroPage() {
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           src={footerAsset.url} 
-          alt="" 
+          alt="Ilustração do horizonte de uma cidade brasileira (skyline)" 
           className="w-full object-cover max-h-[200px]" 
         />
       </motion.div>
