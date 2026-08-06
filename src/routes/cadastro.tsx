@@ -34,11 +34,13 @@ function CadastroPage() {
           animate="animate"
           className="relative z-10 max-w-md text-center"
         >
-          <img 
-            src={logoAsset.url} 
-            alt="PagouMorou Logo" 
-            className="w-full h-auto mb-8 rounded-3xl shadow-2xl"
-          />
+          <div className="w-full h-48 mb-8 rounded-3xl shadow-2xl overflow-hidden bg-white flex items-center justify-center">
+            <img 
+              src={logoAsset.url} 
+              alt="PagouMorou Logo" 
+              className="h-[280%] object-contain -translate-y-[2%]"
+            />
+          </div>
           <h2 className="text-3xl font-display font-bold text-white mb-4">
             Junte-se à revolução do aluguel.
           </h2>
@@ -60,8 +62,8 @@ function CadastroPage() {
               Voltar para o início
             </Link>
 
-            <div className="md:hidden mb-8 text-center">
-               <img src={logoAsset.url} alt="Logo" className="h-12 w-auto mx-auto mb-4" />
+            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start justify-center">
+               <img src={logoAsset.url} alt="Logo" className="h-[280%] object-contain -translate-y-[2%]" />
             </div>
 
             <h1 className="text-3xl font-display font-bold text-text mb-2">Criar conta</h1>
