@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, Building2, MapPin, Sparkles } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, Building2, MapPin, Sparkles, Train } from "lucide-react";
 import { Page } from "@/components/layout/page";
 import { apartments } from "@/mock";
 import { PropertyCard } from "@/components/cards/property-card";
@@ -177,10 +177,10 @@ function SearchPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold flex items-center gap-2">
-                <MapPin className="size-5 text-primary" />
-                Melhores localizações
+                <Train className="size-5 text-primary" />
+                Próximos ao metrô
               </h2>
-              <p className="text-muted-foreground text-sm">Viver perto de tudo o que importa para você.</p>
+              <p className="text-muted-foreground text-sm">Mobilidade e rapidez para o seu dia a dia.</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="rounded-full border border-border">
