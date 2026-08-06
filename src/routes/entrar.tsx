@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/forms/password-input";
 import { Field } from "@/components/forms/field";
-import { fadeIn, slideUp } from "@/lib/motion";
+import { fade, slideUp } from "@/lib/motion";
 import logoAsset from "@/assets/logo.asset.json";
 
 export const Route = createFileRoute("/entrar")({
@@ -29,7 +29,7 @@ function EntrarPage() {
       <div className="hidden md:flex md:w-1/2 bg-surface-secondary items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5 pattern-grid" />
         <motion.div 
-          variants={fadeIn}
+          variants={fade}
           initial="initial"
           animate="animate"
           className="relative z-10 max-w-md text-center"
