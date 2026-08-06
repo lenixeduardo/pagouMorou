@@ -1,11 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Bell, Menu, Settings } from "lucide-react";
+import { Bell, Menu, Settings, CheckCircle2, MessageSquare, DollarSign } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { SearchInput } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/hooks/use-auth";
+import { useNotifications } from "@/hooks/use-notifications";
 import { primaryNav } from "@/config/navigation";
 import {
   DropdownMenu,
@@ -21,7 +22,9 @@ import { currentUser, notifications } from "@/mock";
 
 export function AppHeader() {
   const { isAuthenticated, user, logout } = useAuthStore();
-  const unread = notifications.filter((n) => !n.read).length;
+  const { notifications, markAsRead } = useNotifications();
+  const unreadNotifications = notifications.filter((n) => !n.read);
+  const unreadCount = unreadNotifications.length;
   const location = useLocation();
   const isAuthPage = location.pathname === "/entrar" || location.pathname === "/cadastro";
 
@@ -48,12 +51,58 @@ export function AppHeader() {
           {!isAuthPage && (
             isAuthenticated || location.pathname !== "/" ? (
               <>
-                <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
-                  <Bell aria-hidden />
-                  {unread > 0 ? (
-                    <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
-                  ) : null}
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
+                      <Bell aria-hidden />
+                      {unreadCount > 0 ? (
+                        <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
+                      ) : null}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-80 rounded-2xl p-2">
+                    <DropdownMenuLabel className="px-4 py-2">Notificações</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {notifications.length === 0 ? (
+                      <div className="py-8 text-center text-sm text-text-secondary">
+                        Nenhuma notificação por enquanto.
+                      </div>
+                    ) : (
+                      <div className="max-h-[400px] overflow-y-auto">
+                        {notifications.map((notif) => {
+                          const Icon = notif.kind === "message" ? MessageSquare : 
+                                       notif.kind === "contract" ? CheckCircle2 : 
+                                       notif.kind === "payment" ? DollarSign : Bell;
+                          return (
+                            <DropdownMenuItem 
+                              key={notif.id} 
+                              className={cn(
+                                "flex flex-col items-start gap-1 p-4 cursor-pointer rounded-xl mb-1",
+                                !notif.read && "bg-primary/5"
+                              )}
+                              onClick={() => markAsRead(notif.id)}
+                            >
+                              <div className="flex w-full items-start gap-3">
+                                <div className={cn(
+                                  "rounded-full p-2",
+                                  notif.kind === "message" ? "bg-blue-500/10 text-blue-500" :
+                                  notif.kind === "contract" ? "bg-success/10 text-success" :
+                                  "bg-primary/10 text-primary"
+                                )}>
+                                  <Icon className="size-4" />
+                                </div>
+                                <div className="flex-1 space-y-1">
+                                  <p className="font-bold text-sm leading-none">{notif.title}</p>
+                                  <p className="text-xs text-text-secondary line-clamp-2">{notif.description}</p>
+                                </div>
+                              </div>
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
