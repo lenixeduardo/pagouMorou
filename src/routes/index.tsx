@@ -38,6 +38,7 @@ function HeroPage() {
 
   return (
     <Page fullWidth className="bg-[#F9FBF9] pb-20 pt-0" component="main">
+      <h1 className="sr-only">PagouMorou - Aluguel Residencial Descomplicado e Seguro</h1>
       <HeroSection />
 
       <div className="container mx-auto px-6 max-w-7xl">
