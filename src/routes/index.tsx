@@ -28,12 +28,13 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "canonical", href: "https://pagoumorou.com.br" }],
     lang: "pt-BR",
   }),
-  component: HomePage,
+  component: HeroPage,
 });
 
-function HomePage() {
+function HeroPage() {
   const { toggleFavorite, isFavorite } = useFavorites();
   const featuredApartments = apartments.slice(0, 3);
+
 
   return (
     <Page fullWidth className="bg-[#F9FBF9] pb-20 pt-0" component="main">
@@ -204,29 +205,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="mb-20 mt-20">
-          <div className="mb-12">
-            <h2 className="text-[32px] font-bold tracking-tight mb-2">Imóveis em destaque</h2>
-            <p className="text-text-secondary text-lg">Os imóveis mais desejados selecionados para você.</p>
-          </div>
-
-          <motion.div
-            variants={container}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {featuredApartments.map((apt) => (
-              <PropertyCard 
-                key={apt.id} 
-                apartment={apt} 
-                favorite={isFavorite(apt.id)}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
-          </motion.div>
-        </section>
 
         <FAQSection />
 
