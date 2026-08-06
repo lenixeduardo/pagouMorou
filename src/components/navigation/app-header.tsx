@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Bell, Menu, Plus } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
@@ -19,12 +19,14 @@ import { currentUser, notifications } from "@/mock";
 
 export function AppHeader() {
   const unread = notifications.filter((n) => !n.read).length;
+  const location = useLocation();
+  const isAuthPage = location.pathname === "/entrar" || location.pathname === "/cadastro";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto grid max-w-app grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 md:px-8">
         <div className="flex min-w-0 items-center gap-3">
-          <Logo className="shrink-0" />
+          {!isAuthPage && <Logo className="shrink-0" />}
         </div>
 
         <div className="hidden justify-center md:flex">
@@ -56,7 +58,7 @@ export function AppHeader() {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="faça que na tela de login n apresente o logotipo, mas somente nas demais"
+                aria-label="era pra manter na seção em verde na pagina entrar, era somente no menu de navegação na pagina de entrar que devia sumir"
               >
                 <Menu className="size-4 text-text-secondary" />
                 <Avatar className="size-8">
