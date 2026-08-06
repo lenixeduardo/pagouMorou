@@ -91,7 +91,7 @@ export function HeroSection() {
                 className="bg-primary hover:bg-primary-hover text-white rounded-full px-8 py-7 text-lg font-bold shadow-lg"
                 asChild
               >
-                <Link to="/buscar">
+                <Link to="/entrar">
                   Explorar imóveis
                   <Plus className="ml-3 size-5 rotate-45" />
                 </Link>

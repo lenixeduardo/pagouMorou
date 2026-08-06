@@ -35,66 +35,70 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
           
           <nav className="hidden items-center gap-6 lg:flex">
-            <Link to="/buscar" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Alugar</Link>
-            <Link to="/buscar" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Comprar</Link>
-            <Link to="/anunciar" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Anunciar</Link>
-            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Mapa</Link>
-            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Sobre</Link>
-            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Contato</Link>
+            {/* Nav items removed per user request for clean landing state */}
           </nav>
         </div>
 
         <div className="flex items-center gap-2 justify-self-end">
           <Button size="sm" className="hidden lg:inline-flex bg-primary hover:bg-primary-hover text-white rounded-full px-5" asChild>
-            <Link to="/buscar">
+            <Link to="/entrar">
               Explorar imóveis
               <Plus className="ml-2 size-4 rotate-45" aria-hidden />
             </Link>
           </Button>
 
-          <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
-            <Bell aria-hidden />
-            {unread > 0 ? (
-              <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
-            ) : null}
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="Menu do usuário"
-              >
-                <Menu className="size-4 text-text-secondary" />
-                <Avatar className="size-8">
-                  <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
-                    {currentUser.name.slice(0, 1)}
-                  </AvatarFallback>
-                </Avatar>
+          {/* User profile menu and notifications hidden on homepage per request */}
+          {location.pathname !== "/" ? (
+            <>
+              <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
+                <Bell aria-hidden />
+                {unread > 0 ? (
+                  <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-danger" />
+                ) : null}
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 rounded-lg">
-              <DropdownMenuLabel className="text-label">{currentUser.name}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/perfil">Meu perfil</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/favoritos">Favoritos</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/anunciar">Anunciar imóvel</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/entrar">Entrar</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/cadastro">Criar conta</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
+                    aria-label="Menu do usuário"
+                  >
+                    <Menu className="size-4 text-text-secondary" />
+                    <Avatar className="size-8">
+                      <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
+                        {currentUser.name.slice(0, 1)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 rounded-lg">
+                  <DropdownMenuLabel className="text-label">{currentUser.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/perfil">Meu perfil</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/favoritos">Favoritos</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/anunciar">Anunciar imóvel</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/entrar">Entrar</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/cadastro">Criar conta</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <Button variant="ghost" className="text-sm font-medium" asChild>
+              <Link to="/entrar">Entrar</Link>
+            </Button>
+          )}
         </div>
       </div>
     </motion.header>
