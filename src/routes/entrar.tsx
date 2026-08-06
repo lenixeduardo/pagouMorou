@@ -169,7 +169,7 @@ function EntrarPage() {
                 </Button>
 
                 <p className="text-center text-[15px] text-[#667085] mt-[30px]">
-                  Limpar o cache do navegador para visualizar o novo favicon imediatamente.{" "}
+                  Ainda não possui uma conta?{" "}
                   <Link to="/cadastro" className="text-[#0B873F] font-semibold underline underline-offset-4">
                     Criar conta gratuitamente
                   </Link>
