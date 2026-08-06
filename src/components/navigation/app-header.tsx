@@ -58,7 +58,7 @@ export function AppHeader() {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="era pra manter na seção em verde na pagina entrar, era somente no menu de navegação na pagina de entrar que devia sumir"
+                aria-label="Implementar as seções de destaque e listagem de imóveis na Home conforme especificado no Design Spec.\n\nValidar a responsividade do layout em dispositivos móveis (390x844)."
               >
                 <Menu className="size-4 text-text-secondary" />
                 <Avatar className="size-8">
