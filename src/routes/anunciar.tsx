@@ -1,29 +1,390 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Building2 } from "lucide-react";
+import { 
+  Building2, 
+  ChevronRight, 
+  ChevronLeft, 
+  Upload, 
+  MapPin, 
+  Info, 
+  CheckCircle2,
+  Camera,
+  Coins,
+  FileText
+} from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Field } from "@/components/forms/field";
+import { fadeIn, slideUp } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/anunciar")({
   head: () => ({
     meta: [
-      { title: "Anunciar imóvel para aluguel | PagouMorou" },
-      { name: "description", content: "Cadastre seu apartamento e alugue direto para o inquilino." },
-      { property: "og:title", content: "Anunciar imóvel | PagouMorou" },
-      { property: "og:description", content: "Publique seu apartamento e negocie sem intermediários." },
+      { title: "Anunciar imóvel | PagouMorou" },
+      { name: "description", content: "Cadastre seu imóvel em poucos minutos e alugue sem burocracia." },
     ],
   }),
   component: AnunciarPage,
 });
 
+const STEPS = [
+  { id: "basic", title: "Informações Básicas", icon: Info },
+  { id: "location", title: "Localização", icon: MapPin },
+  { id: "photos", title: "Fotos", icon: Camera },
+  { id: "pricing", title: "Valores", icon: Coins },
+];
+
 function AnunciarPage() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, STEPS.length - 1));
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simular envio
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setCurrentStep(STEPS.length); // Ir para sucesso
+    }, 2000);
+  };
+
+  const isSuccess = currentStep === STEPS.length;
+
   return (
-    <Page title="Anunciar imóvel" description="O fluxo de publicação do anúncio será construído aqui.">
-      <EmptyState
-        icon={Building2}
-        title="Publicação em construção"
-        description="Etapas de fotos, valores e características do imóvel chegam nas próximas etapas."
-      />
+    <Page className="pb-20 pt-10">
+      <div className="mx-auto max-w-3xl">
+        {!isSuccess && (
+          <div className="mb-12">
+            <h1 className="mb-2 text-display text-4xl font-bold">Anunciar Imóvel</h1>
+            <p className="text-lg text-text-secondary">
+              Preencha os detalhes abaixo para publicar seu anúncio.
+            </p>
+
+            {/* Stepper */}
+            <div className="mt-10 flex items-center justify-between px-2">
+              {STEPS.map((step, index) => {
+                const Icon = step.icon;
+                const isActive = index === currentStep;
+                const isCompleted = index < currentStep;
+
+                return (
+                  <div key={step.id} className="flex flex-col items-center gap-2">
+                    <div
+                      className={cn(
+                        "relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300",
+                        isActive && "bg-primary text-white ring-4 ring-primary/20 scale-110",
+                        isCompleted && "bg-success text-white",
+                        !isActive && !isCompleted && "bg-surface-secondary text-muted"
+                      )}
+                    >
+                      {isCompleted ? <CheckCircle2 className="size-6" /> : <Icon className="size-6" />}
+                    </div>
+                    <span className={cn(
+                      "hidden text-caption font-bold md:block",
+                      isActive ? "text-primary" : "text-muted"
+                    )}>
+                      {step.title}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="relative mt-4 h-1 w-full bg-surface-secondary">
+              <div 
+                className="absolute left-0 top-0 h-full bg-primary transition-all duration-500"
+                style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <AnimatePresence mode="wait">
+            {currentStep === 0 && (
+              <motion.div
+                key="step-basic"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div className="grid gap-6 md:grid-cols-2">
+                  <Field label="Tipo de imóvel" required>
+                    <Select defaultValue="apartamento">
+                      <SelectTrigger className="h-12 rounded-xl">
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="apartamento">Apartamento</SelectItem>
+                        <SelectItem value="casa">Casa</SelectItem>
+                        <SelectItem value="studio">Studio / Kitnet</SelectItem>
+                        <SelectItem value="cobertura">Cobertura</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+
+                  <Field label="Quartos" required>
+                    <Select defaultValue="1">
+                      <SelectTrigger className="h-12 rounded-xl">
+                        <SelectValue placeholder="Qtd. quartos" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1 quarto</SelectItem>
+                        <SelectItem value="2">2 quartos</SelectItem>
+                        <SelectItem value="3">3 quartos</SelectItem>
+                        <SelectItem value="4+">4+ quartos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </div>
+
+                <Field label="Título do anúncio" description="Destaque o que seu imóvel tem de melhor." required>
+                  <Input 
+                    placeholder="Ex: Apartamento ensolarado perto do metrô" 
+                    className="h-12 rounded-xl"
+                  />
+                </Field>
+
+                <Field label="Descrição detalhada" required>
+                  <Textarea 
+                    placeholder="Fale sobre o imóvel, condomínio e região..." 
+                    className="min-h-[150px] rounded-xl"
+                  />
+                </Field>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="pet" />
+                    <label htmlFor="pet" className="text-sm font-medium leading-none">Aceita pets</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="parking" />
+                    <label htmlFor="parking" className="text-sm font-medium leading-none">Vaga de garagem</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="furnished" />
+                    <label htmlFor="furnished" className="text-sm font-medium leading-none">Mobiliado</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="pool" />
+                    <label htmlFor="pool" className="text-sm font-medium leading-none">Piscina</label>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 1 && (
+              <motion.div
+                key="step-location"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="md:col-span-1">
+                    <Field label="CEP" required>
+                      <Input placeholder="00000-000" className="h-12 rounded-xl" />
+                    </Field>
+                  </div>
+                  <div className="md:col-span-2">
+                    <Field label="Endereço" required>
+                      <Input placeholder="Rua, Avenida, etc." className="h-12 rounded-xl" />
+                    </Field>
+                  </div>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <Field label="Bairro" required>
+                    <Input placeholder="Ex: Pinheiros" className="h-12 rounded-xl" />
+                  </Field>
+                  <Field label="Cidade" required>
+                    <Input placeholder="Ex: São Paulo" className="h-12 rounded-xl" />
+                  </Field>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <Field label="Número" required>
+                    <Input placeholder="123" className="h-12 rounded-xl" />
+                  </Field>
+                  <Field label="Complemento">
+                    <Input placeholder="Apto 42, Bloco B" className="h-12 rounded-xl" />
+                  </Field>
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 2 && (
+              <motion.div
+                key="step-photos"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-surface py-12 text-center">
+                  <div className="mb-4 rounded-full bg-primary/10 p-4 text-primary">
+                    <Upload className="size-8" />
+                  </div>
+                  <h3 className="mb-1 text-lg font-bold">Arraste suas fotos aqui</h3>
+                  <p className="mb-6 text-sm text-text-secondary">
+                    Ou clique para selecionar arquivos do seu computador.
+                    <br />
+                    Mínimo de 5 fotos para maior destaque.
+                  </p>
+                  <Button type="button" variant="outline" className="rounded-xl">
+                    Selecionar Fotos
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="aspect-square rounded-xl bg-surface-secondary" />
+                  ))}
+                  <div className="flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-border text-muted">
+                    <Camera className="size-6" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 3 && (
+              <motion.div
+                key="step-pricing"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div className="grid gap-6 md:grid-cols-2">
+                  <Field label="Aluguel mensal" required>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
+                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                    </div>
+                  </Field>
+                  <Field label="Condomínio" required>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
+                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                    </div>
+                  </Field>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <Field label="IPTU (Mensal)" required>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
+                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" />
+                    </div>
+                  </Field>
+                  <Field label="Seguro Incêndio (Estimado)">
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted font-bold">R$</span>
+                      <Input placeholder="0,00" className="h-12 rounded-xl pl-12" readOnly />
+                    </div>
+                  </Field>
+                </div>
+
+                <div className="rounded-2xl bg-primary/5 p-6 border border-primary/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium">Total por mês</span>
+                    <span className="text-2xl font-bold text-primary">R$ 0,00</span>
+                  </div>
+                  <p className="text-xs text-text-secondary">
+                    Este é o valor que o inquilino verá no anúncio como pacote completo.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {isSuccess && (
+              <motion.div
+                key="success"
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                className="flex flex-col items-center justify-center rounded-3xl bg-white p-12 text-center shadow-lg border border-border"
+              >
+                <div className="mb-6 rounded-full bg-success/10 p-6 text-success">
+                  <CheckCircle2 className="size-16" />
+                </div>
+                <h2 className="mb-2 text-3xl font-bold">Anúncio Enviado!</h2>
+                <p className="mb-8 max-w-md text-lg text-text-secondary">
+                  Seu imóvel passará por uma análise rápida e em breve estará disponível para milhares de inquilinos.
+                </p>
+                <div className="flex flex-col gap-3 w-full max-w-xs">
+                  <Button size="lg" className="rounded-xl font-bold" asChild>
+                    <a href="/">Ir para a Home</a>
+                  </Button>
+                  <Button variant="ghost" size="lg" className="rounded-xl font-bold">
+                    Ver meu anúncio
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {!isSuccess && (
+            <div className="mt-8 flex items-center justify-between">
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={prevStep}
+                disabled={currentStep === 0}
+                className={cn("rounded-xl font-bold", currentStep === 0 && "opacity-0")}
+              >
+                <ChevronLeft className="mr-2 size-5" />
+                Voltar
+              </Button>
+
+              {currentStep === STEPS.length - 1 ? (
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="rounded-xl px-10 font-bold"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Enviando..." : "Publicar Anúncio"}
+                </Button>
+              ) : (
+                <Button 
+                  type="button" 
+                  size="lg" 
+                  onClick={nextStep}
+                  className="rounded-xl px-10 font-bold"
+                >
+                  Continuar
+                  <ChevronRight className="ml-2 size-5" />
+                </Button>
+              )}
+            </div>
+          )}
+        </form>
+      </div>
     </Page>
   );
 }
