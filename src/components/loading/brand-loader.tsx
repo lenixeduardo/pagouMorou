@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import logoData from "@/assets/logo.asset.json";
+import logoData from "@/assets/logo-brand-sheet.png.asset.json";
 
 const LOADING_MESSAGES = [
   { text: "Buscando imóveis disponíveis para você...", icon: Search },
