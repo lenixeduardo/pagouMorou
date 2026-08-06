@@ -73,9 +73,9 @@ function CadastroPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex flex-col md:flex-row-reverse overflow-x-hidden">
+    <main className="min-h-screen bg-white flex flex-col md:flex-row-reverse overflow-hidden">
       {/* Coluna Esquerda (que fica na direita no Desktop) - Formulário */}
-      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] min-h-screen z-10 bg-white order-2 md:order-1">
+      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] h-screen overflow-y-auto z-10 bg-white order-2 md:order-1">
         <motion.div 
           className="max-w-[490px] w-full mx-auto"
           variants={containerVariants}
@@ -191,7 +191,7 @@ function CadastroPage() {
       </div>
 
       {/* Coluna Direita (que fica na esquerda no Desktop) - Imagem do imóvel */}
-      <div className="relative w-full md:w-[58%] h-[320px] md:h-screen overflow-hidden order-1 md:order-2">
+      <div className="relative w-full md:w-[58%] h-screen overflow-hidden order-1 md:order-2">
         <motion.img 
           src={apartmentAsset.url} 
           alt="Apartamento moderno em São Paulo" 
