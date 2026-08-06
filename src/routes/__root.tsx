@@ -128,7 +128,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ajuste o tamanho correamente do logotipo no menu de navegação, para que fique visivel">
+    <html lang="faça que na tela de login n apresente o logotipo, mas somente nas demais">
       <head>
         <HeadContent />
       </head>
