@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/forms/password-input";
 import { Field } from "@/components/forms/field";
 import { fade, slideUp } from "@/lib/motion";
-import logoAsset from "@/assets/logo.asset.json";
+import logoAsset from "@/assets/logo-brand-sheet.png.asset.json";
 
 export const Route = createFileRoute("/entrar")({
   head: () => ({
@@ -34,11 +34,13 @@ function EntrarPage() {
           animate="animate"
           className="relative z-10 max-w-md text-center"
         >
-          <img 
-            src={logoAsset.url} 
-            alt="PagouMorou Logo" 
-            className="w-full h-auto mb-8 rounded-3xl shadow-2xl"
-          />
+          <div className="w-full h-48 mb-8 rounded-3xl shadow-2xl overflow-hidden bg-white flex items-center justify-center p-8">
+            <img 
+              src={logoAsset.url} 
+              alt="PagouMorou Logo" 
+              className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]"
+            />
+          </div>
           <h2 className="text-3xl font-display font-bold text-white mb-4">
             Alugue sem fiador e sem complicação.
           </h2>
@@ -60,8 +62,8 @@ function EntrarPage() {
               Voltar para o início
             </Link>
 
-            <div className="md:hidden mb-8">
-               <img src={logoAsset.url} alt="Logo" className="h-12 w-auto mb-4" />
+            <div className="md:hidden mb-8 h-12 overflow-hidden flex items-start w-[200px]">
+               <img src={logoAsset.url} alt="Logo" className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]" />
             </div>
 
             <h1 className="text-3xl font-display font-bold text-text mb-2">Bem-vindo de volta</h1>
