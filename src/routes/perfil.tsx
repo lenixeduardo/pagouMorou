@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { calculateTenantScore, calculateOwnerScore, getScoreColor, getScoreLabel } from "@/lib/score";
-import { ShieldCheck, TrendingUp, AlertTriangle } from "lucide-react";
-import { useEffect, useState, ChangeEvent } from "react";
+import { ShieldCheck, TrendingUp, AlertTriangle, CloudUpload, Sparkles } from "lucide-react";
+import { useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
 import { useNotifications } from "@/hooks/use-notifications";
+import confetti from "canvas-confetti";
 import { 
   UserCircle, 
   Settings, 
@@ -85,17 +86,90 @@ function PerfilPage() {
     updateStatus(id, "rejected");
   };
 
+  const triggerEmeraldCelebration = useCallback(() => {
+    const duration = 3 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        colors: ['#10b981', '#34d399', '#059669']
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        colors: ['#10b981', '#34d399', '#059669']
+      });
+    }, 250);
+  }, []);
+
+  const handleKycUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      toast.promise(
+        new Promise((resolve) => setTimeout(resolve, 2000)),
+        {
+          loading: 'Validando documentos...',
+          success: () => {
+            updateUser({ 
+              verified: true,
+              scoreFactors: { 
+                ...user?.scoreFactors, 
+                incompleteDocs: false,
+                kycVerified: true 
+              } 
+            });
+            addNotification({
+              kind: "system",
+              title: "Identidade Verificada!",
+              description: "Seus documentos foram validados. Seu score aumentou!",
+            });
+            return 'Documentos validados com sucesso!';
+          },
+          error: 'Erro ao validar documentos.',
+        }
+      );
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
       return;
     }
     
+    // Se o usuário atingiu o status de Top User, celebra!
+    const isTop = (isOwner && ownerScore >= 800) || (isTenant && tenantScore >= 800);
+    const wasAlreadyCelebrated = sessionStorage.getItem(`celebrated-${user?.id}`);
+    
+    if (isTop && !wasAlreadyCelebrated) {
+      triggerEmeraldCelebration();
+      sessionStorage.setItem(`celebrated-${user?.id}`, 'true');
+      toast.success("Parabéns! Você atingiu o status de Top User!", {
+        icon: <Sparkles className="text-emerald-500" />,
+        duration: 5000,
+      });
+    }
+
     const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => {
       clearTimeout(timer);
     };
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, isOwner, isTenant, ownerScore, tenantScore, triggerEmeraldCelebration, user?.id]);
 
 
 
@@ -341,6 +415,39 @@ function PerfilPage() {
                   </div>
                 </div>
               )}
+
+              {/* KYC Status Card */}
+              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="text-caption font-bold text-text-secondary">Segurança KYC</span>
+                  {user?.scoreFactors?.kycVerified ? (
+                    <CheckCircle2 className="size-5 text-success" />
+                  ) : (
+                    <CloudUpload className="size-5 text-warning" />
+                  )}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="text-xl font-bold">
+                    {user?.scoreFactors?.kycVerified ? "Verificado" : "Pendente"}
+                  </p>
+                  {!user?.scoreFactors?.kycVerified && (
+                    <label className="cursor-pointer group">
+                      <span className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                        Enviar Documentos <ChevronRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept=".pdf,image/*" 
+                        onChange={handleKycUpload}
+                      />
+                    </label>
+                  )}
+                  {user?.scoreFactors?.kycVerified && (
+                    <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
+                  )}
+                </div>
+              </div>
               
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">
