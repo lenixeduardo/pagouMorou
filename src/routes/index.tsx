@@ -1,8 +1,8 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ViktorHero } from "@/components/motionsites/ViktorHero";
 import { PricingCard } from "@/components/motionsites/PricingCard";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
-import { Link } from "@tanstack/react-router";
 import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/cards/property-card";
@@ -147,4 +147,4 @@ function HomePage() {
     </Page>
   );
 }
-import { createFileRoute } from "@tanstack/react-router";
+
