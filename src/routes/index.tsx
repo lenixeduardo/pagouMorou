@@ -104,18 +104,11 @@ function HomePage() {
       </section>
 
       <div className="container mx-auto mt-16 px-6">
-        {/* Featured Section */}
+        {/* Featured Section - Bento Grid Style */}
         <section className="mb-20">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-display text-3xl font-bold">Destaques em São Paulo</h2>
-              <p className="text-text-secondary">Os imóveis mais desejados da capital paulista.</p>
-            </div>
-            <Button variant="ghost" className="hidden font-semibold text-primary md:flex" asChild>
-              <Link to="/buscar">
-                Ver todos <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
+          <div className="mb-8 px-4 md:px-0">
+            <h2 className="mb-2 text-display text-4xl font-extrabold uppercase tracking-tighter">Destaques</h2>
+            <p className="text-text-secondary font-medium">Os imóveis mais desejados selecionados para você.</p>
           </div>
 
           <motion.div
@@ -123,10 +116,15 @@ function HomePage() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {featuredApartments.map((apt) => (
-              <PropertyCard key={apt.id} apartment={apt} />
+            {featuredApartments.map((apt, idx) => (
+              <div key={apt.id} className={cn(
+                "group relative overflow-hidden rounded-3xl border border-border bg-card transition-all hover:border-primary/50",
+                idx === 0 ? "md:col-span-2 md:row-span-2" : ""
+              )}>
+                <PropertyCard apartment={apt} />
+              </div>
             ))}
           </motion.div>
         </section>
