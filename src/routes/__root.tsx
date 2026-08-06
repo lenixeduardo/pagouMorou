@@ -91,17 +91,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PagouMorou — Alugou. Pagou. Morou." },
+      { title: "PagouMorou — Locação Residencial Digital e Segura" },
       {
         name: "description",
         content:
-          "Marketplace de aluguel residencial: encontre apartamentos, negocie direto com o proprietário e assine o contrato digital.",
+          "Marketplace de aluguel residencial no PagouMorou: encontre apartamentos, negocie direto com o proprietário e simplifique sua mudança.",
       },
       { name: "author", content: "PagouMorou" },
-      { property: "og:title", content: "PagouMorou — Alugou. Pagou. Morou." },
+      { property: "og:title", content: "PagouMorou — Locação Residencial Digital e Segura" },
       {
         property: "og:description",
-        content: "Alugue apartamentos sem burocracia, direto com o proprietário.",
+        content: "Alugue seu próximo imóvel sem burocracia, direto com o proprietário no PagouMorou.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

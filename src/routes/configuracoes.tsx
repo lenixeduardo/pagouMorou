@@ -25,7 +25,11 @@ export const Route = createFileRoute("/configuracoes")({
   head: () => ({
     meta: [
       { title: "Configurações | PagouMorou" },
-      { name: "description", content: "Gerencie suas preferências e dados pessoais no PagouMorou." },
+      {
+        name: "description",
+        content:
+          "Ajuste suas preferências de conta, segurança e notificações no PagouMorou para uma experiência personalizada.",
+      },
     ],
   }),
   component: ConfiguracoesPage,

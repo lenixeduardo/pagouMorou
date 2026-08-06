@@ -7,10 +7,18 @@ import { Page } from "@/components/layout/page";
 export const Route = createFileRoute("/mensagens")({
   head: () => ({
     meta: [
-      { title: "Mensagens com proprietários | PagouMorou" },
-      { name: "description", content: "Negocie direto com o proprietário pelo chat do PagouMorou." },
+      { title: "Mensagens | PagouMorou" },
+      {
+        name: "description",
+        content:
+          "Converse diretamente com proprietários ou inquilinos pelo chat do PagouMorou. Negociação rápida e sem burocracia.",
+      },
       { property: "og:title", content: "Mensagens | PagouMorou" },
-      { property: "og:description", content: "Converse e negocie o aluguel sem intermediários." },
+      {
+        property: "og:description",
+        content:
+          "Converse diretamente com proprietários ou inquilinos pelo chat do PagouMorou. Negociação rápida e sem burocracia.",
+      },
     ],
   }),
   component: MensagensPage,

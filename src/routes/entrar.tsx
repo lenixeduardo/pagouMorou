@@ -17,9 +17,17 @@ export const Route = createFileRoute("/entrar")({
   head: () => ({
     meta: [
       { title: "Entrar | PagouMorou" },
-      { name: "description", content: "Entre para continuar sua busca pelo próximo lar." },
+      {
+        name: "description",
+        content:
+          "Acesse sua conta no PagouMorou para gerenciar seus imóveis ou continuar sua busca pelo lar ideal.",
+      },
       { property: "og:title", content: "Entrar | PagouMorou" },
-      { property: "og:description", content: "Entre para continuar sua busca pelo próximo lar." },
+      {
+        property: "og:description",
+        content:
+          "Acesse sua conta no PagouMorou para gerenciar seus imóveis ou continuar sua busca pelo lar ideal.",
+      },
       { property: "og:image", content: apartmentAsset.url },
       { name: "twitter:card", content: "summary_large_image" },
     ],

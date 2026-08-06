@@ -13,7 +13,11 @@ export const Route = createFileRoute("/perfil/agentes")({
   head: () => ({
     meta: [
       { title: "Integrações de Agentes | PagouMorou" },
-      { name: "description", content: "Gerencie integrações MCP para agentes de IA." },
+      {
+        name: "description",
+        content:
+          "Gerencie conexões seguras para agentes de IA no PagouMorou. Use o protocolo MCP para automatizar sua gestão imobiliária.",
+      },
     ],
   }),
   component: AgentIntegrationsPage,

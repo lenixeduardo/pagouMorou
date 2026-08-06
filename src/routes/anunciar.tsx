@@ -36,7 +36,11 @@ export const Route = createFileRoute("/anunciar")({
   head: () => ({
     meta: [
       { title: "Anunciar Imóvel | PagouMorou" },
-      { name: "description", content: "Publique seu anúncio no PagouMorou e alugue seu imóvel rapidamente sem burocracia." },
+      {
+        name: "description",
+        content:
+          "Publique seu anúncio no PagouMorou e alugue seu imóvel rapidamente. Conectamos você aos melhores inquilinos sem burocracia.",
+      },
     ],
   }),
   component: AnunciarPage,

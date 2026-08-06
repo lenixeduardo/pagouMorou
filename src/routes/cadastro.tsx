@@ -16,9 +16,17 @@ export const Route = createFileRoute("/cadastro")({
   head: () => ({
     meta: [
       { title: "Criar Conta | PagouMorou" },
-      { name: "description", content: "Cadastre-se no PagouMorou para encontrar seu próximo lar." },
+      {
+        name: "description",
+        content:
+          "Cadastre-se no PagouMorou para encontrar seu próximo lar. A plataforma de locação que prioriza sua agilidade e segurança.",
+      },
       { property: "og:title", content: "Criar Conta | PagouMorou" },
-      { property: "og:description", content: "Cadastre-se no PagouMorou para encontrar seu próximo lar." },
+      {
+        property: "og:description",
+        content:
+          "Cadastre-se no PagouMorou para encontrar seu próximo lar. A plataforma de locação que prioriza sua agilidade e segurança.",
+      },
       { property: "og:image", content: apartmentAsset.url },
       { name: "twitter:card", content: "summary_large_image" },
     ],
