@@ -231,17 +231,16 @@ function PerfilPage() {
             </nav>
           </motion.aside>
 
-          {/* Main Content */}
-          <motion.div variants={fadeIn} className="space-y-8">
+          <motion.div variants={fadeIn} className="flex-1 space-y-8">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <span className="text-caption font-bold text-text-secondary">Contratos</span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">0</p>}
+                <span className="text-caption font-bold text-text-secondary">Meus Anúncios</span>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{myApartments.length}</p>}
               </div>
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <span className="text-caption font-bold text-text-secondary">Visitas</span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">2</p>}
+                <span className="text-caption font-bold text-text-secondary">Propostas</span>
+                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{receivedProposals.length}</p>}
               </div>
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Mensagens</span>
@@ -249,77 +248,122 @@ function PerfilPage() {
               </div>
             </div>
 
-            {/* Owner Section (Anúncios) */}
-            <div>
-              <div className="mb-6 flex items-end justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold">Meus Anúncios</h3>
-                  <p className="text-text-secondary text-sm">Gerencie os imóveis que você publicou.</p>
-                </div>
-                <Button size="sm" className="rounded-lg font-bold" asChild>
-                  <Link to="/anunciar">
-                    <Building2 className="mr-2 size-4" /> Novo anúncio
-                  </Link>
-                </Button>
-              </div>
+            <Tabs defaultValue="anuncios" className="w-full" onValueChange={setActiveTab}>
+              <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
+                <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">Meus Anúncios</TabsTrigger>
+                <TabsTrigger value="propostas" className="rounded-xl py-3 font-bold">
+                  Propostas {receivedProposals.length > 0 && <Badge variant="secondary" className="ml-2">{receivedProposals.length}</Badge>}
+                </TabsTrigger>
+              </TabsList>
 
-              {isLoading ? (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <SkeletonCardGrid count={2} />
-                </div>
-              ) : userProperties.length > 0 ? (
-                <motion.div 
-                  variants={container}
-                  initial="initial"
-                  animate="animate"
-                  className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                >
-                  {userProperties.map((apt) => (
-                    <PropertyCard key={apt.id} apartment={apt} />
-                  ))}
-                </motion.div>
-              ) : (
-                <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-12 text-center bg-card">
-                  <div className="mb-4 rounded-full bg-surface-secondary p-4 text-muted">
-                    <Home className="size-8" />
+              <TabsContent value="anuncios">
+                {isLoading ? (
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {[1, 2].map((i) => (
+                      <div key={i} className="space-y-4" key={i}>
+                        <Skeleton className="aspect-video w-full rounded-3xl" />
+                        <Skeleton className="h-6 w-2/3" />
+                        <Skeleton className="h-4 w-1/3" />
+                      </div>
+                    ))}
                   </div>
-                  <h4 className="text-lg font-bold">Nenhum anúncio ativo</h4>
-                  <p className="mb-6 text-sm text-text-secondary max-w-xs">
-                    Você ainda não tem imóveis cadastrados para alugar.
-                  </p>
-                  <Button variant="outline" className="rounded-xl" asChild>
-                    <Link to="/anunciar">Começar a anunciar</Link>
-                  </Button>
-                </div>
-              )}
-            </div>
+                ) : myApartments.length === 0 ? (
+                  <Card className="border-dashed py-12 text-center">
+                    <CardContent>
+                      <Building2 className="mx-auto mb-4 size-12 text-muted" />
+                      <CardTitle className="mb-2">Você ainda não tem anúncios</CardTitle>
+                      <CardDescription className="mb-6">
+                        Anuncie seu imóvel no PagouMorou e encontre inquilinos rapidamente.
+                      </CardDescription>
+                      <Button asChild className="rounded-xl font-bold">
+                        <Link to="/anunciar">Começar a anunciar</Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <motion.div 
+                    variants={container}
+                    initial="initial"
+                    animate="animate"
+                    className="grid gap-6 md:grid-cols-2"
+                  >
+                    {myApartments.map((apt) => (
+                      <motion.div key={apt.id} variants={fadeIn}>
+                        <PropertyCard apartment={apt} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+              </TabsContent>
 
-            {/* Notifications Activity */}
-            <div>
-              <h3 className="mb-6 text-2xl font-bold">Atividade Recente</h3>
-              <div className="divide-y divide-border rounded-3xl border border-border bg-white overflow-hidden shadow-sm">
-                <div className="flex items-center gap-4 p-6 hover:bg-surface-secondary/50 transition-colors">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
-                    <Bell className="size-6" />
+              <TabsContent value="propostas" className="space-y-6">
+                {receivedProposals.length === 0 ? (
+                  <Card className="border-dashed py-12 text-center">
+                    <CardContent>
+                      <Clock className="mx-auto mb-4 size-12 text-muted" />
+                      <CardTitle className="mb-2">Nenhuma proposta recebida</CardTitle>
+                      <CardDescription>
+                        Quando alguém se interessar pelo seu imóvel, as propostas aparecerão aqui.
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-4">
+                    {receivedProposals.map((proposal) => {
+                      const apt = apartments.find(a => a.id === proposal.apartmentId);
+                      return (
+                        <Card key={proposal.id} className="overflow-hidden border-border transition-all hover:shadow-md">
+                          <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <div className="space-y-1">
+                              <CardTitle className="text-xl">{proposal.tenantName}</CardTitle>
+                              <CardDescription className="flex items-center gap-1">
+                                <Building2 className="size-3" /> {apt?.title}
+                              </CardDescription>
+                            </div>
+                            <Badge 
+                              variant={proposal.status === "pending" ? "outline" : proposal.status === "approved" ? "default" : "destructive"}
+                              className={cn(
+                                proposal.status === "approved" && "bg-success hover:bg-success/90",
+                                proposal.status === "pending" && "text-warning border-warning"
+                              )}
+                            >
+                              {proposal.status === "pending" ? "Pendente" : proposal.status === "approved" ? "Aprovada" : "Recusada"}
+                            </Badge>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="flex items-center justify-between">
+                              <div className="text-2xl font-bold text-primary">
+                                {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(proposal.rentAmount)}
+                                <span className="text-sm font-normal text-text-secondary"> /mês</span>
+                              </div>
+                              {proposal.status === "pending" && (
+                                <div className="flex gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="rounded-lg text-danger border-danger hover:bg-danger/5"
+                                    onClick={() => handleRejectProposal(proposal.id)}
+                                  >
+                                    Recusar
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    className="rounded-lg bg-success hover:bg-success/90"
+                                    onClick={() => handleApproveProposal(proposal.id)}
+                                  >
+                                    Aprovar
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold">Verificação de conta concluída</p>
-                    <p className="text-xs text-text-secondary truncate">Seus documentos foram validados com sucesso.</p>
-                  </div>
-                  <span className="text-[10px] text-muted whitespace-nowrap">Há 2 horas</span>
-                </div>
-                <div className="flex items-center gap-4 p-6 hover:bg-surface-secondary/50 transition-colors">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-info/10 text-info shrink-0">
-                    <MessageSquare className="size-6" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold">Nova mensagem de Rafael</p>
-                    <p className="text-xs text-text-secondary truncate">Olá! O studio ainda está disponível para setembro?</p>
-                  </div>
-                  <span className="text-[10px] text-muted whitespace-nowrap">Há 1 dia</span>
-                </div>
-              </div>
-            </div>
+                )}
+              </TabsContent>
+            </Tabs>
           </motion.div>
         </motion.div>
       </div>
