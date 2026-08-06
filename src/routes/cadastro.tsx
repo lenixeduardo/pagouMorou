@@ -9,6 +9,7 @@ import { PasswordInput } from "@/components/forms/password-input";
 import { Field } from "@/components/forms/field";
 import { Logo } from "@/components/shared/logo";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuthStore } from "@/hooks/use-auth";
 import apartmentAsset from "@/assets/login-apartment.png.asset.json";
 
 export const Route = createFileRoute("/cadastro")({
@@ -49,6 +50,7 @@ const itemVariants = {
 
 function CadastroPage() {
   const [loading, setLoading] = useState(false);
+  const { login } = useAuthStore();
   const [userType, setUserType] = useState<"inquilino" | "proprietario">("inquilino");
   const navigate = useNavigate();
 
@@ -58,6 +60,14 @@ function CadastroPage() {
     // Simula criação de conta e redireciona para o perfil logado
     setTimeout(() => {
       setLoading(false);
+      
+      login({
+        id: "1",
+        email: "novo@usuario.com",
+        name: "Novo Usuário",
+        type: userType
+      });
+
       navigate({ to: "/perfil" });
     }, 1500);
   };

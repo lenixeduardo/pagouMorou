@@ -10,6 +10,7 @@ import { Field } from "@/components/forms/field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/shared/logo";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuthStore } from "@/hooks/use-auth";
 import apartmentAsset from "@/assets/login-apartment.png.asset.json";
 
 export const Route = createFileRoute("/entrar")({
@@ -51,6 +52,7 @@ const itemVariants = {
 function EntrarPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { login } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -60,6 +62,15 @@ function EntrarPage() {
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
+      
+      // Persiste o estado global
+      login({
+        id: "1",
+        email: "usuario@exemplo.com",
+        name: "Usuário Exemplo",
+        type: "inquilino"
+      });
+
       // Redireciona para a página inicial após 1.5s de sucesso
       setTimeout(() => {
         navigate({ to: "/" });
