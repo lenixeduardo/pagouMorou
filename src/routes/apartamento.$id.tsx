@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, MapPin, Maximize, Send, MessageSquare } from "lucide-react";
+import { Building2, MapPin, Maximize, Send, MessageSquare, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
@@ -12,9 +13,12 @@ import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
-
+import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
+import { motion, AnimatePresence } from "framer-motion";
+import { slideUp, fadeIn } from "@/lib/motion";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
+
 
 export const Route = createFileRoute("/apartamento/$id")({
   head: () => ({
@@ -50,13 +54,17 @@ function ApartamentoPage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const favorite = apartment ? isFavorite(apartment.id) : false;
+  const tenantScore = user ? calculateTenantScore(user) : 850;
 
   const handleProposal = () => {
     if (!isAuthenticated) {
       toast.error("Você precisa estar logado para fazer uma proposta.");
       return;
     }
-    
+    setIsProposalModalOpen(true);
+  };
+
+  const confirmProposal = () => {
     addProposal({
       apartmentId: apartment!.id,
       tenantId: user!.id,
@@ -70,6 +78,9 @@ function ApartamentoPage() {
       description: `Sua proposta para ${apartment!.title} foi enviada ao proprietário.`,
       href: "/perfil",
     });
+
+    setIsProposalModalOpen(false);
+    toast.success("Proposta enviada com sucesso!");
   };
 
   const handleSendMessage = () => {
@@ -219,6 +230,103 @@ function ApartamentoPage() {
           </aside>
         </div>
       </div>
+      {/* Modal de Prévia da Proposta com Score */}
+      <AnimatePresence>
+        {isProposalModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => setIsProposalModalOpen(false)}
+            />
+            <motion.div
+              variants={slideUp}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="relative w-full max-w-lg overflow-hidden rounded-[32px] bg-white p-8 shadow-2xl"
+            >
+              <div className="mb-8 flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Resumo da Proposta</h2>
+                <Button variant="ghost" size="icon" onClick={() => setIsProposalModalOpen(false)} className="rounded-full">
+                  <Heart className="size-5 rotate-45" />
+                </Button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="rounded-2xl bg-surface-secondary p-6">
+                  <p className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-4">Seu Perfil de Inquilino</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={cn(
+                        "size-16 rounded-full flex items-center justify-center bg-white shadow-sm border-2",
+                        tenantScore >= 800 ? "border-emerald-500" : "border-border"
+                      )}>
+                        {tenantScore >= 800 ? (
+                          <Sparkles className="size-8 text-emerald-500" />
+                        ) : (
+                          <ShieldCheck className={cn("size-8", getScoreColor(tenantScore))} />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold leading-none">{tenantScore}</p>
+                        <p className={cn("text-xs font-bold uppercase tracking-widest mt-1", getScoreColor(tenantScore))}>
+                          {getScoreLabel(tenantScore)}
+                        </p>
+                      </div>
+                    </div>
+                    {tenantScore >= 800 && (
+                      <Badge className="bg-emerald-500 text-white rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
+                        Top Inquilino
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="mt-4 h-1.5 w-full bg-border rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(tenantScore / 1000) * 100}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className={cn("h-full", 
+                        tenantScore >= 800 ? "bg-emerald-500" : 
+                        tenantScore >= 600 ? "bg-primary" : 
+                        tenantScore >= 400 ? "bg-warning" : "bg-danger"
+                      )}
+                    />
+                  </div>
+                  <p className="mt-4 text-xs text-text-secondary leading-relaxed">
+                    Seu score será exibido ao proprietário para aumentar a confiança na sua proposta.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center py-3 border-b border-border">
+                    <span className="text-text-secondary">Imóvel</span>
+                    <span className="font-bold">{apartment?.title}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-border">
+                    <span className="text-text-secondary">Valor do Aluguel</span>
+                    <span className="font-bold text-primary">
+                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(apartment?.rent || 0)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-4 space-y-3">
+                  <Button className="w-full h-14 rounded-2xl text-lg font-bold shadow-lg" onClick={confirmProposal}>
+                    Confirmar e Enviar Proposta
+                  </Button>
+                  <Button variant="ghost" className="w-full h-12 rounded-xl text-text-secondary" onClick={() => setIsProposalModalOpen(false)}>
+                    Revisar detalhes
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </Page>
   );
 }
