@@ -11,12 +11,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn, stagger as staggerContainer } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useFavorites } from "@/hooks/use-favorites";
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       type: (search["type"] as string) || "Todos",
-      bedrooms: search["bedrooms"] ? String(search["bedrooms"]) : null,
+      bedrooms: (search["bedrooms"] as string) || undefined,
       minPrice: Number(search["minPrice"]) || 0,
       maxPrice: Number(search["maxPrice"]) || 20000,
       sort: (search["sort"] as string) || "relevance",
@@ -44,6 +45,7 @@ type PropertyType = "Todos" | "Studio" | "Apartamento";
 type SortOption = "relevance" | "price_asc" | "price_desc";
 
 function BuscarPage() {
+  const { toggleFavorite, isFavorite } = useFavorites();
   const { type, bedrooms, minPrice, maxPrice, sort, q } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -87,7 +89,7 @@ function BuscarPage() {
     }
 
     // Filter by bedrooms
-    if (bedrooms !== null) {
+    if (bedrooms !== undefined) {
       if (bedrooms === "4+") {
         result = result.filter((apt) => apt.features.bedrooms >= 4);
       } else {
@@ -110,14 +112,14 @@ function BuscarPage() {
 
   const clearFilters = () => {
     navigate({
-      search: { type: "Todos", bedrooms: null, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" },
+      search: { type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" },
       replace: true,
     });
     setLocalPriceRange([0, 20000]);
     setLocalQuery("");
   };
 
-  const hasActiveFilters = type !== "Todos" || bedrooms !== null || minPrice > 0 || maxPrice < 20000 || q !== "";
+  const hasActiveFilters = type !== "Todos" || bedrooms !== undefined || minPrice > 0 || maxPrice < 20000 || q !== "";
 
   return (
     <Page fullWidth className="pb-20" component="main">
@@ -291,7 +293,11 @@ function BuscarPage() {
                 >
                   {filteredApartments.map((apt) => (
                     <motion.div key={apt.id} variants={fadeIn}>
-                      <PropertyCard apartment={apt} />
+                      <PropertyCard 
+                        apartment={apt} 
+                        favorite={isFavorite(apt.id)}
+                        onToggleFavorite={toggleFavorite}
+                      />
                     </motion.div>
                   ))}
                 </motion.div>

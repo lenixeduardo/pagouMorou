@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Building2, MapPin, Maximize } from "lucide-react";
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
+import { useFavorites } from "@/hooks/use-favorites";
+import { Heart } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
@@ -27,6 +30,8 @@ export const Route = createFileRoute("/apartamento/$id")({
 function ApartamentoPage() {
   const { id } = Route.useParams();
   const apartment = apartments.find((a) => a.id === id);
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = apartment ? isFavorite(apartment.id) : false;
 
   if (!apartment) {
     return (
@@ -35,7 +40,7 @@ function ApartamentoPage() {
           icon={Building2}
           title="Imóvel não encontrado"
           description="O anúncio que você está procurando não existe ou foi removido."
-          action={<Button asChild><Link to="/buscar">Voltar para busca</Link></Button>}
+          action={<Button asChild><Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>Voltar para busca</Link></Button>}
         />
       </Page>
     );
@@ -56,7 +61,17 @@ function ApartamentoPage() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-display text-4xl font-bold">{apartment.title}</h1>
+              <div className="flex items-center justify-between gap-4">
+                <h1 className="text-display text-4xl font-bold">{apartment.title}</h1>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-2xl border-border shrink-0"
+                  onClick={() => toggleFavorite(apartment.id)}
+                >
+                  <Heart className={cn("size-5", favorite && "fill-danger text-danger")} />
+                </Button>
+              </div>
               <div className="flex items-center gap-4 text-text-secondary">
                 <span className="flex items-center gap-1"><MapPin className="size-4" /> {apartment.address.neighborhoodId}, {apartment.address.city}</span>
                 <span className="flex items-center gap-1"><Maximize className="size-4" /> {apartment.features.areaM2}m²</span>

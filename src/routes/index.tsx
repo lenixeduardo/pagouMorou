@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from "lucide-react";
+import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import footerAsset from "@/assets/footer.asset.json";
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const { toggleFavorite, isFavorite } = useFavorites();
   const featuredApartments = apartments.slice(0, 3);
   const recentApartments = apartments.slice(0, 4);
 
@@ -82,7 +84,7 @@ function HomePage() {
                 />
               </div>
               <Button size="lg" className="h-14 px-8 text-lg font-medium md:w-auto" asChild>
-                <Link to="/buscar">
+                <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
                   Buscar
                 </Link>
               </Button>
@@ -124,7 +126,12 @@ function HomePage() {
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 px-4 md:px-0"
           >
             {featuredApartments.map((apt) => (
-              <PropertyCard key={apt.id} apartment={apt} />
+              <PropertyCard 
+                key={apt.id} 
+                apartment={apt} 
+                favorite={isFavorite(apt.id)}
+                onToggleFavorite={toggleFavorite}
+              />
             ))}
           </motion.div>
         </section>
@@ -137,6 +144,7 @@ function HomePage() {
               <Link
                 key={nb.id}
                 to="/buscar"
+                search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}
                 className="group flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-md"
               >
                 <span className="mb-1 text-title group-hover:text-primary">{nb.name}</span>
@@ -163,13 +171,18 @@ function HomePage() {
             className="grid gap-4 px-4 md:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           >
             {recentApartments.map((apt) => (
-              <PropertyCard key={apt.id} apartment={apt} />
+              <PropertyCard 
+                key={apt.id} 
+                apartment={apt} 
+                favorite={isFavorite(apt.id)}
+                onToggleFavorite={toggleFavorite}
+              />
             ))}
           </motion.div>
 
           <div className="mt-12 text-center">
             <Button size="lg" variant="outline" className="h-12 px-10 font-bold" asChild>
-              <Link to="/buscar">
+              <Link to="/buscar" search={{ type: "Todos", bedrooms: undefined, minPrice: 0, maxPrice: 20000, sort: "relevance", q: "" }}>
                 Carregar mais imóveis
               </Link>
             </Button>

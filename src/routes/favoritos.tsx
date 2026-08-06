@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
+import { useFavorites } from "@/hooks/use-favorites";
+import { apartments } from "@/mock";
+import { PropertyCard } from "@/components/cards/property-card";
+import { motion } from "framer-motion";
+import { container, fadeIn } from "@/lib/motion";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
@@ -17,13 +22,35 @@ export const Route = createFileRoute("/favoritos")({
 });
 
 function FavoritosPage() {
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const favoriteApartments = apartments.filter((apt) => favorites.includes(apt.id));
+
   return (
     <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui." component="main">
-      <EmptyState
-        icon={Heart}
-        title="Nenhum favorito ainda"
-        description="Ao explorar apartamentos, toque no coração para salvar os que mais gostar."
-      />
+      {favoriteApartments.length > 0 ? (
+        <motion.div
+          variants={container}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          {favoriteApartments.map((apt) => (
+            <motion.div key={apt.id} variants={fadeIn}>
+              <PropertyCard
+                apartment={apt}
+                favorite={isFavorite(apt.id)}
+                onToggleFavorite={toggleFavorite}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : (
+        <EmptyState
+          icon={Heart}
+          title="Nenhum favorito ainda"
+          description="Ao explorar apartamentos, toque no coração para salvar os que mais gostar."
+        />
+      )}
     </Page>
   );
 }
