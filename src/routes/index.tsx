@@ -36,9 +36,9 @@ function HomePage() {
   const recentApartments = apartments.slice(0, 4);
 
   return (
-    <Page fullWidth className="pb-20">
+    <Page fullWidth className="bg-background pb-20 pt-0">
       {/* Hero / Search Section */}
-      <section className="relative flex min-h-[500px] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[600px]">
+      <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[60vh]">
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
           <div className="grid h-full w-full grid-cols-6 grid-rows-6 opacity-20">
