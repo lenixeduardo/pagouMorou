@@ -185,7 +185,7 @@ export const apartments: Apartment[] = [
     rent: 1800,
     condoFee: 320,
     iptu: 80,
-    images: ["https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2071&auto=format&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1536376074432-8f274fa4265d?q=80&w=2071&auto=format&fit=crop"],
     address: {
       street: "Rua Antônio de Albuquerque",
       number: "530",
