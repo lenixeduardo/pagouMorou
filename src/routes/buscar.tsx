@@ -64,7 +64,7 @@ function SearchPage() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex flex-col gap-6 mb-12">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold tracking-tight">Encontre seu novo lar</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Buscar seu novo lar</h1>
             <div className="flex items-center gap-2">
               <Button variant="outline" className="rounded-full gap-2 px-6">
                 <Filter className="size-4" />
