@@ -90,7 +90,7 @@ export function AppHeader() {
               </DropdownMenu>
             </>
           ) : (
-            <Button className="rounded-full px-6" asChild>
+            <Button className="rounded-full px-8 h-11 text-base font-semibold shadow-md hover:shadow-lg transition-all" asChild>
               <Link to="/entrar">Entrar</Link>
             </Button>
           )}
