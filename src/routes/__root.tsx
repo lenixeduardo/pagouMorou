@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto">
+    <html lang="refaça o logotipo tendo o mesmo estilo do apresentado.">
       <head>
         <HeadContent />
       </head>
