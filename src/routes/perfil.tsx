@@ -59,7 +59,8 @@ function PerfilPage() {
   const { addNotification } = useNotifications();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("anuncios");
+  const isOwner = user?.type === 'proprietario';
+  const isTenant = user?.type === 'inquilino';
 
   // Meus anúncios
   const myApartments = apartments.filter(apt => apt.ownerId === user?.id);
@@ -68,6 +69,25 @@ function PerfilPage() {
   const receivedProposals = proposals.filter(p => 
     myApartments.some(apt => apt.id === p.apartmentId)
   );
+
+  // Mock de dados para score se não existirem
+  const mockUserForScore = {
+    ...user,
+    avatarUrl: user?.avatarUrl,
+    scoreFactors: user?.scoreFactors || {
+      lowStability: false,
+      contractBreach: false,
+      positiveOwnerReviews: 85,
+      latePayments: 0,
+      incompleteDocs: false,
+      incompleteProfile: false,
+      noAvatar: !user?.avatarUrl,
+      chatResponseTime: "high"
+    }
+  };
+
+  const tenantScore = calculateTenantScore(mockUserForScore as any);
+  const ownerScore = calculateOwnerScore(mockUserForScore as any, myApartments);
 
   const handleApproveProposal = (id: string) => {
     updateStatus(id, "approved");
