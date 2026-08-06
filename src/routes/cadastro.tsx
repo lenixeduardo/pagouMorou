@@ -26,8 +26,8 @@ function CadastroPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row-reverse">
       {/* Lado Direito - Visual/Branding (Invertido no Cadastro) */}
-      <div className="hidden md:flex md:w-1/2 bg-primary/5 items-center justify-center p-12 relative overflow-hidden">
-        <div className="absolute inset-0 pattern-dots" />
+      <div className="hidden md:flex md:w-1/2 bg-primary items-center justify-center p-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/5 pattern-dots" />
         <motion.div 
           variants={fade}
           initial="initial"
@@ -37,12 +37,12 @@ function CadastroPage() {
           <img 
             src={logoAsset.url} 
             alt="PagouMorou Logo" 
-            className="w-full h-auto mb-8 rounded-3xl shadow-xl"
+            className="w-full h-auto mb-8 rounded-3xl shadow-2xl"
           />
-          <h2 className="text-3xl font-display font-bold text-text mb-4">
+          <h2 className="text-3xl font-display font-bold text-white mb-4">
             Junte-se à revolução do aluguel.
           </h2>
-          <p className="text-secondary-text text-lg">
+          <p className="text-white/80 text-lg">
             Cadastre-se para encontrar seu próximo lar ou anunciar seu imóvel com total segurança.
           </p>
         </motion.div>
