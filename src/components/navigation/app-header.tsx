@@ -87,7 +87,7 @@ export function AppHeader() {
                       <Link to="/anunciar">Anunciar imóvel</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/configuracoes" className="flex items-center gap-2">
+                      <Link to="/perfil" className="flex items-center gap-2">
                         <Settings className="size-4" />
                         Configurações
                       </Link>
