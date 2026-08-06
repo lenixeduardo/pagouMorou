@@ -65,7 +65,7 @@ function EntrarPage() {
   return (
     <main className="min-h-screen bg-white flex flex-col md:flex-row overflow-x-hidden">
       {/* Coluna Esquerda - Autenticação (42%) */}
-      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] min-h-screen z-10 bg-white order-2 md:order-1">
+      <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] min-h-screen md:h-screen z-10 bg-white order-2 md:order-1">
         <motion.div 
           className="max-w-[490px] w-full mx-auto"
           variants={containerVariants}
@@ -185,7 +185,7 @@ function EntrarPage() {
       </div>
 
       {/* Coluna Direita - Imagem do imóvel (58%) */}
-      <div className="relative w-full md:w-[58%] h-screen overflow-hidden order-1 md:order-2">
+      <div className="relative w-full md:w-[58%] h-[50vh] md:h-screen overflow-hidden order-1 md:order-2">
         <motion.img 
           src={apartmentAsset.url} 
           alt="Apartamento moderno em São Paulo" 
