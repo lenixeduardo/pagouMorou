@@ -198,27 +198,6 @@ function PerfilPage() {
 
   // Simula os imóveis do usuário (se for proprietário)
   const userProperties = apartments.slice(0, 2);
-  const isOwner = user?.type === 'proprietario';
-  const isTenant = user?.type === 'inquilino';
-
-  // Mock de dados para score se não existirem
-  const mockUserForScore = {
-    ...user,
-    avatarUrl: user?.avatarUrl,
-    scoreFactors: user?.scoreFactors || {
-      lowStability: false,
-      contractBreach: false,
-      positiveOwnerReviews: 85,
-      latePayments: 0,
-      incompleteDocs: false,
-      incompleteProfile: false,
-      noAvatar: !user?.avatarUrl,
-      chatResponseTime: "high"
-    }
-  };
-
-  const tenantScore = calculateTenantScore(mockUserForScore as any);
-  const ownerScore = calculateOwnerScore(mockUserForScore as any, myApartments);
 
   return (
     <Page className="pb-20 pt-10" component="main">
