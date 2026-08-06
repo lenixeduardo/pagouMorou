@@ -33,6 +33,7 @@ export function PropertyCard({
     <motion.article
       initial="rest"
       whileHover="hover"
+      viewport={{ once: true }}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-card border border-border bg-card shadow-xs transition-all duration-300 hover:shadow-md",
         className,
@@ -41,6 +42,9 @@ export function PropertyCard({
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-secondary">
         {cover ? (
           <motion.img
+            initial={{ scale: 1.1, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             variants={imageZoom}
             src={cover}
             alt={apartment.title}

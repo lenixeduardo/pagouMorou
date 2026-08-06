@@ -1,4 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { motion } from "framer-motion";
 import { HelpCircle } from "lucide-react";
 
 const FAQ_DATA = [
@@ -23,7 +24,13 @@ const FAQ_DATA = [
 export function FAQSection() {
   return (
     <section className="mb-20 px-4 md:px-0">
-      <div className="mb-10 flex flex-col items-center text-center">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-10 flex flex-col items-center text-center"
+      >
         <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <HelpCircle className="size-6" />
         </div>
@@ -33,7 +40,7 @@ export function FAQSection() {
         <p className="max-w-2xl text-lg text-text-secondary">
           Separamos as principais perguntas que as pessoas fazem sobre alugar um apartamento no PagouMorou.
         </p>
-      </div>
+      </motion.div>
 
       <div className="mx-auto max-w-3xl">
         <Accordion type="single" collapsible className="w-full">
