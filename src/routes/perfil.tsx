@@ -138,7 +138,7 @@ function PerfilPage() {
           {/* Main Content */}
           <motion.div variants={fadeIn} className="space-y-8">
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Contratos</span>
                 <p className="text-3xl font-bold mt-1">0</p>
@@ -150,10 +150,6 @@ function PerfilPage() {
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Mensagens</span>
                 <p className="text-3xl font-bold mt-1">1</p>
-              </div>
-              <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-                <span className="text-caption font-bold text-text-secondary">Favoritos</span>
-                <p className="text-3xl font-bold mt-1">2</p>
               </div>
             </div>
 
