@@ -33,13 +33,15 @@ function FavoritosPage() {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
-    } else {
-      const timer = setTimeout(() => setIsLoading(false), 1500);
-      return () => {
-        clearTimeout(timer);
-      };
+      return;
     }
+    
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [isAuthenticated, navigate]);
+
 
 
 
