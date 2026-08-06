@@ -56,7 +56,7 @@ export function AppHeader() {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="essa é a imagem ajuste."
+                aria-label="agora adicione ao nav o novo logotipo"
               >
                 <Menu className="size-4 text-text-secondary" />
                 <Avatar className="size-8">
