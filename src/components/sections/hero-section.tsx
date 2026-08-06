@@ -12,7 +12,7 @@ export function HeroSection() {
   ];
 
   return (
-    <section className="relative flex flex-col pt-4 md:pt-8 bg-white overflow-hidden">
+    <section className="relative flex flex-col pt-4 md:pt-8 bg-[#F9FBF9] overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
           {/* Hero Left Content */}
