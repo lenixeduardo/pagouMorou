@@ -6,9 +6,9 @@ import { container, item } from "@/lib/motion";
 
 export function HeroSection() {
   const propertyImages = [
-    "https://images.unsplash.com/photo-1536376074432-8f274fa4265d?q=80&w=2070&auto=format&fit=crop", // Studio moderno
-    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop", // Apartamento Pinheiros
-    "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?q=80&w=2070&auto=format&fit=crop"  // Loft/Varanda Savassi
+    "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop", // Cozinha planejada
+    "https://images.unsplash.com/photo-1505691938895-1758d7eaa511?q=80&w=2070&auto=format&fit=crop", // Quarto e cama ao centro
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"  // Prédio comercial/residencial moderno
   ];
 
   return (
