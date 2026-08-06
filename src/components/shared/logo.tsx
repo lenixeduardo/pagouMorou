@@ -25,8 +25,11 @@ export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) 
             className="w-full h-full object-contain" 
           />
         </div>
-        <span className="text-xl font-display font-bold tracking-tight text-text">
-          Pagou<span className="text-primary">Morou</span>
+        <span 
+          style={{ fontFamily: "'PP Mondwest', serif" }}
+          className="text-2xl font-bold tracking-tight text-[#051A24]"
+        >
+          PagouMorou
         </span>
       </div>
       {withSlogan && (
