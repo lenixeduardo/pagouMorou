@@ -36,7 +36,7 @@ function HomePage() {
   const featuredApartments = apartments.slice(0, 3);
 
   return (
-    <Page fullWidth className="bg-white pb-20 pt-0" component="main">
+    <Page fullWidth className="bg-[#F9FBF9] pb-20 pt-0" component="main">
       <HeroSection />
 
       <div className="container mx-auto px-6 max-w-7xl">
