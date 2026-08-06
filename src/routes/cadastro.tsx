@@ -82,8 +82,8 @@ function CadastroPage() {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="mb-12">
-            <Logo size="lg" className="w-[200px] md:w-[260px]" />
+          <motion.div variants={itemVariants} className="mb-8 md:mb-12">
+            <Logo size="lg" className="w-[280px] md:w-[260px] mx-auto md:mx-0" />
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-6">
