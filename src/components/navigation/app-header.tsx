@@ -56,7 +56,7 @@ export function AppHeader() {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-3 rounded-full border-border bg-background px-3 py-1.5 transition-all hover:shadow-md h-auto"
-                aria-label="acredito que o meu hamburguer e o itemd e perfil estao redudandante , opte pelo melhor cabifvel no escopo do projeto"
+                aria-label="refaça o logotipo tendo o mesmo estilo do apresentado."
               >
                 <Menu className="size-4 text-text-secondary" />
                 <Avatar className="size-8">
