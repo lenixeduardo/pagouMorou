@@ -1,16 +1,7 @@
-import { User } from "@/types";
+import { User, Apartment } from "@/types";
 
 /**
  * Calcula o score do inquilino (0 a 1000) baseado em diversos fatores.
- * Regras:
- * - Base: 1000 pontos
- * - Perfil incompleto: -100
- * - Sem foto: -50
- * - Documentação incompleta: -150
- * - Baixa permanência/Quebra contrato: -200
- * - Atrasos no pagamento: -100 por atraso (max -300)
- * - Avaliações de proprietários: Peso 20% do score (0-200)
- * - Tempo de resposta chat: low (-100), medium (-50), high (0)
  */
 export function calculateTenantScore(user: Partial<User>): number {
   let score = 800; // Começamos com uma base neutra/boa
@@ -28,15 +19,54 @@ export function calculateTenantScore(user: Partial<User>): number {
   score -= Math.min(latePaymentPenalty, 300);
 
   if (factors.positiveOwnerReviews !== undefined) {
-    // Escala de 0-100 para 0-200 pontos bônus/ônus
     score += (factors.positiveOwnerReviews - 50) * 2;
   }
 
   if (factors.chatResponseTime === "low") score -= 100;
   if (factors.chatResponseTime === "medium") score -= 50;
 
-  // Garante limites
   return Math.max(0, Math.min(1000, score));
+}
+
+/**
+ * Calcula o score do proprietário (0 a 1000)
+ */
+export function calculateOwnerScore(owner: Partial<User>, properties: Apartment[]): number {
+  let score = 700; // Base para proprietário
+
+  // 1. Qualidade dos Anúncios (Fotos e Descrição)
+  properties.forEach(apt => {
+    if (apt.images.length >= 5) score += 20;
+    if (apt.images.length < 3) score -= 30;
+    
+    // Validação de descrição (mínimo de palavras/presença de termos chave)
+    const desc = apt.description.toLowerCase();
+    const hasLocation = desc.includes("local") || desc.includes("bairro") || desc.includes("rua");
+    const hasPOI = desc.includes("perto") || desc.includes("metrô") || desc.includes("próximo");
+    const hasRooms = desc.includes("quarto") || desc.includes("sala") || desc.includes("cozinha");
+    const hasFurnished = apt.features.furnished ? (desc.includes("cama") || desc.includes("sofá") || desc.includes("geladeira")) : true;
+
+    if (hasLocation && hasPOI && hasRooms && hasFurnished) {
+      score += 40;
+    } else {
+      score -= 20;
+    }
+  });
+
+  // 2. Tempo de Resposta e Revisão
+  if (owner.scoreFactors) {
+    if (owner.scoreFactors.chatResponseTime === "high") score += 100;
+    if (owner.scoreFactors.chatResponseTime === "low") score -= 100;
+  }
+
+  // 3. Documentação
+  if (owner.verified) score += 150;
+  
+  // 4. Avaliações de Inquilinos
+  const avgRating = properties.reduce((acc, apt) => acc + apt.rating, 0) / (properties.length || 1);
+  score += (avgRating - 3) * 100; // Se nota for 5, +200. Se for 1, -200.
+
+  return Math.max(0, Math.min(1000, Math.round(score)));
 }
 
 export function getScoreColor(score: number): string {
