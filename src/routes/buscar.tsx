@@ -143,35 +143,6 @@ function SearchPage() {
           </div>
         </section>
 
-        <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-primary/5 rounded-3xl p-8 flex flex-col justify-between h-[200px] hover-lift cursor-pointer group">
-            <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-              <Building2 className="size-6" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold">Próximos ao Metrô</h3>
-              <p className="text-sm text-muted-foreground">Mobilidade urbana no seu dia a dia.</p>
-            </div>
-          </div>
-          <div className="bg-slate-50 rounded-3xl p-8 flex flex-col justify-between h-[200px] hover-lift cursor-pointer group">
-            <div className="size-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-              <Sparkles className="size-6" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold">Imóveis Novos</h3>
-              <p className="text-sm text-muted-foreground">Recém publicados na plataforma.</p>
-            </div>
-          </div>
-          <div className="bg-slate-900 rounded-3xl p-8 flex flex-col justify-between h-[200px] hover-lift cursor-pointer group text-white">
-            <div className="size-12 rounded-2xl bg-white/10 flex items-center justify-center text-white group-hover:bg-white group-hover:text-slate-900 transition-all">
-              <Sparkles className="size-6" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold">Novidades</h3>
-              <p className="text-sm text-slate-400">Recém adicionados à plataforma.</p>
-            </div>
-          </div>
-        </section>
 
         <section>
           <div className="flex items-center justify-between mb-6">
