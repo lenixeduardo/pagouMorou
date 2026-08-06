@@ -11,11 +11,11 @@ interface LogoProps {
 export function Logo({ className, withSlogan = false, size = "md" }: LogoProps) {
   return (
     <Link to="/" className={cn("flex items-center gap-2.5", className)} aria-label="PagouMorou">
-      <div className="flex items-center overflow-hidden h-9">
+      <div className="flex items-center overflow-hidden h-9 w-[180px]">
         <img 
           src={logoData.url} 
           alt="PagouMorou Logo" 
-          className="h-[280%] object-contain -translate-y-[2%]"
+          className="h-[280%] w-auto object-contain -translate-y-[2%] -translate-x-[2%]"
         />
       </div>
       {withSlogan && (
