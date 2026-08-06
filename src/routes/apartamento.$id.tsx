@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Building2, MapPin, Maximize, Send, MessageSquare } from "lucide-react";
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
@@ -9,7 +10,7 @@ import { useNotifications } from "@/hooks/use-notifications";
 import { useChat } from "@/hooks/use-chat";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 
 import { EmptyState } from "@/components/feedback/empty-state";
@@ -194,7 +195,7 @@ function ApartamentoPage() {
                     placeholder="Tire suas dúvidas..." 
                     className="h-12 rounded-xl"
                     value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setChatMessage(e.target.value)}
                   />
                   <Button 
                     size="icon" 
