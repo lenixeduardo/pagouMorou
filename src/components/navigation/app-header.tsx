@@ -30,7 +30,7 @@ export function AppHeader() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       className="sticky top-0 z-40 border-b border-border bg-[#F9FBF9]/80 backdrop-blur-xl supports-[backdrop-filter]:bg-[#F9FBF9]/70"
     >
-      <div className="mx-auto flex max-w-app items-center justify-between gap-4 px-4 py-3 md:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-8">
         <div className="flex items-center gap-8">
           {!isAuthPage && <Logo className="shrink-0" />}
           
