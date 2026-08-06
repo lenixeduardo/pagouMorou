@@ -17,9 +17,17 @@ export const Route = createFileRoute("/favoritos")({
   head: () => ({
     meta: [
       { title: "Meus favoritos | PagouMorou" },
-      { name: "description", content: "Apartamentos que você salvou para alugar depois." },
+      {
+        name: "description",
+        content:
+          "Visualize seus imóveis favoritos no PagouMorou. Compare opções e escolha seu próximo endereço com facilidade.",
+      },
       { property: "og:title", content: "Meus favoritos | PagouMorou" },
-      { property: "og:description", content: "Sua lista de apartamentos salvos no PagouMorou." },
+      {
+        property: "og:description",
+        content:
+          "Visualize seus imóveis favoritos no PagouMorou. Compare opções e escolha seu próximo endereço com facilidade.",
+      },
     ],
   }),
   component: FavoritosPage,

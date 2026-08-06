@@ -16,7 +16,11 @@ export const Route = createFileRoute("/buscar")({
   head: () => ({
     title: "Explorar Imóveis | PagouMorou",
     meta: [
-      { name: "description", content: "Busque seu novo lar entre os melhores imóveis selecionados." },
+      {
+        name: "description",
+        content:
+          "Busque seu próximo lar entre os melhores imóveis selecionados no PagouMorou. Aluguel direto, seguro e digital.",
+      },
     ],
   }),
   component: SearchPage,

@@ -22,12 +22,14 @@ export const Route = createFileRoute("/apartamento/$id")({
       { title: "Detalhes do Imóvel | PagouMorou" },
       {
         name: "description",
-        content: "Veja fotos, valores e fale direto com o proprietário deste imóvel no PagouMorou.",
+        content:
+          "Veja fotos e fale direto com o proprietário deste imóvel no PagouMorou. Aluguel residencial transparente e sem intermediários.",
       },
       { property: "og:title", content: "Detalhes do Imóvel | PagouMorou" },
       {
         property: "og:description",
-        content: "Veja fotos, valores e fale direto com o proprietário deste imóvel no PagouMorou.",
+        content:
+          "Veja fotos e fale direto com o proprietário deste imóvel no PagouMorou. Aluguel residencial transparente e sem intermediários.",
       },
     ],
   }),

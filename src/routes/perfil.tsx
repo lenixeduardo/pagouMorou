@@ -47,7 +47,11 @@ export const Route = createFileRoute("/perfil")({
   head: () => ({
     meta: [
       { title: "Meu Perfil | PagouMorou" },
-      { name: "description", content: "Gerencie seus dados, contratos e anúncios de aluguel no painel do usuário PagouMorou." },
+      {
+        name: "description",
+        content:
+          "Gerencie seu perfil, anúncios e propostas no PagouMorou. Tudo o que você precisa para sua locação em um só lugar.",
+      },
     ],
   }),
   component: PerfilPage,
