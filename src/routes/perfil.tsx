@@ -448,55 +448,6 @@ function PerfilPage() {
                 </CardContent>
               </Card>
             )}
-                    <TrendingUp className="size-5 text-primary" />
-                    <CardTitle className="text-lg">Como melhorar seu Score?</CardTitle>
-                  </div>
-                  <CardDescription>
-                    Seu score ajuda proprietários a confiarem em você para alugar mais rápido.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-full bg-success/10 p-1.5 text-success">
-                        <CheckCircle2 className="size-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Mantenha pagamentos em dia</p>
-                        <p className="text-xs text-text-secondary">Pagamentos pontuais são o fator mais importante.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className={cn("rounded-full p-1.5", mockUserForScore.scoreFactors.incompleteProfile ? "bg-warning/10 text-warning" : "bg-success/10 text-success")}>
-                        {mockUserForScore.scoreFactors.incompleteProfile ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Complete seu perfil</p>
-                        <p className="text-xs text-text-secondary">Adicione fotos e valide seus documentos.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-full bg-primary/10 p-1.5 text-primary">
-                        <MessageSquare className="size-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Responda rápido no chat</p>
-                        <p className="text-xs text-text-secondary">Interação ágil melhora sua reputação.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-full bg-info/10 p-1.5 text-info">
-                        <TrendingUp className="size-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold">Histórico de permanência</p>
-                        <p className="text-xs text-text-secondary">Evite quebras de contrato ou curtas estadias.</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
             <Tabs defaultValue="anuncios" className="w-full" onValueChange={setActiveTab}>
               <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
