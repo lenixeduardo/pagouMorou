@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import logoData from "@/assets/logo-brand-sheet.png.asset.json";
+import { Logo } from "@/components/shared/logo";
 
 const LOADING_MESSAGES = [
   { text: "Buscando imóveis disponíveis para você...", icon: Search },
@@ -77,13 +77,9 @@ export function BrandLoader({ className, isSplash = false }: BrandLoaderProps) {
                 repeatType: "reverse",
                 ease: "easeInOut"
               }}
-              className="flex size-32 items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50 overflow-hidden"
+              className="flex items-center justify-center rounded-[32px] bg-white shadow-xl border border-border/50 p-12"
             >
-              <img 
-                src={logoData.url} 
-                alt="PagouMorou Logo" 
-                className="h-[320%] w-auto object-contain -translate-y-[4%] -translate-x-[2%]" 
-              />
+              <Logo size="lg" className="scale-150" />
             </motion.div>
           </motion.div>
         </div>
