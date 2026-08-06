@@ -41,7 +41,7 @@ function PerfilPage() {
   const isOwner = true;
 
   return (
-    <Page className="pb-20 pt-10">
+    <Page className="pb-20 pt-10" component="main">
       <div className="container mx-auto px-6">
         <motion.div 
           variants={stagger}

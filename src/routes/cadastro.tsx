@@ -24,7 +24,7 @@ export const Route = createFileRoute("/cadastro")({
 
 function CadastroPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row-reverse pb-[env(safe-area-inset-bottom)]">
+    <main className="min-h-screen bg-background flex flex-col md:flex-row-reverse pb-[env(safe-area-inset-bottom)]">
       {/* Lado Direito - Visual/Branding (Invertido no Cadastro) */}
       <div className="hidden md:flex md:w-1/2 bg-primary/90 items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/5 pattern-dots" />
@@ -113,6 +113,6 @@ function CadastroPage() {
           </motion.div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

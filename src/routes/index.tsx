@@ -38,7 +38,7 @@ function HomePage() {
   const recentApartments = apartments.slice(0, 4);
 
   return (
-    <Page fullWidth className="bg-background pb-20 pt-0">
+    <Page fullWidth className="bg-background pb-20 pt-0" component="main">
       {/* Hero / Search Section */}
       <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden bg-primary px-6 py-16 text-center text-white md:min-h-[60vh]">
         <div className="absolute inset-0 z-0 opacity-10">
