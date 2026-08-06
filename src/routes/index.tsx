@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, FileSignature, Search, Sparkles, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import footerAsset from "@/assets/footer.asset.json";
 
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
@@ -189,6 +190,15 @@ function HomePage() {
           </div>
 
         </section>
+      </div>
+      
+      {/* Footer Branding Asset */}
+      <div className="w-full mt-10 overflow-hidden pointer-events-none select-none">
+        <img 
+          src={footerAsset.url} 
+          alt="" 
+          className="w-full object-cover max-h-[200px] opacity-80" 
+        />
       </div>
     </Page>
   );
