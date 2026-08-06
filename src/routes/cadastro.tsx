@@ -16,7 +16,7 @@ export const Route = createFileRoute("/cadastro")({
       { name: "description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
       { property: "og:title", content: "Criar Conta | PagouMorou" },
       { property: "og:description", content: "Cadastre-se no PagouMorou para alugar seu próximo imóvel sem fiador ou burocracia." },
-      { property: "og:image", content: logoAsset.url },
+      { property: "og:image", content: "/favicon.png" },
     ],
   }),
   component: CadastroPage,

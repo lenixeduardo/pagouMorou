@@ -16,7 +16,7 @@ export const Route = createFileRoute("/entrar")({
       { name: "description", content: "Acesse sua conta PagouMorou para gerenciar seus aluguéis e contratos." },
       { property: "og:title", content: "Entrar | PagouMorou" },
       { property: "og:description", content: "Acesse sua conta PagouMorou para gerenciar seus aluguéis e contratos." },
-      { property: "og:image", content: logoAsset.url },
+      { property: "og:image", content: "/favicon.png" },
     ],
   }),
   component: EntrarPage,
