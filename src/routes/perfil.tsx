@@ -59,6 +59,7 @@ function PerfilPage() {
   const { addNotification } = useNotifications();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("anuncios");
   const isOwner = user?.type === 'proprietario';
   const isTenant = user?.type === 'inquilino';
 
