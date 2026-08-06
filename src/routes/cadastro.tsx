@@ -69,7 +69,7 @@ function CadastroPage() {
               Escolha como você quer começar no PagouMorou.
             </p>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <Button variant="outline" className="h-20 flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary-soft">
                   <span className="font-bold">Sou Inquilino</span>
@@ -104,7 +104,7 @@ function CadastroPage() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center text-secondary-text">
+            <div className="mt-6 md:mt-8 text-center text-secondary-text">
               Já tem uma conta?{" "}
               <Link to="/entrar" className="text-primary font-bold hover:underline">
                 Faça login

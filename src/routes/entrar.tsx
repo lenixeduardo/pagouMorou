@@ -69,7 +69,7 @@ function EntrarPage() {
               Insira seus dados para acessar sua conta.
             </p>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4 md:space-y-6" onSubmit={(e) => e.preventDefault()}>
               <Field label="E-mail" id="email">
                 <Input 
                   id="email" 
@@ -102,7 +102,7 @@ function EntrarPage() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center text-secondary-text">
+            <div className="mt-6 md:mt-8 text-center text-secondary-text">
               Ainda não tem uma conta?{" "}
               <Link to="/cadastro" className="text-primary font-bold hover:underline">
                 Crie uma agora
