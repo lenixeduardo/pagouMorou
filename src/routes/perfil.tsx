@@ -400,6 +400,55 @@ function PerfilPage() {
                 <CardHeader className="bg-surface-secondary/30 pb-4">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="size-5 text-primary" />
+                    <CardTitle className="text-lg">Como ser um Top Inquilino?</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Um score alto garante prioridade nas propostas e melhores condições de locação.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <Calendar className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Estabilidade é chave</p>
+                        <p className="text-xs text-text-secondary">Evite quebras de contrato e permaneça mais tempo nos imóveis.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-primary/10 p-1.5 text-primary">
+                        <CheckCircle2 className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Pagamentos em dia</p>
+                        <p className="text-xs text-text-secondary">Mantenha seu histórico de aluguel impecável e sem atrasos.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-info/10 p-1.5 text-info">
+                        <Star className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Boas avaliações</p>
+                        <p className="text-xs text-text-secondary">Seja um bom morador e receba ótimas recomendações de proprietários.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-success/10 p-1.5 text-success">
+                        <UserCircle className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">Perfil completo</p>
+                        <p className="text-xs text-text-secondary">Avatar, documentos e perfil 100% preenchidos aumentam sua confiança.</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+                    <TrendingUp className="size-5 text-primary" />
                     <CardTitle className="text-lg">Como melhorar seu Score?</CardTitle>
                   </div>
                   <CardDescription>
