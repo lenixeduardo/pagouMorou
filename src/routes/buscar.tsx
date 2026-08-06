@@ -155,11 +155,11 @@ function SearchPage() {
           </div>
           <div className="bg-slate-50 rounded-3xl p-8 flex flex-col justify-between h-[200px] hover-lift cursor-pointer group">
             <div className="size-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-              <MapPin className="size-6" />
+              <Sparkles className="size-6" />
             </div>
             <div>
-              <h3 className="text-lg font-bold">Bairros Premium</h3>
-              <p className="text-sm text-muted-foreground">Vila Mariana, Moema e Pinheiros.</p>
+              <h3 className="text-lg font-bold">Imóveis Novos</h3>
+              <p className="text-sm text-muted-foreground">Recém publicados na plataforma.</p>
             </div>
           </div>
           <div className="bg-slate-900 rounded-3xl p-8 flex flex-col justify-between h-[200px] hover-lift cursor-pointer group text-white">
@@ -211,6 +211,48 @@ function SearchPage() {
               ))
             ) : (
               <p className="text-muted-foreground py-10 px-4">Continue explorando mais bairros.</p>
+            )}
+          </div>
+        </section>
+
+        <section className="mb-20">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <Sparkles className="size-5 text-primary" />
+                Recém adicionados
+              </h2>
+              <p className="text-muted-foreground text-sm">As últimas oportunidades publicadas hoje.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" className="rounded-full border border-border">
+                <ChevronLeft className="size-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="rounded-full border border-border">
+                <ChevronRight className="size-5" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="min-w-[320px] md:min-w-[380px]">
+                  <SkeletonCardGrid count={1} />
+                </div>
+              ))
+            ) : filteredApartments.length > 0 ? (
+              [...filteredApartments].reverse().slice(0, 5).map((apt) => (
+                <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
+                  <PropertyCard 
+                    apartment={apt} 
+                    favorite={isFavorite(apt.id)}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                </div>
+              ))
+            ) : (
+              <p className="text-muted-foreground py-10 px-4">Fique atento às novidades.</p>
             )}
           </div>
         </section>
