@@ -15,17 +15,17 @@ import { Slider } from "@/components/ui/slider";
 export const Route = createFileRoute("/buscar")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      type: (search.type as string) || "Todos",
-      bedrooms: search.bedrooms ? String(search.bedrooms) : null,
-      minPrice: Number(search.minPrice) || 0,
-      maxPrice: Number(search.maxPrice) || 20000,
-      sort: (search.sort as string) || "relevance",
-      q: (search.q as string) || "",
+      type: (search["type"] as string) || "Todos",
+      bedrooms: search["bedrooms"] ? String(search["bedrooms"]) : null,
+      minPrice: Number(search["minPrice"]) || 0,
+      maxPrice: Number(search["maxPrice"]) || 20000,
+      sort: (search["sort"] as string) || "relevance",
+      q: (search["q"] as string) || "",
     };
   },
   head: ({ search }) => ({
     meta: [
-      { title: `Resultados para "${search.q || "Imóveis"}" | PagouMorou` },
+      { title: `Resultados para "${(search as any).q || "Imóveis"}" | PagouMorou` },
       {
         name: "description",
         content: "Filtre apartamentos por bairro, preço e características e alugue sem burocracia.",
@@ -57,7 +57,7 @@ function BuscarPage() {
 
   const updateFilters = (updates: Partial<ReturnType<typeof Route.useSearch>>) => {
     navigate({
-      search: (prev) => ({ ...prev, ...updates }),
+      search: (prev: any) => ({ ...prev, ...updates }),
       replace: true,
     });
   };
