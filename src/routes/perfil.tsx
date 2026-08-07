@@ -5,7 +5,7 @@ import {
   getScoreColor,
   getScoreLabel,
 } from "@/lib/score";
-import { ShieldCheck, TrendingUp, CloudUpload, Sparkles } from "lucide-react";
+import { ShieldCheck, TrendingUp, CloudUpload, Sparkles, Download } from "lucide-react";
 import { useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRequireAuth } from "@/hooks/use-require-auth";
@@ -29,8 +29,8 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  // Plus removed as it was unused
   Star,
+  FileDown,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -477,10 +477,42 @@ function PerfilPage() {
                     <CloudUpload className="size-5 text-warning" aria-hidden />
                   )}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 w-full">
                   <p className="text-xl font-bold">{KYC_LABEL[user?.verification ?? "none"]}</p>
+                  
                   {user?.verification === "verified" ? (
-                    <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
+                    <div className="space-y-4">
+                      <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="flex items-center justify-between p-3 rounded-xl border border-border bg-surface-secondary/20">
+                          <div className="flex items-center gap-2">
+                            <FileText className="size-4 text-primary" />
+                            <span className="text-xs font-medium">Documento ID</span>
+                          </div>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => toast.success("Iniciando download...")}>
+                            <Download className="size-3.5" />
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between p-3 rounded-xl border border-border bg-surface-secondary/20">
+                          <div className="flex items-center gap-2">
+                            <FileText className="size-4 text-primary" />
+                            <span className="text-xs font-medium">Comprovante</span>
+                          </div>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => toast.success("Iniciando download...")}>
+                            <Download className="size-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="w-full rounded-lg border-primary text-primary hover:bg-primary/5 text-xs h-9"
+                        onClick={() => toast.success("Iniciando download de todos os documentos...")}
+                      >
+                        <FileDown className="mr-2 size-3.5" />
+                        Baixar Todos (.zip)
+                      </Button>
+                    </div>
                   ) : user?.verification === "pending" ? (
                     <p className="text-xs text-text-secondary">
                       Recebemos seus documentos. A análise leva até 48h.
@@ -820,13 +852,33 @@ function PerfilPage() {
                                 </div>
                               )}
                               {proposal.status === "accepted" && (
-                                <Button
-                                  size="sm"
-                                  className="rounded-lg bg-primary"
-                                  onClick={() => requestPayment(proposal.id)}
-                                >
-                                  Solicitar PIX
-                                </Button>
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg border-primary text-primary"
+                                    onClick={() => {
+                                      toast.info("Gerando contrato PDF...", {
+                                        description: "Aguarde enquanto preparamos o documento com as cláusulas do imóvel."
+                                      });
+                                      // Simulação de geração de PDF
+                                      setTimeout(() => {
+                                        toast.success("Contrato PDF gerado com sucesso!", {
+                                          description: "O documento foi enviado para assinatura digital."
+                                        });
+                                      }, 1500);
+                                    }}
+                                  >
+                                    Gerar Contrato (PDF)
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-primary"
+                                    onClick={() => requestPayment(proposal.id)}
+                                  >
+                                    Solicitar PIX
+                                  </Button>
+                                </div>
                               )}
                               {proposal.status === "payment_sent" && (
                                 <div className="flex gap-2">

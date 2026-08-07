@@ -10,6 +10,7 @@ import {
   Camera,
   Coins,
   X,
+  Plus,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm, type Path } from "react-hook-form";
@@ -82,6 +83,7 @@ const anuncioSchema = z.object({
   rent: z.coerce.number().min(1, "Informe o valor do aluguel."),
   condoFee: z.coerce.number().min(0),
   iptu: z.coerce.number().min(0),
+  standardClauses: z.array(z.string()).default([]),
 });
 
 type AnuncioForm = z.input<typeof anuncioSchema>;
@@ -92,6 +94,7 @@ const STEPS = [
   { id: "location", title: "Localização", icon: MapPin },
   { id: "photos", title: "Fotos", icon: Camera },
   { id: "pricing", title: "Valores", icon: Coins },
+  { id: "contract", title: "Contrato", icon: CheckCircle2 },
 ] as const;
 
 /** Campos validados ao clicar em "Continuar" de cada passo — assim o erro
@@ -101,6 +104,7 @@ const STEP_FIELDS: Path<AnuncioForm>[][] = [
   ["zipCode", "street", "number", "neighborhood", "city", "state"],
   [],
   ["rent", "condoFee", "iptu"],
+  ["standardClauses"],
 ];
 
 function AnunciarPage() {
@@ -119,9 +123,8 @@ function AnunciarPage() {
     handleSubmit,
     trigger,
     watch,
+    setValue,
     formState: { errors },
-    // O terceiro genérico é o tipo já transformado pelo zod: `z.coerce.number()`
-    // entra como texto do input e sai como number no submit.
   } = useForm<AnuncioForm, unknown, AnuncioValues>({
     resolver: zodResolver(anuncioSchema),
     mode: "onTouched",
@@ -145,6 +148,11 @@ function AnunciarPage() {
       rent: 0,
       condoFee: 0,
       iptu: 0,
+      standardClauses: [
+        "O imóvel deve ser entregue nas mesmas condições de limpeza do início do contrato.",
+        "A manutenção de itens de desgaste natural é de responsabilidade do locatário.",
+        "É proibida a realização de reformas sem autorização prévia por escrito do proprietário.",
+      ],
     },
   });
 
@@ -153,7 +161,21 @@ function AnunciarPage() {
   const condoFee = Number(watch("condoFee")) || 0;
   const iptu = Number(watch("iptu")) || 0;
 
+  const isFurnished = watch("furnished");
   const descriptionQuality = useMemo(() => analyseDescription(description), [description]);
+
+  // Hook simplificado para sugerir cláusulas
+  const prevFurnished = useRef(isFurnished);
+  useEffect(() => {
+    if (isFurnished && !prevFurnished.current) {
+      const furnishedClause = "O imóvel é locado com a mobília e equipamentos listados no laudo de vistoria, devendo o locatário zelar por sua perfeita conservação.";
+      const current = watch("standardClauses") || [];
+      if (!current.includes(furnishedClause)) {
+        setValue("standardClauses", [...current, furnishedClause]);
+      }
+    }
+    prevFurnished.current = isFurnished;
+  }, [isFurnished, watch]);
 
   // Cada preview vira um object URL; sem o revoke a aba vaza memória a cada
   // troca de seleção.
@@ -258,7 +280,14 @@ function AnunciarPage() {
           </div>
         )}
 
-        <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
+        <form onSubmit={(event) => {
+          if (currentStep < STEPS.length - 1) {
+            event.preventDefault();
+            void goNext();
+            return;
+          }
+          void handleSubmit(onSubmit)(event);
+        }}>
           <AnimatePresence mode="wait">
             {!isSuccess && currentStep === 0 && (
               <motion.div
@@ -461,6 +490,18 @@ function AnunciarPage() {
                     </fieldset>
                   )}
                 />
+
+                <div className="rounded-xl bg-info/5 border border-info/10 p-4">
+                  <div className="flex gap-3">
+                    <Info className="size-5 text-info shrink-0 mt-0.5" />
+                    <div className="text-sm text-info">
+                      <p className="font-bold mb-1">Cláusulas Inteligentes</p>
+                      <p>
+                        Ao marcar "Mobiliado", adicionaremos automaticamente sugestões de cláusulas sobre conservação dos móveis no passo final.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -719,6 +760,79 @@ function AnunciarPage() {
                   <Button variant="ghost" size="lg" className="rounded-xl font-bold" asChild>
                     <Link to="/perfil">Ir para o painel</Link>
                   </Button>
+                </div>
+              </motion.div>
+            )}
+            {!isSuccess && currentStep === 4 && (
+              <motion.div
+                key="step-contract"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Cláusulas do Contrato</h2>
+                  <p className="text-text-secondary mb-6">
+                    Defina as cláusulas padrão que serão incluídas no contrato digital deste imóvel.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <Controller
+                    control={control}
+                    name="standardClauses"
+                    render={({ field }) => (
+                      <div className="space-y-4">
+                        {(field.value || []).map((clause, index) => (
+                          <div key={index} className="group relative">
+                            <Textarea
+                              value={clause}
+                              onChange={(e) => {
+                                const newValue = [...(field.value || [])];
+                                newValue[index] = e.target.value;
+                                field.onChange(newValue);
+                              }}
+                              className="min-h-[80px] rounded-xl pr-10"
+                              placeholder={`Cláusula ${index + 1}`}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newValue = (field.value || []).filter((_, i) => i !== index);
+                                field.onChange(newValue);
+                              }}
+                              className="absolute right-3 top-3 text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="size-5" />
+                            </button>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full border-dashed rounded-xl h-12"
+                          onClick={() => field.onChange([...(field.value || []), ""])}
+                        >
+                          <Plus className="mr-2 size-4" />
+                          Adicionar cláusula personalizada
+                        </Button>
+                      </div>
+                    )}
+                  />
+                </div>
+
+                <div className="rounded-xl bg-info/5 border border-info/10 p-4">
+                  <div className="flex gap-3">
+                    <Info className="size-5 text-info shrink-0 mt-0.5" />
+                    <div className="text-sm text-info">
+                      <p className="font-bold mb-1">Dica de Especialista</p>
+                      <p>
+                        Cláusulas claras sobre manutenção, limpeza e mobília evitam conflitos futuros e aumentam seu Score de Proprietário.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
