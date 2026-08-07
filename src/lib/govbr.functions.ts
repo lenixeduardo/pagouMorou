@@ -53,7 +53,7 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
             title,
             owner_id
           )
-        `)
+        `) as any; // Cast temporário enquanto o tipo não atualiza via CLI
         .eq('id', data.proposalId)
         .single();
 
