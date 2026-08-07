@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Implementar o armazenamento do PDF assinado no bucket contracts do Supabase Storage.
+              Adicionar um QR Code no selo ITI para validação externa imediata do contrato.
             </span>
           </nav>
         </div>
