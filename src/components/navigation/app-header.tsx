@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Contrato Digital e Gestão de Documentos Implementados
+              Implementar a geração de contrato PDF dinâmico com os dados da proposta aceita.
             </span>
           </nav>
         </div>
