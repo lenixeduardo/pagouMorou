@@ -42,7 +42,7 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       
       // 1. Buscar dados da proposta e do imóvel para localizar o contrato
-      const { data: proposal, error: proposalError } = await supabaseAdmin
+      const { data: proposal, error: proposalError } = await (supabaseAdmin
         .from('proposals')
         .select(`
           id,
@@ -53,7 +53,7 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
             title,
             owner_id
           )
-        `) as any; // Cast temporário enquanto o tipo não atualiza via CLI
+        `) as any)
         .eq('id', data.proposalId)
         .single();
 
