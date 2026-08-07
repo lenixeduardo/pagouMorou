@@ -33,6 +33,7 @@ export interface NewApartmentInput {
   petFriendly: boolean;
   amenities: string[];
   photos: File[];
+  standardClauses?: string[];
 }
 
 export function useCreateApartment() {
