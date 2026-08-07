@@ -47,6 +47,7 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
         .select(`
           id,
           apartment_id,
+          tenant_id,
           contract_url,
           apartments (
             title,
