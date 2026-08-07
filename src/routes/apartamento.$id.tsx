@@ -15,10 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/hooks/use-favorites";
-import { useAuthStore } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
-import { useNotifications } from "@/hooks/use-notifications";
-import { useChat } from "@/hooks/use-chat";
+import { useStartConversation } from "@/hooks/use-conversations";
+import { usePublicProfile } from "@/hooks/use-public-profile";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, ChangeEvent } from "react";
@@ -83,17 +84,17 @@ function ApartamentoPage() {
   const { id } = Route.useParams();
   const { data: apartment } = useSuspenseQuery(apartmentBySlugQueryOptions(id));
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { user, isAuthenticated } = useAuthStore();
-  const { addProposal } = useProposals();
-  const { addNotification } = useNotifications();
-  const { sendMessage } = useChat();
+  const { user, isAuthenticated } = useAuth();
+  const { sendProposal, isSending } = useProposals();
+  const { startConversation, isSending: isSendingMessage } = useStartConversation();
+  const { data: owner } = usePublicProfile(apartment?.ownerId);
 
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const favorite = apartment ? isFavorite(apartment.id) : false;
   const tenantScore = user ? calculateTenantScore(user) : 850;
+  const isOwnListing = user !== null && apartment?.ownerId === user.id;
 
   const handleProposal = () => {
     if (!isAuthenticated) {
@@ -103,41 +104,23 @@ function ApartamentoPage() {
     setIsProposalModalOpen(true);
   };
 
-  const confirmProposal = () => {
-    addProposal({
+  const confirmProposal = async () => {
+    const sent = await sendProposal({
       apartmentId: apartment!.id,
-      tenantId: user!.id,
-      tenantName: user!.name,
       rentAmount: apartment!.rent,
     });
-
-    addNotification({
-      kind: "contract",
-      title: "Proposta enviada",
-      description: `Sua proposta para ${apartment!.title} foi enviada ao proprietário.`,
-      href: "/perfil",
-    });
-
-    setIsProposalModalOpen(false);
-    toast.success("Proposta enviada com sucesso!");
+    if (sent) setIsProposalModalOpen(false);
   };
 
-  const handleSendMessage = () => {
-    if (!chatMessage.trim()) return;
-    if (!isAuthenticated) {
-      toast.error("Você precisa estar logado para enviar mensagens.");
-      return;
-    }
+  const handleSendMessage = async () => {
+    const content = chatMessage.trim();
+    if (!content) return;
 
-    sendMessage(`conv-${apartment!.id}`, user!.id, chatMessage);
-    addNotification({
-      kind: "message",
-      title: "Mensagem enviada",
-      description: `Você enviou uma mensagem sobre o imóvel ${apartment!.title}.`,
-      href: "/mensagens",
-    });
-    setChatMessage("");
-    toast.success("Mensagem enviada!");
+    const conversationId = await startConversation(apartment!.id, content);
+    if (conversationId) {
+      setChatMessage("");
+      toast.success("Mensagem enviada! Acompanhe a resposta em Mensagens.");
+    }
   };
 
   // The loader already throws notFound() when the slug doesn't resolve, so
@@ -150,12 +133,20 @@ function ApartamentoPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
           <div className="space-y-8">
             {/* Gallery Placeholder */}
+            {/* Anúncios recém-publicados podem ainda não ter foto. */}
             <div className="aspect-video overflow-hidden rounded-3xl bg-surface-secondary shadow-sm">
-              <img
-                src={apartment.images[0]}
-                alt={apartment.title}
-                className="h-full w-full object-cover"
-              />
+              {apartment.images[0] ? (
+                <img
+                  src={apartment.images[0]}
+                  alt={apartment.title}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-text-secondary">
+                  <Building2 className="size-10" aria-hidden />
+                  <span className="text-caption">Sem fotos publicadas ainda</span>
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">
@@ -196,7 +187,9 @@ function ApartamentoPage() {
               </div>
               <div className="text-center">
                 <span className="text-xs text-text-secondary block">Andar</span>
-                <span className="text-lg font-bold">{apartment.features.floor}º</span>
+                <span className="text-lg font-bold">
+                  {apartment.features.floor !== undefined ? `${apartment.features.floor}º` : "—"}
+                </span>
               </div>
             </div>
 
@@ -244,37 +237,85 @@ function ApartamentoPage() {
                 </div>
               </div>
 
-              <Button
-                className="w-full h-14 text-lg font-bold rounded-2xl shadow-md transition-all active:scale-[0.98]"
-                onClick={handleProposal}
-              >
-                Quero alugar
-              </Button>
-
-              <div className="mt-4 space-y-3">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Tire suas dúvidas..."
-                    className="h-12 rounded-xl"
-                    value={chatMessage}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setChatMessage(e.target.value)}
-                  />
-                  <Button
-                    size="icon"
-                    className="h-12 w-12 shrink-0 rounded-xl"
-                    onClick={handleSendMessage}
-                  >
-                    <Send className="size-5" />
+              {isOwnListing ? (
+                <div className="rounded-2xl border border-border bg-surface-secondary p-4 text-center">
+                  <p className="text-body font-bold">Este anúncio é seu</p>
+                  <p className="mt-1 text-caption text-text-secondary">
+                    Acompanhe propostas e mensagens pelo seu painel.
+                  </p>
+                  <Button variant="outline" className="mt-4 w-full rounded-xl font-bold" asChild>
+                    <Link to="/perfil">Ir para o painel</Link>
                   </Button>
                 </div>
-                <Button
-                  variant="outline"
-                  className="w-full h-12 font-bold rounded-xl border-border flex items-center gap-2"
-                >
-                  <MessageSquare className="size-4" />
-                  Falar com proprietário
-                </Button>
-              </div>
+              ) : (
+                <>
+                  <Button
+                    className="w-full h-14 text-lg font-bold rounded-2xl shadow-md transition-all active:scale-[0.98]"
+                    onClick={handleProposal}
+                  >
+                    Quero alugar
+                  </Button>
+
+                  <div className="mt-4 space-y-3">
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Tire suas dúvidas..."
+                        aria-label="Mensagem para o proprietário"
+                        className="h-12 rounded-xl"
+                        value={chatMessage}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          setChatMessage(e.target.value)
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            void handleSendMessage();
+                          }
+                        }}
+                      />
+                      <Button
+                        size="icon"
+                        className="h-12 w-12 shrink-0 rounded-xl"
+                        disabled={isSendingMessage || chatMessage.trim() === ""}
+                        onClick={() => void handleSendMessage()}
+                        aria-label="Enviar mensagem ao proprietário"
+                      >
+                        <Send className="size-5" aria-hidden />
+                      </Button>
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="w-full h-12 font-bold rounded-xl border-border flex items-center gap-2"
+                      asChild
+                    >
+                      <Link to="/mensagens">
+                        <MessageSquare className="size-4" aria-hidden />
+                        Ver minhas conversas
+                      </Link>
+                    </Button>
+                  </div>
+                </>
+              )}
+
+              {owner && (
+                <div className="mt-6 flex items-center gap-3 border-t border-border pt-6">
+                  <Avatar className="size-11">
+                    {owner.avatarUrl ? <AvatarImage src={owner.avatarUrl} alt="" /> : null}
+                    <AvatarFallback className="bg-primary/10 font-bold text-primary">
+                      {owner.name.slice(0, 1)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <p className="truncate text-caption text-text-secondary">Anunciado por</p>
+                    <p className="flex items-center gap-1 truncate font-bold">
+                      {owner.name}
+                      {owner.verified && (
+                        <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden />
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </aside>
         </div>
@@ -389,9 +430,10 @@ function ApartamentoPage() {
                 <div className="pt-4 space-y-3">
                   <Button
                     className="w-full h-14 rounded-2xl text-lg font-bold shadow-lg"
-                    onClick={confirmProposal}
+                    disabled={isSending}
+                    onClick={() => void confirmProposal()}
                   >
-                    Confirmar e Enviar Proposta
+                    {isSending ? "Enviando..." : "Confirmar e Enviar Proposta"}
                   </Button>
                   <Button
                     variant="ghost"

@@ -10,7 +10,10 @@ import { Field } from "@/components/forms/field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/shared/logo";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuthStore } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
+import { getBrowserSupabase } from "@/lib/supabase/browser";
+import { translateAuthError } from "@/lib/auth/profile";
+import { toast } from "sonner";
 import apartmentAsset from "@/assets/login-apartment.png.asset.json";
 
 export const Route = createFileRoute("/entrar")({
@@ -47,50 +50,55 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 18 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { 
-      duration: 0.6, 
-      ease: [0.22, 1, 0.36, 1] as const 
-    }
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
   },
 };
 
 function EntrarPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { login } = useAuthStore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulação de login
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-      
-      // Persiste o estado global
-      login({
-        id: "1",
-        email: "usuario@exemplo.com",
-        name: "Usuário Exemplo",
-        type: "inquilino"
-      });
 
-      // Redireciona para a página de busca após 1.5s de sucesso
+    try {
+      await signIn(email, password);
+      setSuccess(true);
+      // A tela de sucesso respira por um instante antes de trocar de rota.
       setTimeout(() => {
-        navigate({ to: "/buscar" });
-      }, 1500);
-    }, 2000);
+        void navigate({ to: "/buscar" });
+      }, 1200);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível entrar.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    const { error } = await getBrowserSupabase().auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/buscar` },
+    });
+    if (error) toast.error(translateAuthError(error.message));
   };
 
   return (
     <main className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
       {/* Coluna Esquerda - Autenticação (42%) */}
       <div className="w-full md:w-[42%] flex flex-col justify-center px-6 py-8 md:px-16 lg:px-[64px] h-screen overflow-y-auto z-10 bg-white order-2 md:order-1">
-        <motion.div 
+        <motion.div
           className="max-w-[490px] w-full mx-auto"
           variants={containerVariants}
           initial="hidden"
@@ -111,10 +119,10 @@ function EntrarPage() {
 
           <AnimatePresence mode="wait">
             {!success ? (
-              <motion.form 
+              <motion.form
                 key="login-form"
-                variants={itemVariants} 
-                onSubmit={handleSubmit}
+                variants={itemVariants}
+                onSubmit={(event) => void handleSubmit(event)}
                 className="space-y-6"
               >
                 <Field label="E-mail" id="email">
@@ -122,20 +130,26 @@ function EntrarPage() {
                     <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-[#0F9B4D]">
                       <Mail size={21} />
                     </div>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="seu@email.com" 
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="seu@email.com"
                       className="pl-[54px]"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                 </Field>
 
                 <Field label="Senha" id="password">
-                  <PasswordInput 
-                    id="password" 
+                  <PasswordInput
+                    id="password"
+                    autoComplete="current-password"
                     placeholder="Sua senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </Field>
@@ -143,18 +157,24 @@ function EntrarPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Checkbox id="remember" />
-                    <label htmlFor="remember" className="text-[14px] font-medium text-[#475467] cursor-pointer">
+                    <label
+                      htmlFor="remember"
+                      className="text-[14px] font-medium text-[#475467] cursor-pointer"
+                    >
                       Manter-me conectado
                     </label>
                   </div>
-                  <Link to="/" className="text-[14px] font-medium text-[#0B873F] hover:underline transition-all">
+                  <Link
+                    to="/"
+                    className="text-[14px] font-medium text-[#0B873F] hover:underline transition-all"
+                  >
                     Esqueci minha senha
                   </Link>
                 </div>
 
                 <motion.div variants={itemVariants}>
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="w-full h-[62px] rounded-[14px] bg-gradient-to-r from-[#0A8F43] to-[#11A84F] text-white text-[17px] font-semibold gap-[14px] shadow-[0_12px_30px_rgba(11,135,63,0.18)] hover:shadow-[0_16px_34px_rgba(11,135,63,0.24)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all"
                     disabled={loading}
                   >
@@ -178,18 +198,26 @@ function EntrarPage() {
                   <div className="flex-1 h-px bg-[#E4E7EC]" />
                 </div>
 
-                <Button 
+                <Button
                   type="button"
                   variant="outline"
+                  onClick={() => void handleGoogle()}
                   className="w-full h-[60px] rounded-[14px] border-[#D9DEE7] bg-white text-[#101828] text-[16px] font-medium hover:bg-[#F9FAFB] hover:border-[#C9CFD8] transition-all"
                 >
-                  <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-3" />
+                  <img
+                    src="https://www.google.com/favicon.ico"
+                    alt="Google"
+                    className="w-5 h-5 mr-3"
+                  />
                   Continuar com Google
                 </Button>
 
                 <p className="text-center text-[15px] text-[#667085] mt-[30px]">
                   Ainda não possui uma conta?{" "}
-                  <Link to="/cadastro" className="text-[#0B873F] font-semibold underline underline-offset-4">
+                  <Link
+                    to="/cadastro"
+                    className="text-[#0B873F] font-semibold underline underline-offset-4"
+                  >
                     Criar conta gratuitamente
                   </Link>
                 </p>
@@ -210,15 +238,14 @@ function EntrarPage() {
 
       {/* Coluna Direita - Imagem do imóvel (58%) */}
       <div className="relative w-full md:w-[58%] h-[50vh] md:h-screen overflow-hidden order-1 md:order-2">
-        <motion.img 
-          src={apartmentAsset.url} 
-          alt="Apartamento moderno em São Paulo" 
+        <motion.img
+          src={apartmentAsset.url}
+          alt="Apartamento moderno em São Paulo"
           className="w-full h-full object-cover object-center"
           initial={{ scale: 1.035 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.8, ease: "easeOut" }}
         />
-        
       </div>
     </main>
   );

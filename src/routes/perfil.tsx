@@ -5,11 +5,14 @@ import {
   getScoreColor,
   getScoreLabel,
 } from "@/lib/score";
-import { ShieldCheck, TrendingUp, AlertTriangle, CloudUpload, Sparkles } from "lucide-react";
+import { ShieldCheck, TrendingUp, CloudUpload, Sparkles } from "lucide-react";
 import { useEffect, useState, ChangeEvent, useCallback } from "react";
-import { useAuthStore } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 import { useProposals } from "@/hooks/use-proposals";
-import { useNotifications } from "@/hooks/use-notifications";
+import { useConversations } from "@/hooks/use-conversations";
+import { getBrowserSupabase } from "@/lib/supabase/browser";
+import { uploadAvatar, isAcceptedImage } from "@/lib/storage/upload";
 import confetti from "canvas-confetti";
 import {
   UserCircle,
@@ -39,7 +42,6 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { PropertyCard } from "@/components/cards/property-card";
-import { currentUser } from "@/mock";
 import { apartmentsByOwnerQueryOptions } from "@/lib/queries/apartments";
 import { fadeIn, stagger, container } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -47,7 +49,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
+import type { User } from "@/types";
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -69,60 +71,77 @@ export const Route = createFileRoute("/perfil")({
   component: PerfilPage,
 });
 
+const KYC_LABEL: Record<NonNullable<User["verification"]>, string> = {
+  none: "Pendente",
+  pending: "Em análise",
+  verified: "Verificado",
+  rejected: "Recusado",
+};
+
 function PerfilPage() {
-  const { isAuthenticated, user, updateUser, logout } = useAuthStore();
-  const { proposals, updateStatus } = useProposals();
-  const { addNotification } = useNotifications();
+  const { isAuthenticated, isLoading: isLoadingSession } = useRequireAuth();
+  const { user, updateProfile, signOut, refresh } = useAuth();
+  const { received: receivedProposals, approveProposal, rejectProposal } = useProposals();
+  const { conversations, totalUnread } = useConversations();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("anuncios");
-  const isOwner = user?.type === "proprietario";
-  const isTenant = user?.type === "inquilino";
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const isOwner = user?.role === "owner";
+  const isTenant = user?.role === "tenant";
 
-  // Meus anúncios. `user?.id` vem do zustand fake-auth ("1"), que não bate com
-  // nenhum owner_id real no banco até a Fase 3 trocar por sessão/profile de
-  // verdade — a lista fica vazia por enquanto, não é um bug desta consulta.
-  const { data: myApartments = [] } = useQuery(apartmentsByOwnerQueryOptions(user?.id ?? ""));
-
-  // Propostas recebidas
-  const receivedProposals = proposals.filter((p) =>
-    myApartments.some((apt) => apt.id === p.apartmentId),
+  // Agora o id vem da sessão real, então bate com `owner_id` no banco.
+  const { data: myApartments = [], isLoading: isLoadingApartments } = useQuery(
+    apartmentsByOwnerQueryOptions(user?.id ?? ""),
   );
 
-  // Mock de dados para score se não existirem
-  const mockUserForScore = {
-    ...user,
-    avatarUrl: user?.avatarUrl,
-    scoreFactors: user?.scoreFactors || {
-      lowStability: false,
-      contractBreach: false,
-      positiveOwnerReviews: 85,
-      latePayments: 0,
-      incompleteDocs: false,
-      incompleteProfile: false,
-      noAvatar: !user?.avatarUrl,
-      chatResponseTime: "high",
-    },
+  const isLoading = isLoadingSession || isLoadingApartments;
+
+  // Fatores de score ainda não medidos pelo produto (histórico de pagamento,
+  // tempo de resposta) entram como neutros; o que já é real — avatar, KYC —
+  // vem do perfil.
+  const scoredUser = user
+    ? {
+        ...user,
+        scoreFactors: {
+          positiveOwnerReviews: 85,
+          latePayments: 0,
+          chatResponseTime: "high" as const,
+          ...user.scoreFactors,
+          noAvatar: !user.avatarUrl,
+          incompleteDocs: user.verification !== "verified",
+          kycVerified: user.verification === "verified",
+        },
+      }
+    : null;
+
+  const tenantScore = scoredUser ? calculateTenantScore(scoredUser) : 0;
+  const ownerScore = scoredUser ? calculateOwnerScore(scoredUser, myApartments) : 0;
+
+  const handleSignOut = async () => {
+    await signOut();
+    void navigate({ to: "/" });
   };
 
-  const tenantScore = calculateTenantScore(mockUserForScore as any);
-  const ownerScore = calculateOwnerScore(mockUserForScore as any, myApartments);
+  const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
 
-  const handleApproveProposal = (id: string) => {
-    updateStatus(id, "approved");
-    const proposal = proposals.find((p) => p.id === id);
-    if (proposal) {
-      addNotification({
-        kind: "contract",
-        title: "Proposta Aprovada!",
-        description: `Sua proposta para o imóvel foi aprovada. Prepare os documentos!`,
-        href: "/perfil",
-      });
+    if (!isAcceptedImage(file)) {
+      toast.error("Envie uma imagem JPG, PNG, WebP ou AVIF.");
+      return;
     }
-  };
 
-  const handleRejectProposal = (id: string) => {
-    updateStatus(id, "rejected");
+    setIsUploadingAvatar(true);
+    try {
+      const avatarUrl = await uploadAvatar(user.id, file);
+      await updateProfile({ avatarUrl });
+      toast.success("Foto de perfil atualizada!");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível enviar a foto.");
+    } finally {
+      setIsUploadingAvatar(false);
+      event.target.value = "";
+    }
   };
 
   const triggerEmeraldCelebration = useCallback(() => {
@@ -132,7 +151,7 @@ function PerfilPage() {
 
     const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-    const interval: any = setInterval(function () {
+    const interval = setInterval(function () {
       const timeLeft = animationEnd - Date.now();
 
       if (timeLeft <= 0) {
@@ -156,67 +175,45 @@ function PerfilPage() {
     }, 250);
   }, []);
 
-  const handleKycUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  /** O envio só coloca a conta na fila de análise: quem marca como
+   * verificada é o backoffice, não o próprio perfil (ver o gatilho
+   * `profiles_guard_privileged_columns`). */
+  const handleKycUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
-        loading: "Validando documentos...",
-        success: () => {
-          updateUser({
-            verified: true,
-            scoreFactors: {
-              ...user?.scoreFactors,
-              incompleteDocs: false,
-              kycVerified: true,
-            },
-          });
-          addNotification({
-            kind: "system",
-            title: "Identidade Verificada!",
-            description: "Seus documentos foram validados. Seu score aumentou!",
-          });
-          return "Documentos validados com sucesso!";
-        },
-        error: "Erro ao validar documentos.",
-      });
+    if (!file) return;
+
+    try {
+      const { error } = await getBrowserSupabase().rpc("request_verification");
+      if (error) throw new Error(error.message);
+      await refresh();
+      toast.success("Documentos recebidos! A análise leva até 48h.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Não foi possível enviar os documentos.",
+      );
+    } finally {
+      e.target.value = "";
     }
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: "/entrar" });
-      return;
-    }
+    if (isLoading || !user) return;
 
     // Se o usuário atingiu o status de Top User, celebra!
     const isTop = (isOwner && ownerScore >= 800) || (isTenant && tenantScore >= 800);
-    const wasAlreadyCelebrated = sessionStorage.getItem(`celebrated-${user?.id}`);
+    const wasAlreadyCelebrated = sessionStorage.getItem(`celebrated-${user.id}`);
 
     if (isTop && !wasAlreadyCelebrated) {
       triggerEmeraldCelebration();
-      sessionStorage.setItem(`celebrated-${user?.id}`, "true");
+      sessionStorage.setItem(`celebrated-${user.id}`, "true");
       toast.success("Parabéns! Você atingiu o status de Top User!", {
         icon: <Sparkles className="text-emerald-500" />,
         duration: 5000,
       });
     }
+  }, [isLoading, isOwner, isTenant, ownerScore, tenantScore, triggerEmeraldCelebration, user]);
 
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [
-    isAuthenticated,
-    navigate,
-    isOwner,
-    isTenant,
-    ownerScore,
-    tenantScore,
-    triggerEmeraldCelebration,
-    user?.id,
-  ]);
-
-  if (!isAuthenticated) return null;
+  if (!isLoadingSession && !isAuthenticated) return null;
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -264,7 +261,7 @@ function PerfilPage() {
                           : "border-surface-secondary",
                       )}
                     >
-                      <AvatarImage src={user?.avatarUrl || currentUser.avatarUrl} />
+                      {user?.avatarUrl ? <AvatarImage src={user.avatarUrl} alt="" /> : null}
                       <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
                         {user?.name?.slice(0, 1) || "U"}
                       </AvatarFallback>
@@ -272,30 +269,26 @@ function PerfilPage() {
                   </div>
                   <label
                     htmlFor="avatar-upload"
-                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-110 active:scale-95 z-20"
+                    aria-label="Trocar foto de perfil"
+                    className={cn(
+                      "absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-110 active:scale-95 z-20",
+                      isUploadingAvatar && "pointer-events-none opacity-60",
+                    )}
                   >
-                    <Camera className="size-4" />
+                    <Camera className="size-4" aria-hidden />
                     <input
                       id="avatar-upload"
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/webp,image/avif"
                       className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            updateUser({ avatarUrl: reader.result as string });
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
+                      disabled={isUploadingAvatar}
+                      onChange={(event) => void handleAvatarChange(event)}
                     />
                   </label>
                 </div>
                 <div className="mt-4 flex items-center gap-1.5">
                   <h2 className="text-xl font-bold">{user?.name}</h2>
-                  {currentUser.verified && <Verified className="size-5 fill-primary text-white" />}
+                  {user?.verified && <Verified className="size-5 fill-primary text-white" />}
                   {isOwner && ownerScore >= 800 && (
                     <Badge
                       variant="secondary"
@@ -318,19 +311,21 @@ function PerfilPage() {
                 <p className="text-sm text-text-secondary">{user?.email}</p>
 
                 <Badge variant="secondary" className="mt-4 rounded-full px-4 py-1">
-                  {user?.type === "proprietario" ? "Proprietário" : "Inquilino"}
+                  {isOwner ? "Proprietário" : "Inquilino"}
                 </Badge>
               </div>
 
               <div className="mt-8 space-y-2">
                 <div className="flex items-center gap-3 text-sm text-text-secondary">
-                  <Calendar className="size-4" />
-                  <span>Membro desde {new Date(currentUser.memberSince).getFullYear()}</span>
+                  <Calendar className="size-4" aria-hidden />
+                  <span>Membro desde {user ? new Date(user.memberSince).getFullYear() : "—"}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-text-secondary">
-                  <MapPin className="size-4" />
-                  <span>São Paulo, SP</span>
-                </div>
+                {user?.phone && (
+                  <div className="flex items-center gap-3 text-sm text-text-secondary">
+                    <MapPin className="size-4" aria-hidden />
+                    <span>{user.phone}</span>
+                  </div>
+                )}
               </div>
 
               <Button
@@ -357,13 +352,20 @@ function PerfilPage() {
                 </div>
                 <ChevronRight className="size-4" />
               </button>
-              <button className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary">
+              <Link
+                to="/mensagens"
+                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary"
+              >
                 <div className="flex items-center gap-3">
-                  <MessageSquare className="size-5" />
+                  <MessageSquare className="size-5" aria-hidden />
                   Mensagens
                 </div>
-                <ChevronRight className="size-4" />
-              </button>
+                {totalUnread > 0 ? (
+                  <Badge className="rounded-full bg-primary px-2 text-white">{totalUnread}</Badge>
+                ) : (
+                  <ChevronRight className="size-4" aria-hidden />
+                )}
+              </Link>
               <Link
                 to="/perfil/agentes"
                 className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-secondary transition-all hover:bg-surface-secondary"
@@ -389,7 +391,7 @@ function PerfilPage() {
               </Link>
               <div className="my-2 h-px bg-border mx-2" />
               <button
-                onClick={() => logout()}
+                onClick={() => void handleSignOut()}
                 className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-danger transition-all hover:bg-danger/5 text-left"
               >
                 <LogOut className="size-5" />
@@ -471,32 +473,36 @@ function PerfilPage() {
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-caption font-bold text-text-secondary">Segurança KYC</span>
-                  {user?.scoreFactors?.kycVerified ? (
-                    <CheckCircle2 className="size-5 text-success" />
+                  {user?.verification === "verified" ? (
+                    <CheckCircle2 className="size-5 text-success" aria-hidden />
                   ) : (
-                    <CloudUpload className="size-5 text-warning" />
+                    <CloudUpload className="size-5 text-warning" aria-hidden />
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p className="text-xl font-bold">
-                    {user?.scoreFactors?.kycVerified ? "Verificado" : "Pendente"}
-                  </p>
-                  {!user?.scoreFactors?.kycVerified && (
+                  <p className="text-xl font-bold">{KYC_LABEL[user?.verification ?? "none"]}</p>
+                  {user?.verification === "verified" ? (
+                    <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
+                  ) : user?.verification === "pending" ? (
+                    <p className="text-xs text-text-secondary">
+                      Recebemos seus documentos. A análise leva até 48h.
+                    </p>
+                  ) : (
                     <label className="cursor-pointer group">
                       <span className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                         Enviar Documentos{" "}
-                        <ChevronRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight
+                          className="size-3 group-hover:translate-x-0.5 transition-transform"
+                          aria-hidden
+                        />
                       </span>
                       <input
                         type="file"
                         className="hidden"
                         accept=".pdf,image/*"
-                        onChange={handleKycUpload}
+                        onChange={(event) => void handleKycUpload(event)}
                       />
                     </label>
-                  )}
-                  {user?.scoreFactors?.kycVerified && (
-                    <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
                   )}
                 </div>
               </div>
@@ -521,16 +527,14 @@ function PerfilPage() {
                 )}
               </div>
 
-              {isOwner && (
-                <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                  <span className="text-caption font-bold text-text-secondary">Mensagens</span>
-                  {isLoading ? (
-                    <Skeleton className="h-9 w-12 mt-1" />
-                  ) : (
-                    <p className="text-3xl font-bold mt-1">1</p>
-                  )}
-                </div>
-              )}
+              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+                <span className="text-caption font-bold text-text-secondary">Conversas</span>
+                {isLoading ? (
+                  <Skeleton className="h-9 w-12 mt-1" />
+                ) : (
+                  <p className="text-3xl font-bold mt-1">{conversations.length}</p>
+                )}
+              </div>
             </div>
 
             {isOwner && (
@@ -727,7 +731,6 @@ function PerfilPage() {
                 ) : (
                   <div className="grid gap-4">
                     {receivedProposals.map((proposal) => {
-                      const apt = myApartments.find((a) => a.id === proposal.apartmentId);
                       return (
                         <Card
                           key={proposal.id}
@@ -737,7 +740,8 @@ function PerfilPage() {
                             <div className="space-y-1">
                               <CardTitle className="text-xl">{proposal.tenantName}</CardTitle>
                               <CardDescription className="flex items-center gap-1">
-                                <Building2 className="size-3" /> {apt?.title}
+                                <Building2 className="size-3" aria-hidden />{" "}
+                                {proposal.apartmentTitle}
                               </CardDescription>
                             </div>
                             <Badge
@@ -778,14 +782,14 @@ function PerfilPage() {
                                     variant="outline"
                                     size="sm"
                                     className="rounded-lg text-danger border-danger hover:bg-danger/5"
-                                    onClick={() => handleRejectProposal(proposal.id)}
+                                    onClick={() => rejectProposal(proposal.id)}
                                   >
                                     Recusar
                                   </Button>
                                   <Button
                                     size="sm"
                                     className="rounded-lg bg-success hover:bg-success/90"
-                                    onClick={() => handleApproveProposal(proposal.id)}
+                                    onClick={() => approveProposal(proposal.id)}
                                   >
                                     Aprovar
                                   </Button>

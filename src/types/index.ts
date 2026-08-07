@@ -12,6 +12,10 @@ export interface Neighborhood {
 
 export type UserRole = "tenant" | "owner";
 
+/** Estágio da análise de documentos (KYC). Só o backoffice muda para
+ * `verified`/`rejected`; o usuário só consegue pedir a análise. */
+export type VerificationStatus = "none" | "pending" | "verified" | "rejected";
+
 export interface User {
   id: ID;
   name: string;
@@ -20,6 +24,7 @@ export interface User {
   avatarUrl?: string;
   role: UserRole;
   verified: boolean;
+  verification: VerificationStatus;
   memberSince: string;
   score?: number;
   scoreFactors?: {

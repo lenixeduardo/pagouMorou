@@ -6,20 +6,19 @@ import { cn } from "@/lib/utils";
 interface FieldProps {
   id: string;
   label: string;
-  hint?: string;
-  error?: string;
-  required?: boolean;
-  className?: string;
+  // `| undefined` explícito: com `exactOptionalPropertyTypes`, repassar
+  // `errors.campo?.message` direto de um formulário exige aceitar undefined.
+  hint?: string | undefined;
+  error?: string | undefined;
+  required?: boolean | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }
 
 export function Field({ id, label, hint, error, required, className, children }: FieldProps) {
   return (
     <div className={cn("flex flex-col gap-[10px]", className)}>
-      <Label 
-        htmlFor={id} 
-        className="text-[16px] font-medium text-[#475467]"
-      >
+      <Label htmlFor={id} className="text-[16px] font-medium text-[#475467]">
         {label}
         {required ? <span className="text-danger"> *</span> : null}
       </Label>

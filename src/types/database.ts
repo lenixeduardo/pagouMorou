@@ -185,11 +185,128 @@ export type Database = {
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
+        ];
+      };
+      conversations: {
+        Row: {
+          apartment_id: string;
+          created_at: string;
+          id: string;
+          last_message_at: string;
+          owner_id: string;
+          tenant_id: string;
+        };
+        Insert: {
+          apartment_id: string;
+          created_at?: string;
+          id?: string;
+          last_message_at?: string;
+          owner_id: string;
+          tenant_id: string;
+        };
+        Update: {
+          apartment_id?: string;
+          created_at?: string;
+          id?: string;
+          last_message_at?: string;
+          owner_id?: string;
+          tenant_id?: string;
+        };
+        Relationships: [
           {
-            foreignKeyName: "apartments_owner_id_fkey";
+            foreignKeyName: "conversations_apartment_id_fkey";
+            columns: ["apartment_id"];
+            isOneToOne: false;
+            referencedRelation: "apartments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "conversations_owner_id_fkey";
             columns: ["owner_id"];
             isOneToOne: false;
-            referencedRelation: "public_profiles";
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "conversations_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      favorites: {
+        Row: {
+          apartment_id: string;
+          created_at: string;
+          profile_id: string;
+        };
+        Insert: {
+          apartment_id: string;
+          created_at?: string;
+          profile_id: string;
+        };
+        Update: {
+          apartment_id?: string;
+          created_at?: string;
+          profile_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "favorites_apartment_id_fkey";
+            columns: ["apartment_id"];
+            isOneToOne: false;
+            referencedRelation: "apartments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "favorites_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      messages: {
+        Row: {
+          content: string;
+          conversation_id: string;
+          created_at: string;
+          id: string;
+          read_at: string | null;
+          sender_id: string;
+        };
+        Insert: {
+          content: string;
+          conversation_id: string;
+          created_at?: string;
+          id?: string;
+          read_at?: string | null;
+          sender_id: string;
+        };
+        Update: {
+          content?: string;
+          conversation_id?: string;
+          created_at?: string;
+          id?: string;
+          read_at?: string | null;
+          sender_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "conversations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey";
+            columns: ["sender_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
@@ -229,6 +346,47 @@ export type Database = {
           state?: string;
         };
         Relationships: [];
+      };
+      notifications: {
+        Row: {
+          created_at: string;
+          description: string;
+          href: string | null;
+          id: string;
+          kind: Database["public"]["Enums"]["notification_kind"];
+          profile_id: string;
+          read: boolean;
+          title: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string;
+          href?: string | null;
+          id?: string;
+          kind?: Database["public"]["Enums"]["notification_kind"];
+          profile_id: string;
+          read?: boolean;
+          title: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          href?: string | null;
+          id?: string;
+          kind?: Database["public"]["Enums"]["notification_kind"];
+          profile_id?: string;
+          read?: boolean;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       profiles: {
         Row: {
@@ -287,6 +445,64 @@ export type Database = {
         };
         Relationships: [];
       };
+      proposals: {
+        Row: {
+          apartment_id: string;
+          created_at: string;
+          id: string;
+          message: string;
+          owner_id: string;
+          rent_amount: number;
+          status: Database["public"]["Enums"]["proposal_status"];
+          tenant_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          apartment_id: string;
+          created_at?: string;
+          id?: string;
+          message?: string;
+          owner_id: string;
+          rent_amount: number;
+          status?: Database["public"]["Enums"]["proposal_status"];
+          tenant_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          apartment_id?: string;
+          created_at?: string;
+          id?: string;
+          message?: string;
+          owner_id?: string;
+          rent_amount?: number;
+          status?: Database["public"]["Enums"]["proposal_status"];
+          tenant_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "proposals_apartment_id_fkey";
+            columns: ["apartment_id"];
+            isOneToOne: false;
+            referencedRelation: "apartments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "proposals_owner_id_fkey";
+            columns: ["owner_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "proposals_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       reviews: {
         Row: {
           apartment_id: string;
@@ -330,13 +546,6 @@ export type Database = {
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "reviews_author_id_fkey";
-            columns: ["author_id"];
-            isOneToOne: false;
-            referencedRelation: "public_profiles";
-            referencedColumns: ["id"];
-          },
         ];
       };
     };
@@ -354,21 +563,151 @@ export type Database = {
         };
         Relationships: [];
       };
-      public_profiles: {
-        Row: {
-          avatar_path: string | null;
-          avatar_url: string | null;
-          id: string | null;
-          member_since: string | null;
-          name: string | null;
-          role: Database["public"]["Enums"]["user_role"] | null;
-          score: number | null;
-          verified: boolean | null;
-        };
-        Relationships: [];
-      };
     };
-    Functions: Record<string, never>;
+    Functions: {
+      create_apartment: {
+        Args: {
+          p_amenities?: string[];
+          p_area_m2: number;
+          p_bathrooms: number;
+          p_bedrooms: number;
+          p_city: string;
+          p_condo_fee: number;
+          p_description: string;
+          p_floor?: number;
+          p_furnished: boolean;
+          p_iptu: number;
+          p_neighborhood: string;
+          p_number: string;
+          p_parking_spots: number;
+          p_pet_friendly: boolean;
+          p_property_type: Database["public"]["Enums"]["property_type"];
+          p_rent: number;
+          p_state: string;
+          p_street: string;
+          p_title: string;
+          p_zip_code: string;
+        };
+        Returns: Database["public"]["Tables"]["apartments"]["Row"];
+      };
+      list_conversations: {
+        Args: never;
+        Returns: {
+          apartment_id: string;
+          apartment_image: string | null;
+          apartment_slug: string;
+          apartment_title: string;
+          counterpart_avatar_url: string | null;
+          counterpart_id: string;
+          counterpart_name: string;
+          id: string;
+          last_message: string | null;
+          last_message_at: string;
+          unread_count: number;
+        }[];
+      };
+      list_proposals: {
+        Args: never;
+        Returns: {
+          apartment_id: string;
+          apartment_slug: string;
+          apartment_title: string;
+          created_at: string;
+          direction: string;
+          id: string;
+          message: string;
+          owner_id: string;
+          owner_name: string;
+          rent_amount: number;
+          status: Database["public"]["Enums"]["proposal_status"];
+          tenant_id: string;
+          tenant_name: string;
+        }[];
+      };
+      request_verification: {
+        Args: never;
+        Returns: Database["public"]["Enums"]["verification_status"];
+      };
+      public_profiles: {
+        Args: { p_ids: string[] };
+        Returns: {
+          avatar_url: string | null;
+          id: string;
+          member_since: string;
+          name: string;
+          role: Database["public"]["Enums"]["user_role"];
+          score: number | null;
+          verified: boolean;
+        }[];
+      };
+      respond_proposal: {
+        Args: {
+          p_id: string;
+          p_status: Database["public"]["Enums"]["proposal_status"];
+        };
+        Returns: Database["public"]["Tables"]["proposals"]["Row"];
+      };
+      search_apartments: {
+        Args: {
+          p_bedrooms?: number;
+          p_city?: string;
+          p_furnished?: boolean;
+          p_limit?: number;
+          p_max_rent?: number;
+          p_min_rent?: number;
+          p_neighborhood?: string;
+          p_offset?: number;
+          p_pet_friendly?: boolean;
+          p_property_type?: Database["public"]["Enums"]["property_type"];
+          p_query?: string;
+          p_sort?: string;
+          p_status?: Database["public"]["Enums"]["apartment_status"];
+        };
+        Returns: {
+          amenities: string[];
+          area_m2: number;
+          bathrooms: number;
+          bedrooms: number;
+          city: string;
+          condo_fee: number;
+          created_at: string;
+          description: string;
+          floor: number | null;
+          furnished: boolean;
+          id: string;
+          images: Json;
+          iptu: number;
+          metro_distance_m: number | null;
+          neighborhood_id: string | null;
+          neighborhood_name: string | null;
+          number: string;
+          owner_id: string;
+          parking_spots: number;
+          pet_friendly: boolean;
+          property_type: Database["public"]["Enums"]["property_type"];
+          rating: number;
+          rent: number;
+          reviews_count: number;
+          slug: string;
+          state: string;
+          status: Database["public"]["Enums"]["apartment_status"];
+          street: string;
+          title: string;
+          total_count: number;
+          zip_code: string;
+        }[];
+      };
+      send_message: {
+        Args: { p_content: string; p_conversation_id: string };
+        Returns: Database["public"]["Tables"]["messages"]["Row"];
+      };
+      send_proposal: {
+        Args: { p_apartment_id: string; p_message?: string; p_rent?: number };
+        Returns: Database["public"]["Tables"]["proposals"]["Row"];
+      };
+      slugify: { Args: { p_text: string }; Returns: string };
+      start_conversation: { Args: { p_apartment_id: string }; Returns: string };
+    };
     Enums: {
       apartment_status: "available" | "reserved" | "rented";
       notification_kind: "message" | "visit" | "contract" | "payment" | "system";

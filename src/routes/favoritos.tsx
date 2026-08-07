@@ -1,7 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/hooks/use-auth";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/use-favorites";
 import { apartmentsByIdsQueryOptions } from "@/lib/queries/apartments";
@@ -34,20 +33,17 @@ export const Route = createFileRoute("/favoritos")({
 });
 
 function FavoritosPage() {
-  const { isAuthenticated } = useAuthStore();
-  const navigate = useNavigate();
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { data: favoriteApartments = [], isLoading } = useQuery(
+  const { isAuthenticated, isLoading: isLoadingSession } = useRequireAuth();
+  const { favorites, toggleFavorite, isFavorite, isLoading: isLoadingFavorites } = useFavorites();
+  const { data: favoriteApartments = [], isLoading: isLoadingApartments } = useQuery(
     apartmentsByIdsQueryOptions(favorites),
   );
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: "/entrar" });
-    }
-  }, [isAuthenticated, navigate]);
+  // A sessão só é conhecida depois da hidratação; até lá, skeleton em vez de
+  // um empty state que some meio segundo depois.
+  const isLoading = isLoadingSession || isLoadingFavorites || isLoadingApartments;
 
-  if (!isAuthenticated) return null;
+  if (!isLoadingSession && !isAuthenticated) return null;
 
   return (
     <Page
