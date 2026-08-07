@@ -379,6 +379,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_apartment: {
+        Args: {
+          p_amenities: string[]
+          p_area_m2: number
+          p_bathrooms: number
+          p_bedrooms: number
+          p_city: string
+          p_condo_fee: number
+          p_description: string
+          p_floor: number
+          p_furnished: boolean
+          p_iptu: number
+          p_neighborhood_id: string
+          p_number: string
+          p_parking_spots: number
+          p_pet_friendly: boolean
+          p_property_type: Database["public"]["Enums"]["property_type"]
+          p_rent: number
+          p_standard_clauses: string[]
+          p_state: string
+          p_street: string
+          p_title: string
+          p_zip_code: string
+        }
+        Returns: string
+      }
       list_proposals: {
         Args: never
         Returns: {
