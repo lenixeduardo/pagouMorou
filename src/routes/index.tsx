@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/sections/hero-section";
+import { useAuth } from "@/hooks/use-auth";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -50,6 +51,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HeroPage() {
+  const { isAuthenticated } = useAuth();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { data: featuredApartments } = useSuspenseQuery(
     apartmentsQueryOptions({ limit: FEATURED_LIMIT }),
@@ -279,8 +281,8 @@ function HeroPage() {
           </div>
         </section>
 
-        {/* Destaques Section */}
-        {featuredApartments.length > 0 && (
+        {/* Destaques Section - Only visible to authenticated users */}
+        {isAuthenticated && featuredApartments.length > 0 && (
           <section className="mb-24">
             <div className="mb-10 flex items-end justify-between gap-4">
               <div>
@@ -306,6 +308,34 @@ function HeroPage() {
                   onToggleFavorite={toggleFavorite}
                 />
               ))}
+            </div>
+          </section>
+        )}
+
+        {!isAuthenticated && (
+          <section className="mb-24 rounded-[40px] bg-primary/5 p-12 text-center border border-primary/10">
+            <div className="max-w-2xl mx-auto">
+              <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto mb-6">
+                <Building2 className="size-8" />
+              </div>
+              <h2 className="text-3xl font-bold mb-4">Veja centenas de imóveis exclusivos</h2>
+              <p className="text-text-secondary text-lg mb-8">
+                Para garantir a segurança dos proprietários e a qualidade das propostas, a
+                visualização dos imóveis é reservada para usuários cadastrados.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="rounded-full px-8 font-bold h-14" asChild>
+                  <Link to="/cadastro">Criar conta grátis</Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full px-8 font-bold h-14"
+                  asChild
+                >
+                  <Link to="/entrar">Já tenho conta</Link>
+                </Button>
+              </div>
             </div>
           </section>
         )}
