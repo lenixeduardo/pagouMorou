@@ -477,6 +477,18 @@ function AnunciarPage() {
                     </fieldset>
                   )}
                 />
+
+                <div className="rounded-xl bg-info/5 border border-info/10 p-4">
+                  <div className="flex gap-3">
+                    <Info className="size-5 text-info shrink-0 mt-0.5" />
+                    <div className="text-sm text-info">
+                      <p className="font-bold mb-1">Cláusulas Inteligentes</p>
+                      <p>
+                        Ao marcar "Mobiliado", adicionaremos automaticamente sugestões de cláusulas sobre conservação dos móveis no passo final.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )}
 
