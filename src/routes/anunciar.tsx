@@ -123,9 +123,8 @@ function AnunciarPage() {
     handleSubmit,
     trigger,
     watch,
+    setValue,
     formState: { errors },
-    // O terceiro genérico é o tipo já transformado pelo zod: `z.coerce.number()`
-    // entra como texto do input e sai como number no submit.
   } = useForm<AnuncioForm, unknown, AnuncioValues>({
     resolver: zodResolver(anuncioSchema),
     mode: "onTouched",
