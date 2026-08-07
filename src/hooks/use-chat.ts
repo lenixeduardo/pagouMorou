@@ -2,6 +2,18 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Message } from "@/types";
 
+const CONVERSATION_PREFIX = "conv-apt-";
+
+/** Id determinístico da conversa de um imóvel, compartilhado por quem envia e quem lista. */
+export const conversationIdForApartment = (apartmentId: string) =>
+  `${CONVERSATION_PREFIX}${apartmentId}`;
+
+/** Inverso de `conversationIdForApartment`; `null` para ids fora desse esquema. */
+export const apartmentIdFromConversationId = (conversationId: string) =>
+  conversationId.startsWith(CONVERSATION_PREFIX)
+    ? conversationId.slice(CONVERSATION_PREFIX.length)
+    : null;
+
 interface ChatStore {
   messages: Message[];
   sendMessage: (conversationId: string, senderId: string, content: string) => void;
