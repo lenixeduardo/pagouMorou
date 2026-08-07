@@ -41,7 +41,7 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">faça um roadmap e mapeie o que está pendente ainda para implementação para obtenção do MVP</span>
+            <span className="text-sm font-medium text-text-secondary">acredito que para o MVP pagamentos através da plataforma não seria o ideal. valide se a ideia de status: pendente pagamento {" > "} envio comprovante {" > "} validacao veracidade comprovante {" > "} prosseguimento no fluxo de mudança</span>
           </nav>
         </div>
 
