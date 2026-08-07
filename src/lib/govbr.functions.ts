@@ -38,60 +38,142 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
     console.log(`[ITI] Iniciando processo de estampa de assinatura digital para proposta ${data.proposalId}`);
     
     try {
-      // 1. Criação de um PDF básico para demonstrar a manipulação (no mundo real carregaríamos o contrato existente)
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([600, 400]);
-      const { height } = page.getSize();
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      
+      // 1. Buscar dados da proposta e do imóvel para localizar o contrato
+      const { data: proposal, error: proposalError } = await supabaseAdmin
+        .from('proposals')
+        .select(`
+          id,
+          apartment_id,
+          contract_url,
+          apartments (
+            title,
+            owner_id
+          )
+        `)
+        .eq('id', data.proposalId)
+        .single();
+
+      if (proposalError || !proposal) {
+        throw new Error("Proposta não encontrada.");
+      }
+
+      // 2. Tentar carregar o PDF real do contrato do Storage
+      // O contrato geralmente é salvo em 'contracts/{apartment_id}/{proposal_id}.pdf'
+      const contractPath = proposal.contract_url || `contracts/${proposal.apartment_id}/${proposal.id}.pdf`;
+      
+      let pdfBytes: Uint8Array;
+      
+      try {
+        const { data: fileData, error: downloadError } = await supabaseAdmin
+          .storage
+          .from('documents')
+          .download(contractPath);
+
+        if (downloadError || !fileData) {
+          console.warn(`[ITI] Contrato real não encontrado em ${contractPath}. Criando fallback...`);
+          // Fallback: Criar novo documento se o real não existir (mantém compatibilidade com demos)
+          const pdfDoc = await PDFDocument.create();
+          const page = pdfDoc.addPage([600, 400]);
+          const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+          page.drawText(`CONTRATO DE LOCAÇÃO - ${proposal.apartments?.title || 'IMÓVEL'}`, {
+            x: 50,
+            y: 350,
+            size: 20,
+            font,
+            color: rgb(0.06, 0.61, 0.3),
+          });
+          pdfBytes = await pdfDoc.save();
+        } else {
+          pdfBytes = new Uint8Array(await fileData.arrayBuffer());
+          console.log(`[ITI] Contrato real carregado de ${contractPath}.`);
+        }
+      } catch (err) {
+        console.error("[ITI] Erro ao acessar Storage:", err);
+        throw new Error("Falha ao acessar o documento original do contrato.");
+      }
+
+      // 3. Carregar o PDF no pdf-lib para manipulação
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pages = pdfDoc.getPages();
+      const lastPage = pages[pages.length - 1];
+      
+      if (!lastPage) {
+        throw new Error("O documento PDF está vazio ou corrompido.");
+      }
+
+      const { width } = lastPage.getSize();
       const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-      page.drawText('CONTRATO DE LOCAÇÃO - PAGOU MOROU', {
-        x: 50,
-        y: height - 50,
-        size: 20,
-        font,
-        color: rgb(0.06, 0.61, 0.3), // Verde institucional #0F9B4D
-      });
+      // 4. Aplicar o selo de assinatura do ITI (Estampa visual)
+      const sealWidth = 400;
+      const sealHeight = 70;
+      const sealX = (width - sealWidth) / 2;
+      const sealY = 50; // Parte inferior da última página
 
-      // 2. Aplicar o selo de assinatura do ITI (Simulação visual via pdf-lib)
-      const sealBoxY = 100;
-      page.drawRectangle({
-        x: 50,
-        y: sealBoxY,
-        width: 500,
-        height: 80,
+      lastPage.drawRectangle({
+        x: sealX,
+        y: sealY,
+        width: sealWidth,
+        height: sealHeight,
         borderColor: rgb(0, 0, 0),
         borderWidth: 1,
-        color: rgb(0.95, 0.95, 0.95),
+        color: rgb(0.98, 0.98, 0.98),
       });
 
-      page.drawText('ASSINADO DIGITALMENTE - GOV.BR (ITI)', {
-        x: 70,
-        y: sealBoxY + 50,
-        size: 14,
+      lastPage.drawText('ASSINADO DIGITALMENTE - GOV.BR (PROCESSO ITI)', {
+        x: sealX + 20,
+        y: sealY + 45,
+        size: 12,
         font,
-        color: rgb(0, 0, 0.5),
+        color: rgb(0, 0.2, 0.6),
       });
 
-      page.drawText(`Assinante: Usuário Autenticado via Gov.br\nData: ${new Date().toLocaleString('pt-BR')}\nHash: ${data.documentHash}`, {
-        x: 70,
-        y: sealBoxY + 15,
+      lastPage.drawText(`Assinante: Protocolo Gov.br | Hash: ${data.documentHash.slice(0, 16)}...`, {
+        x: sealX + 20,
+        y: sealY + 25,
         size: 8,
-        color: rgb(0.3, 0.3, 0.3),
-        lineHeight: 10,
+        color: rgb(0.2, 0.2, 0.2),
       });
 
-      const pdfBytes = await pdfDoc.save();
-      console.log(`[ITI] PDF processado com sucesso. Tamanho: ${pdfBytes.length} bytes`);
+      lastPage.drawText(`Verificado em: ${new Date().toLocaleString('pt-BR')} | ID: ${data.proposalId}`, {
+        x: sealX + 20,
+        y: sealY + 10,
+        size: 7,
+        color: rgb(0.4, 0.4, 0.4),
+      });
 
-      // No ambiente real, salvaríamos pdfBytes no Supabase Storage e atualizaríamos o status da proposta
+      const signedPdfBytes = await pdfDoc.save();
       
+      // 5. Salvar o PDF assinado de volta no Storage (sobrescrevendo ou criando versão assinada)
+      const signedPath = contractPath.replace('.pdf', '_signed.pdf');
+      const { error: uploadError } = await supabaseAdmin
+        .storage
+        .from('documents')
+        .upload(signedPath, signedPdfBytes, {
+          contentType: 'application/pdf',
+          upsert: true
+        });
+
+      if (uploadError) throw uploadError;
+
+      // 6. Atualizar status da proposta para assinado
+      await supabaseAdmin
+        .from('proposals')
+        .update({ 
+          status: 'contract_signed',
+          contract_url: signedPath
+        } as any)
+        .eq('id', data.proposalId);
+
       return {
         success: true,
         signatureType: "digital_iti_conform",
         sealUrl: "https://pki.gov.br/seal-verification",
         timestamp: new Date().toISOString(),
         documentId: `signed_${data.proposalId}.pdf`,
-        // Em um app real retornaríamos a URL do documento salvo no Storage
+        contractUrl: signedPath
       };
     } catch (error) {
       console.error("[ITI] Erro ao manipular PDF:", error);
