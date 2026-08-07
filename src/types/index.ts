@@ -124,13 +124,28 @@ export interface AppNotification {
   href?: string;
 }
 
+export type SortOption = "relevance" | "recent" | "price_asc" | "price_desc" | "rating" | "metro";
+
+/**
+ * Vocabulário de filtro compartilhado por `/buscar` (via `validateSearch`),
+ * pela server function de busca e pela tool MCP `search_properties` — os
+ * três consomem os mesmos nomes de campo contra a mesma função SQL
+ * `search_apartments`. Todos os campos são opcionais aqui porque este tipo
+ * representa uma especificação de filtro parcial; quem resolve os defaults
+ * (ex.: `sort: "relevance"`, `page: 1`) é o schema Zod em
+ * `src/lib/search/filters.ts`.
+ */
 export interface SearchFilters {
   query?: string;
   city?: string;
-  neighborhoodId?: ID;
+  neighborhood?: string;
+  propertyType?: PropertyType | "todos";
   minRent?: number;
   maxRent?: number;
   bedrooms?: number;
   furnished?: boolean;
   petFriendly?: boolean;
+  sort?: SortOption;
+  page?: number;
+  perPage?: number;
 }

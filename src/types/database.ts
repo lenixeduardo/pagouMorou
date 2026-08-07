@@ -368,7 +368,58 @@ export type Database = {
         Relationships: [];
       };
     };
-    Functions: Record<string, never>;
+    Functions: {
+      search_apartments: {
+        Args: {
+          p_bedrooms?: number;
+          p_city?: string;
+          p_furnished?: boolean;
+          p_limit?: number;
+          p_max_rent?: number;
+          p_min_rent?: number;
+          p_neighborhood?: string;
+          p_offset?: number;
+          p_pet_friendly?: boolean;
+          p_property_type?: Database["public"]["Enums"]["property_type"];
+          p_query?: string;
+          p_sort?: string;
+          p_status?: Database["public"]["Enums"]["apartment_status"];
+        };
+        Returns: {
+          amenities: string[];
+          area_m2: number;
+          bathrooms: number;
+          bedrooms: number;
+          city: string;
+          condo_fee: number;
+          created_at: string;
+          description: string;
+          floor: number;
+          furnished: boolean;
+          id: string;
+          images: Json;
+          iptu: number;
+          metro_distance_m: number;
+          neighborhood_id: string;
+          neighborhood_name: string;
+          number: string;
+          owner_id: string;
+          parking_spots: number;
+          pet_friendly: boolean;
+          property_type: Database["public"]["Enums"]["property_type"];
+          rating: number;
+          rent: number;
+          reviews_count: number;
+          slug: string;
+          state: string;
+          status: Database["public"]["Enums"]["apartment_status"];
+          street: string;
+          title: string;
+          total_count: number;
+          zip_code: string;
+        }[];
+      };
+    };
     Enums: {
       apartment_status: "available" | "reserved" | "rented";
       notification_kind: "message" | "visit" | "contract" | "payment" | "system";

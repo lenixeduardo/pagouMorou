@@ -1,7 +1,8 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { listApartments } from "@/lib/api/apartments";
+import { searchApartments } from "@/lib/api/apartments";
 import { createPublicSupabase } from "@/lib/supabase/server";
+import { PROPERTY_TYPES } from "@/lib/search/filters";
 import type { Apartment } from "@/types";
 
 /**
@@ -13,6 +14,7 @@ function serialize(apartment: Apartment) {
     id: apartment.id,
     title: apartment.title,
     status: apartment.status,
+    propertyType: apartment.propertyType,
     rent: apartment.rent,
     condoFee: apartment.condoFee,
     iptu: apartment.iptu,
@@ -34,16 +36,25 @@ export default defineTool({
   name: "search_properties",
   title: "Buscar imóveis",
   description:
-    "Busca imóveis residenciais para alugar no catálogo do PagouMorou, com filtros por texto, cidade, bairro, faixa de aluguel, dormitórios e mobília.",
+    "Busca imóveis residenciais disponíveis para alugar no catálogo do PagouMorou, com filtros por texto, cidade, bairro, tipo de imóvel, faixa de aluguel, dormitórios, mobília e pet. Por padrão retorna apenas imóveis com status 'available'.",
   inputSchema: {
-    query: z.string().optional().describe("Texto livre: título, bairro, cidade ou rua."),
+    query: z.string().optional().describe("Texto livre: título, descrição, bairro, cidade ou rua."),
     city: z.string().optional().describe("Filtra pela cidade, ex: São Paulo."),
     neighborhood: z.string().optional().describe("Filtra pelo nome do bairro, ex: Pinheiros."),
+    propertyType: z
+      .enum(PROPERTY_TYPES)
+      .optional()
+      .describe("Tipo de imóvel: apartamento, casa, studio, loft, kitnet ou cobertura."),
     minRent: z.number().optional().describe("Aluguel mínimo em reais."),
     maxRent: z.number().optional().describe("Aluguel máximo em reais."),
     bedrooms: z.number().optional().describe("Número mínimo de dormitórios."),
     furnished: z.boolean().optional().describe("Somente imóveis mobiliados."),
-    limit: z.number().optional().describe("Máximo de resultados (padrão 10)."),
+    petFriendly: z.boolean().optional().describe("Somente imóveis que aceitam pets."),
+    sort: z
+      .enum(["relevance", "recent", "price_asc", "price_desc", "rating", "metro"])
+      .optional()
+      .describe("Critério de ordenação. Padrão: relevância (ou mais recentes sem texto de busca)."),
+    limit: z.number().optional().describe("Máximo de resultados (padrão 10, máx. 50)."),
   },
   outputSchema: {
     count: z.number(),
@@ -52,57 +63,23 @@ export default defineTool({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async (input) => {
     const limit = Math.min(Math.max(input.limit ?? 10, 1), 50);
-    const term = input.query?.trim().toLowerCase();
 
-    const catalog = await listApartments(createPublicSupabase(), {});
+    const { items, total } = await searchApartments(createPublicSupabase(), {
+      q: input.query,
+      city: input.city,
+      neighborhood: input.neighborhood,
+      type: input.propertyType ?? "todos",
+      minRent: input.minRent,
+      maxRent: input.maxRent,
+      bedrooms: input.bedrooms,
+      furnished: input.furnished,
+      petFriendly: input.petFriendly,
+      sort: input.sort ?? "relevance",
+      page: 1,
+      perPage: limit,
+    });
 
-    const results = catalog
-      .filter((apartment) => {
-        if (term) {
-          const haystack = [
-            apartment.title,
-            apartment.description,
-            apartment.address.street,
-            apartment.address.city,
-            apartment.address.neighborhoodName,
-          ]
-            .join(" ")
-            .toLowerCase();
-          if (!haystack.includes(term)) return false;
-        }
-
-        if (
-          input.city &&
-          !apartment.address.city.toLowerCase().includes(input.city.toLowerCase())
-        ) {
-          return false;
-        }
-
-        if (
-          input.neighborhood &&
-          !apartment.address.neighborhoodName
-            .toLowerCase()
-            .includes(input.neighborhood.toLowerCase())
-        ) {
-          return false;
-        }
-
-        if (typeof input.minRent === "number" && apartment.rent < input.minRent) return false;
-        if (typeof input.maxRent === "number" && apartment.rent > input.maxRent) return false;
-        if (typeof input.bedrooms === "number" && apartment.features.bedrooms < input.bedrooms) {
-          return false;
-        }
-        if (
-          typeof input.furnished === "boolean" &&
-          apartment.features.furnished !== input.furnished
-        ) {
-          return false;
-        }
-
-        return true;
-      })
-      .slice(0, limit)
-      .map(serialize);
+    const results = items.map(serialize);
 
     return {
       content: [
@@ -111,10 +88,10 @@ export default defineTool({
           text:
             results.length === 0
               ? "Nenhum imóvel encontrado com esses critérios."
-              : JSON.stringify(results, null, 2),
+              : JSON.stringify({ count: total, results }, null, 2),
         },
       ],
-      structuredContent: { count: results.length, results },
+      structuredContent: { count: total, results },
     };
   },
 });
