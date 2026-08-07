@@ -3,6 +3,7 @@
 
 export const APARTMENT_PHOTOS_BUCKET = "apartment-photos";
 export const AVATARS_BUCKET = "avatars";
+export const CONTRACTS_BUCKET = "contracts";
 
 /**
  * Monta a URL pública de um objeto. Os dois buckets do projeto são públicos

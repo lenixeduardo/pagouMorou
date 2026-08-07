@@ -60,15 +60,16 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
       }
 
       // 2. Tentar carregar o PDF real do contrato do Storage
-      // O contrato geralmente é salvo em 'contracts/{apartment_id}/{proposal_id}.pdf'
-      const contractPath = proposal.contract_url || `contracts/${proposal.apartment_id}/${proposal.id}.pdf`;
+      // No MVP, o contrato geralmente é salvo em 'contracts/{apartment_id}/{proposal_id}.pdf'
+      const { CONTRACTS_BUCKET } = await import("@/lib/supabase/buckets");
+      const contractPath = proposal.contract_url || `${proposal.apartment_id}/${proposal.id}.pdf`;
       
       let pdfBytes: Uint8Array;
       
       try {
         const { data: fileData, error: downloadError } = await supabaseAdmin
           .storage
-          .from('documents')
+          .from(CONTRACTS_BUCKET)
           .download(contractPath);
 
         if (downloadError || !fileData) {
@@ -146,11 +147,11 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
 
       const signedPdfBytes = await pdfDoc.save();
       
-      // 5. Salvar o PDF assinado de volta no Storage (sobrescrevendo ou criando versão assinada)
+      // 5. Salvar o PDF assinado de volta no Storage (sobrescrevendo ou criando versão assinada no bucket 'contracts')
       const signedPath = contractPath.replace('.pdf', '_signed.pdf');
       const { error: uploadError } = await supabaseAdmin
         .storage
-        .from('documents')
+        .from(CONTRACTS_BUCKET)
         .upload(signedPath, signedPdfBytes, {
           contentType: 'application/pdf',
           upsert: true
