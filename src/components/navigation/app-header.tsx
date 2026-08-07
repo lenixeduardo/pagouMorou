@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Realizar testes de ponta a ponta simulando a criação de uma notificação via banco de dados para validar o disparo do toast.
+              gostaria que fosse retornados screenshots referente a como está o Contrato PDF template, como está o documento apos assinatura, se de fato a implementacao de integração de assinatura usando gov foi um sucesso
             </span>
           </nav>
         </div>
