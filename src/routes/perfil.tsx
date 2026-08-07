@@ -820,13 +820,33 @@ function PerfilPage() {
                                 </div>
                               )}
                               {proposal.status === "accepted" && (
-                                <Button
-                                  size="sm"
-                                  className="rounded-lg bg-primary"
-                                  onClick={() => requestPayment(proposal.id)}
-                                >
-                                  Solicitar PIX
-                                </Button>
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg border-primary text-primary"
+                                    onClick={() => {
+                                      toast.info("Gerando contrato PDF...", {
+                                        description: "Aguarde enquanto preparamos o documento com as cláusulas do imóvel."
+                                      });
+                                      // Simulação de geração de PDF
+                                      setTimeout(() => {
+                                        toast.success("Contrato PDF gerado com sucesso!", {
+                                          description: "O documento foi enviado para assinatura digital."
+                                        });
+                                      }, 1500);
+                                    }}
+                                  >
+                                    Gerar Contrato (PDF)
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-primary"
+                                    onClick={() => requestPayment(proposal.id)}
+                                  >
+                                    Solicitar PIX
+                                  </Button>
+                                </div>
                               )}
                               {proposal.status === "payment_sent" && (
                                 <div className="flex gap-2">
