@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              valide agora o ciclo de propostas
+              voce consegue me ajudar a obter as env para executar a api do gov? https://github.com/dtedesco/govbr-oauth
             </span>
           </nav>
         </div>
