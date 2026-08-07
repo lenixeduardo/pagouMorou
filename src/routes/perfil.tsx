@@ -851,35 +851,54 @@ function PerfilPage() {
                                   </Button>
                                 </div>
                               )}
-                              {proposal.status === "accepted" && (
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="rounded-lg border-primary text-primary"
-                                    onClick={() => {
-                                      toast.info("Gerando contrato PDF...", {
-                                        description: "Aguarde enquanto preparamos o documento com as cláusulas do imóvel."
-                                      });
-                                      // Simulação de geração de PDF
-                                      setTimeout(() => {
-                                        toast.success("Contrato PDF gerado com sucesso!", {
-                                          description: "O documento foi enviado para assinatura digital."
-                                        });
-                                      }, 1500);
-                                    }}
-                                  >
-                                    Gerar Contrato (PDF)
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    className="rounded-lg bg-primary"
-                                    onClick={() => requestPayment(proposal.id)}
-                                  >
-                                    Solicitar PIX
-                                  </Button>
-                                </div>
-                              )}
+                               {proposal.status === "accepted" && (
+                                 <div className="flex flex-col sm:flex-row gap-2">
+                                   <Button
+                                     variant="outline"
+                                     size="sm"
+                                     className="rounded-lg border-primary text-primary"
+                                     onClick={() => {
+                                       toast.info("Gerando contrato PDF...", {
+                                         description: "Aguarde enquanto preparamos o documento com as cláusulas do imóvel."
+                                       });
+                                       // Simulação de geração de PDF
+                                       setTimeout(() => {
+                                         toast.success("Contrato PDF gerado com sucesso!");
+                                       }, 1500);
+                                     }}
+                                   >
+                                     <FileText className="mr-2 h-4 w-4" />
+                                     Gerar Contrato (PDF)
+                                   </Button>
+                                   
+                                   <Button
+                                     variant="outline"
+                                     size="sm"
+                                     className="rounded-lg border-[#1351b4] text-[#1351b4] hover:bg-[#1351b4]/5"
+                                     onClick={async () => {
+                                       try {
+                                         const url = await getGovBrAuthUrl({ 
+                                           data: { redirectUri: window.location.origin + "/auth/callback" } 
+                                         });
+                                         window.location.href = url;
+                                       } catch (error) {
+                                         toast.error("Erro ao conectar com Gov.br");
+                                       }
+                                     }}
+                                   >
+                                     <ExternalLink className="mr-2 h-4 w-4" />
+                                     Assinar (Gov.br)
+                                   </Button>
+
+                                   <Button
+                                     size="sm"
+                                     className="rounded-lg bg-primary"
+                                     onClick={() => requestPayment(proposal.id)}
+                                   >
+                                     Solicitar PIX
+                                   </Button>
+                                 </div>
+                               )}
                               {proposal.status === "payment_sent" && (
                                 <div className="flex gap-2">
                                   <Button
