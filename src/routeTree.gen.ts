@@ -22,6 +22,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as ApartamentoIdRouteImport } from './routes/apartamento.$id'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as PerfilAgentesRouteImport } from './routes/perfil.agentes'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
@@ -92,6 +93,11 @@ const ApartamentoIdRoute = ApartamentoIdRouteImport.update({
   path: '/apartamento/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PerfilAgentesRoute = PerfilAgentesRouteImport.update({
   id: '/agentes',
   path: '/agentes',
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/perfil/agentes': typeof PerfilAgentesRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/perfil/agentes': typeof PerfilAgentesRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/apartamento/$id': typeof ApartamentoIdRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/perfil/agentes': typeof PerfilAgentesRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/apartamento/$id'
+    | '/auth/callback'
     | '/perfil/agentes'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesByTo: FileRoutesByTo
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/apartamento/$id'
+    | '/auth/callback'
     | '/perfil/agentes'
     | '/.mcp/invoke-tool/$tool'
   id:
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/apartamento/$id'
+    | '/auth/callback'
     | '/perfil/agentes'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesById: FileRoutesById
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApartamentoIdRoute: typeof ApartamentoIdRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
@@ -320,6 +333,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApartamentoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/perfil/agentes': {
       id: '/perfil/agentes'
       path: '/agentes'
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApartamentoIdRoute: ApartamentoIdRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
