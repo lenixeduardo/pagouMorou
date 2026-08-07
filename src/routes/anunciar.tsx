@@ -171,9 +171,7 @@ function AnunciarPage() {
       const furnishedClause = "O imóvel é locado com a mobília e equipamentos listados no laudo de vistoria, devendo o locatário zelar por sua perfeita conservação.";
       const current = watch("standardClauses") || [];
       if (!current.includes(furnishedClause)) {
-        // Para evitar problemas de loop no useEffect com watch/setValue, 
-        // apenas logamos ou poderíamos usar um setValue aqui se tivéssemos importado.
-        // Mas o melhor é deixar o proprietário revisar no passo final.
+        setValue("standardClauses", [...current, furnishedClause]);
       }
     }
     prevFurnished.current = isFurnished;
