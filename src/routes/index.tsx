@@ -21,6 +21,7 @@ import { apartmentsQueryOptions } from "@/lib/queries/apartments";
 import { container } from "@/lib/motion";
 import footerAsset from "@/assets/footer.asset.json";
 import { FAQSection } from "@/components/sections/faq-section";
+import { MVPRoadmap } from "@/components/sections/mvp-roadmap";
 
 const FEATURED_LIMIT = 3;
 
@@ -310,6 +311,7 @@ function HeroPage() {
         )}
 
         <FAQSection />
+        <MVPRoadmap />
       </div>
 
       {/* Footer Branding Asset */}
