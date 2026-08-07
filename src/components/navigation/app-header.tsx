@@ -41,7 +41,12 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">Gere de forma visual o passo atual que estamos quais foram concluidos ate chergarmos ao MVP</span>
+            <span className="text-sm font-medium text-text-secondary">
+              Implementar a visualização dessa proposta no dashboard do proprietário com o score
+              destacado.
+              <br />
+              Adicionar campos para personalização do valor da proposta (contraproposta).
+            </span>
           </nav>
         </div>
 
