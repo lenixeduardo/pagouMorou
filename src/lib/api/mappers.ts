@@ -124,6 +124,7 @@ export function mapApartmentSearchRow(row: ApartmentSearchRow): Apartment {
       ...optional("floor", row.floor),
     },
     amenities: row.amenities,
+    standardClauses: (row as any).standard_clauses ?? [],
     ownerId: row.owner_id,
     rating: row.rating,
     reviewsCount: row.reviews_count,

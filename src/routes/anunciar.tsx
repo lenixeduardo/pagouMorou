@@ -10,6 +10,8 @@ import {
   Camera,
   Coins,
   X,
+  Plus,
+  FileText,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm, type Path } from "react-hook-form";
@@ -734,6 +736,79 @@ function AnunciarPage() {
                   <Button variant="ghost" size="lg" className="rounded-xl font-bold" asChild>
                     <Link to="/perfil">Ir para o painel</Link>
                   </Button>
+                </div>
+              </motion.div>
+            )}
+            {!isSuccess && currentStep === 4 && (
+              <motion.div
+                key="step-contract"
+                variants={slideUp}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-8 rounded-3xl border border-border bg-white p-8 shadow-sm"
+              >
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Cláusulas do Contrato</h2>
+                  <p className="text-text-secondary mb-6">
+                    Defina as cláusulas padrão que serão incluídas no contrato digital deste imóvel.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <Controller
+                    control={control}
+                    name="standardClauses"
+                    render={({ field }) => (
+                      <div className="space-y-4">
+                        {(field.value || []).map((clause, index) => (
+                          <div key={index} className="group relative">
+                            <Textarea
+                              value={clause}
+                              onChange={(e) => {
+                                const newValue = [...(field.value || [])];
+                                newValue[index] = e.target.value;
+                                field.onChange(newValue);
+                              }}
+                              className="min-h-[80px] rounded-xl pr-10"
+                              placeholder={`Cláusula ${index + 1}`}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newValue = (field.value || []).filter((_, i) => i !== index);
+                                field.onChange(newValue);
+                              }}
+                              className="absolute right-3 top-3 text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="size-5" />
+                            </button>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full border-dashed rounded-xl h-12"
+                          onClick={() => field.onChange([...(field.value || []), ""])}
+                        >
+                          <Plus className="mr-2 size-4" />
+                          Adicionar cláusula personalizada
+                        </Button>
+                      </div>
+                    )}
+                  />
+                </div>
+
+                <div className="rounded-xl bg-info/5 border border-info/10 p-4">
+                  <div className="flex gap-3">
+                    <Info className="size-5 text-info shrink-0 mt-0.5" />
+                    <div className="text-sm text-info">
+                      <p className="font-bold mb-1">Dica de Especialista</p>
+                      <p>
+                        Cláusulas claras sobre manutenção, limpeza e mobília evitam conflitos futuros e aumentam seu Score de Proprietário.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
