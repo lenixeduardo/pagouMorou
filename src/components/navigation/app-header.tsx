@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Adicionar um QR Code no selo ITI para validação externa imediata do contrato.
+              Adicionar logs de auditoria no banco de dados para cada documento assinado digitalmente.
             </span>
           </nav>
         </div>
