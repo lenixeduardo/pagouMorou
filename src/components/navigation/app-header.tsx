@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Carregar o PDF real do contrato (gerado no passo anterior) em vez de criar um novo documento na função de assinatura.
+              Implementar o armazenamento do PDF assinado no bucket contracts do Supabase Storage.
             </span>
           </nav>
         </div>
