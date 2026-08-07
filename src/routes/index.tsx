@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/sections/hero-section";
+import { useAuth } from "@/hooks/use-auth";
 import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -50,7 +51,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HeroPage() {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { data: featuredApartments } = useSuspenseQuery(
     apartmentsQueryOptions({ limit: FEATURED_LIMIT }),
