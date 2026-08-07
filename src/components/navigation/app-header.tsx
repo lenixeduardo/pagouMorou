@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              inicie os 2 proximos itens do to do
+              agora valide o to-do do app e implemente os proximos passos
             </span>
           </nav>
         </div>
