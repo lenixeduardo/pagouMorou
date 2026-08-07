@@ -41,7 +41,7 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">certo</span>
+            <span className="text-sm font-medium text-text-secondary">Continuar com a implementação de novas funcionalidades agora que o banco está estável.</span>
           </nav>
         </div>
 
