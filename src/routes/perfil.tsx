@@ -828,6 +828,27 @@ function PerfilPage() {
                                   Solicitar PIX
                                 </Button>
                               )}
+                              {proposal.status === "payment_sent" && (
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg border-primary text-primary"
+                                    asChild
+                                  >
+                                    <a href={proposal.paymentProofUrl} target="_blank" rel="noopener noreferrer">
+                                      Ver Comprovante
+                                    </a>
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-success hover:bg-success/90"
+                                    onClick={() => respondMutation({ id: proposal.id, status: "payment_verified" })}
+                                  >
+                                    Confirmar Recebimento
+                                  </Button>
+                                </div>
+                              )}
                               {proposal.counterRentAmount && (
                                 <div className="mt-2 rounded-lg bg-warning/10 p-2 text-sm text-warning-foreground">
                                   Você sugeriu contraproposta de{" "}
