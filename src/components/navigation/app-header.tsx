@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Iniciar a atualização do schema da tabela proposals para suportar o fluxo P0.
+              teste
             </span>
           </nav>
         </div>
