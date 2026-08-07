@@ -1,16 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo } from "react";
-import { useAuthStore } from "@/hooks/use-auth";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/use-favorites";
-import { apartments } from "@/mock";
+import { apartmentsByIdsQueryOptions } from "@/lib/queries/apartments";
 import { PropertyCard } from "@/components/cards/property-card";
 import { motion } from "framer-motion";
 import { container, fadeIn } from "@/lib/motion";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
-
+import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 export const Route = createFileRoute("/favoritos")({
   head: () => ({
@@ -33,27 +33,27 @@ export const Route = createFileRoute("/favoritos")({
 });
 
 function FavoritosPage() {
-  const { isAuthenticated } = useAuthStore();
-  const navigate = useNavigate();
-  // Hooks precisam ser chamados antes de qualquer retorno antecipado.
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: "/entrar" });
-    }
-  }, [isAuthenticated, navigate]);
-
-  const favoriteApartments = useMemo(
-    () => apartments.filter((apt) => favorites.includes(apt.id)),
-    [favorites],
+  const { isAuthenticated, isLoading: isLoadingSession } = useRequireAuth();
+  const { favorites, toggleFavorite, isFavorite, isLoading: isLoadingFavorites } = useFavorites();
+  const { data: favoriteApartments = [], isLoading: isLoadingApartments } = useQuery(
+    apartmentsByIdsQueryOptions(favorites),
   );
 
-  if (!isAuthenticated) return null;
+  // A sessão só é conhecida depois da hidratação; até lá, skeleton em vez de
+  // um empty state que some meio segundo depois.
+  const isLoading = isLoadingSession || isLoadingFavorites || isLoadingApartments;
+
+  if (!isLoadingSession && !isAuthenticated) return null;
 
   return (
-    <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui." component="main">
-      {favoriteApartments.length > 0 ? (
+    <Page
+      title="Favoritos"
+      description="Seus apartamentos salvos aparecerão aqui."
+      component="main"
+    >
+      {isLoading ? (
+        <SkeletonCardGrid count={4} />
+      ) : favoriteApartments.length > 0 ? (
         <motion.div
           variants={container}
           initial="initial"

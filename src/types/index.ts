@@ -12,6 +12,10 @@ export interface Neighborhood {
 
 export type UserRole = "tenant" | "owner";
 
+/** Estágio da análise de documentos (KYC). Só o backoffice muda para
+ * `verified`/`rejected`; o usuário só consegue pedir a análise. */
+export type VerificationStatus = "none" | "pending" | "verified" | "rejected";
+
 export interface User {
   id: ID;
   name: string;
@@ -20,6 +24,7 @@ export interface User {
   avatarUrl?: string;
   role: UserRole;
   verified: boolean;
+  verification: VerificationStatus;
   memberSince: string;
   score?: number;
   scoreFactors?: {
@@ -37,6 +42,8 @@ export interface User {
 
 export type ApartmentStatus = "available" | "reserved" | "rented";
 
+export type PropertyType = "apartamento" | "casa" | "studio" | "loft" | "kitnet" | "cobertura";
+
 export interface ApartmentFeatures {
   bedrooms: number;
   bathrooms: number;
@@ -49,9 +56,11 @@ export interface ApartmentFeatures {
 
 export interface Apartment {
   id: ID;
+  slug: string;
   title: string;
   description: string;
   status: ApartmentStatus;
+  propertyType: PropertyType;
   rent: number;
   condoFee: number;
   iptu: number;
@@ -60,6 +69,7 @@ export interface Apartment {
     street: string;
     number: string;
     neighborhoodId: ID;
+    neighborhoodName: string;
     city: string;
     state: string;
     zipCode: string;
@@ -69,6 +79,7 @@ export interface Apartment {
   ownerId: ID;
   rating: number;
   reviewsCount: number;
+  metroDistanceM?: number;
   createdAt: string;
 }
 

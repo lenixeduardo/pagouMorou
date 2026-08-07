@@ -12,6 +12,7 @@ import { useEffect, type ReactNode, Suspense } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/layout/app-shell";
+import { useAuthListener } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { Toaster } from "@/components/ui/sonner";
 import { BrandLoader } from "@/components/loading/brand-loader";
@@ -101,7 +102,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "PagouMorou — Locação Residencial Digital e Segura" },
       {
         property: "og:description",
-        content: "Alugue seu próximo imóvel sem burocracia, direto com o proprietário no PagouMorou.",
+        content:
+          "Alugue seu próximo imóvel sem burocracia, direto com o proprietário no PagouMorou.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -134,7 +136,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Dancing+Script:wght@600&display=swap"
+          rel="stylesheet"
+        />
         <HeadContent />
       </head>
       <body>
@@ -145,11 +150,19 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/** Precisa viver dentro do QueryClientProvider — mantém o cache de perfil em
+ * dia com login, logout e refresh de token do Supabase Auth. */
+function AuthSync() {
+  useAuthListener();
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthSync />
       <ThemeProvider>
         <AppShell>
           <Suspense fallback={<LoadingComponent />}>

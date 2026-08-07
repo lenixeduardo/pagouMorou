@@ -86,7 +86,7 @@
       {
         "name": "get_property",
         "title": "Detalhes do imóvel",
-        "description": "Retorna os detalhes completos de um imóvel do PagouMorou a partir do seu id, incluindo características, comodidades e avaliações públicas.",
+        "description": "Retorna os detalhes completos de um imóvel do PagouMorou a partir do seu slug (o identificador usado na URL /apartamento/:slug), incluindo características, comodidades e avaliações públicas.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -99,7 +99,7 @@
             "id": {
               "type": "string",
               "minLength": 1,
-              "description": "Identificador do imóvel, ex: apt-1."
+              "description": "Slug do imóvel, ex: studio-claro-com-varanda-na-vila-madalena."
             }
           },
           "required": [
