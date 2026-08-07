@@ -146,7 +146,7 @@ function SearchPage() {
   useEffect(() => {
     const trimmed = debouncedTerm.trim();
     if (trimmed === (search.q ?? "")) return;
-    navigate({ search: (prev) => ({ ...prev, q: trimmed || undefined }), replace: true });
+    navigate({ search: (prev: any) => ({ ...prev, q: trimmed || undefined }), replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedTerm]);
 
@@ -188,7 +188,7 @@ function SearchPage() {
 
   const updateSearch = (patch: Partial<SearchParams>) => {
     setVisible(PAGE_SIZE);
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ search: (prev: any) => ({ ...prev, ...patch }) });
   };
 
   const commitRentRange = (value: number[]) => {
