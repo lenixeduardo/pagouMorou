@@ -14,6 +14,7 @@ export function RealTimeNotifications() {
     if (!notifications || notifications.length === 0) return;
 
     const latest = notifications[0];
+    if (!latest) return;
 
     // Se é a primeira vez ou uma nova notificação (id mudou)
     if (latest.id !== lastNotificationIdRef.current) {
