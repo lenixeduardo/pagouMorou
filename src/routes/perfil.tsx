@@ -79,7 +79,7 @@ const KYC_LABEL: Record<NonNullable<User["verification"]>, string> = {
 function PerfilPage() {
   const { isAuthenticated, isLoading: isLoadingSession } = useRequireAuth();
   const { user, updateProfile, signOut, refresh } = useAuth();
-  const { received: receivedProposals, approveProposal, rejectProposal } = useProposals();
+  const { received: receivedProposals, approveProposal, rejectProposal, counterOffer, requestPayment } = useProposals();
   const { conversations, totalUnread } = useConversations();
   const navigate = useNavigate();
   // activeTab removed as it was unused
