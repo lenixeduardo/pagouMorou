@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Fluxo P0 de Propostas Finalizado: Contrapropostas e Pagamento Manual
+              Implementar a geração de contrato PDF dinâmico com os dados da proposta aceita. Faça o proprietário definir no cadastro do imovel quais serão as clausulas padrões que entram no momento de gerar o contrato, como por exemplo quando imobiliado clausulas sobre estes itens, limpeza, manutenção etc.
             </span>
           </nav>
         </div>
