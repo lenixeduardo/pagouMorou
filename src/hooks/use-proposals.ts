@@ -66,8 +66,12 @@ export function useProposals() {
         ownerId: row.owner_id,
         ownerName: row.owner_name,
         rentAmount: row.rent_amount,
+        counterRentAmount: row.counter_rent_amount,
         message: row.message,
-        status: row.status,
+        status: row.status as ProposalStatus,
+        paymentProofUrl: row.payment_proof_url,
+        contractUrl: row.contract_url,
+        signedContractUrl: row.signed_contract_url,
         direction: row.direction === "received" ? "received" : "sent",
         createdAt: row.created_at,
       }));
@@ -99,18 +103,38 @@ export function useProposals() {
   });
 
   const { mutate: respondMutation } = useMutation({
-    mutationFn: async (input: { id: string; status: Exclude<ProposalStatus, "pending"> }) => {
+    mutationFn: async (input: { 
+      id: string; 
+      status: Exclude<ProposalStatus, "pending">;
+      counterRentAmount?: number;
+      paymentProofUrl?: string;
+      contractUrl?: string;
+      signedContractUrl?: string;
+    }) => {
       const { data, error } = await getBrowserSupabase().rpc("respond_proposal", {
         p_id: input.id,
         p_status: input.status,
+        p_counter_rent: input.counterRentAmount,
+        p_payment_proof: input.paymentProofUrl,
+        p_contract: input.contractUrl,
+        p_signed_contract: input.signed_contract_url,
       });
       if (error) throw new Error(error.message);
       return data;
     },
     onSuccess: (_data, variables) => {
-      toast[variables.status === "approved" ? "success" : "message"](
-        variables.status === "approved" ? "Proposta aprovada!" : "Proposta recusada.",
-      );
+      const statusLabels: Record<string, string> = {
+        accepted: "Proposta aceita!",
+        rejected: "Proposta recusada.",
+        counter_offer: "Contraproposta enviada!",
+        waiting_payment: "Solicitação de pagamento enviada!",
+        payment_sent: "Comprovante enviado com sucesso!",
+        payment_verified: "Pagamento verificado!",
+        contract_signed: "Contrato assinado!",
+      };
+      
+      const label = statusLabels[variables.status] || "Status atualizado!";
+      toast.success(label);
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -142,12 +166,27 @@ export function useProposals() {
   );
 
   const approveProposal = useCallback(
-    (id: string) => respondMutation({ id, status: "approved" }),
+    (id: string) => respondMutation({ id, status: "accepted" }),
     [respondMutation],
   );
 
   const rejectProposal = useCallback(
     (id: string) => respondMutation({ id, status: "rejected" }),
+    [respondMutation],
+  );
+
+  const counterOffer = useCallback(
+    (id: string, amount: number) => respondMutation({ id, status: "counter_offer", counterRentAmount: amount }),
+    [respondMutation],
+  );
+
+  const requestPayment = useCallback(
+    (id: string) => respondMutation({ id, status: "waiting_payment" }),
+    [respondMutation],
+  );
+
+  const sendPaymentProof = useCallback(
+    (id: string, url: string) => respondMutation({ id, status: "payment_sent", paymentProofUrl: url }),
     [respondMutation],
   );
 
@@ -160,5 +199,8 @@ export function useProposals() {
     sendProposal,
     approveProposal,
     rejectProposal,
+    counterOffer,
+    requestPayment,
+    sendPaymentProof,
   };
 }
