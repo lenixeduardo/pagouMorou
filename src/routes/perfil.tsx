@@ -744,22 +744,27 @@ function PerfilPage() {
                             </div>
                             <Badge
                               variant={
-                                proposal.status === "pending"
+                                proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment"
                                   ? "outline"
-                                  : proposal.status === "approved"
+                                  : proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed"
                                     ? "default"
                                     : "destructive"
                               }
                               className={cn(
-                                proposal.status === "approved" && "bg-success hover:bg-success/90",
-                                proposal.status === "pending" && "text-warning border-warning",
+                                (proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed") && "bg-success hover:bg-success/90",
+                                (proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment") && "text-warning border-warning",
+                                proposal.status === "payment_sent" && "text-blue-500 border-blue-500",
                               )}
                             >
-                              {proposal.status === "pending"
-                                ? "Pendente"
-                                : proposal.status === "approved"
-                                  ? "Aprovada"
-                                  : "Recusada"}
+                              {proposal.status === "pending" ? "Pendente" : 
+                               proposal.status === "accepted" ? "Aceita" : 
+                               proposal.status === "rejected" ? "Recusada" :
+                               proposal.status === "counter_offer" ? "Contraproposta" :
+                               proposal.status === "waiting_payment" ? "Aguardando Pagamento" :
+                               proposal.status === "payment_sent" ? "Pagamento Enviado" :
+                               proposal.status === "payment_verified" ? "Pagamento Verificado" :
+                               proposal.status === "contract_signed" ? "Contrato Assinado" : 
+                               proposal.status}
                             </Badge>
                           </CardHeader>
                           <CardContent>

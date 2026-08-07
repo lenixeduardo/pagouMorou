@@ -53,10 +53,12 @@ export function useProposals() {
   const { data: proposals = [], isLoading } = useQuery({
     queryKey,
     queryFn: async (): Promise<Proposal[]> => {
-      const { data, error } = await getBrowserSupabase().rpc("list_proposals");
+      // Usamos any para evitar erros de tipagem com Database['public']['Functions']['list_proposals']['Returns']
+      // até que os tipos sejam regerados.
+      const { data, error } = await getBrowserSupabase().rpc("list_proposals") as any;
       if (error) throw error;
 
-      return (data ?? []).map((row) => ({
+      return (data ?? []).map((row: any) => ({
         id: row.id,
         apartmentId: row.apartment_id,
         apartmentTitle: row.apartment_title,
@@ -117,7 +119,7 @@ export function useProposals() {
         p_counter_rent: input.counterRentAmount,
         p_payment_proof: input.paymentProofUrl,
         p_contract: input.contractUrl,
-        p_signed_contract: input.signed_contract_url,
+        p_signed_contract: input.signedContractUrl,
       });
       if (error) throw new Error(error.message);
       return data;
