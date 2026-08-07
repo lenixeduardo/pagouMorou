@@ -76,6 +76,7 @@ export interface Apartment {
   };
   features: ApartmentFeatures;
   amenities: string[];
+  standardClauses?: string[];
   ownerId: ID;
   rating: number;
   reviewsCount: number;
