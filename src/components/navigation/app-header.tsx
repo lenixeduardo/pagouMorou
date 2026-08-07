@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              crie testes automatizados para os ultimos passos implementados, devem cobrir de ponta a ponta as novas funcionalidades
+              Implementar a integração real com a API do Gov.br para assinatura digital.
             </span>
           </nav>
         </div>
