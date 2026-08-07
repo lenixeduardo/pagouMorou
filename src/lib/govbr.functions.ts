@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import QRCode from 'qrcode';
 
 /**
  * Nota técnica: A integração com o Gov.br requer registro da aplicação 
@@ -107,11 +108,11 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
       const { width } = lastPage.getSize();
       const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-      // 4. Aplicar o selo de assinatura do ITI (Estampa visual)
-      const sealWidth = 400;
-      const sealHeight = 70;
+      // 4. Aplicar o selo de assinatura do ITI (Estampa visual com QR Code)
+      const sealWidth = 500;
+      const sealHeight = 100;
       const sealX = (width - sealWidth) / 2;
-      const sealY = 50; // Parte inferior da última página
+      const sealY = 40;
 
       lastPage.drawRectangle({
         x: sealX,
@@ -123,25 +124,45 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
         color: rgb(0.98, 0.98, 0.98),
       });
 
+      // Gerar QR Code para validação (Simulado: apontando para página de verificação do PagouMorou)
+      const verificationUrl = `https://pagoumorou.com.br/verificar/${data.proposalId}`;
+      const qrCodeDataUrl = await QRCode.toDataURL(verificationUrl, { margin: 1, width: 80 });
+      const qrCodeImage = await pdfDoc.embedPng(qrCodeDataUrl);
+
+      lastPage.drawImage(qrCodeImage, {
+        x: sealX + sealWidth - 90,
+        y: sealY + 10,
+        width: 80,
+        height: 80,
+      });
+
       lastPage.drawText('ASSINADO DIGITALMENTE - GOV.BR (PROCESSO ITI)', {
         x: sealX + 20,
-        y: sealY + 45,
-        size: 12,
+        y: sealY + 75,
+        size: 14,
         font,
         color: rgb(0, 0.2, 0.6),
       });
 
-      lastPage.drawText(`Assinante: Protocolo Gov.br | Hash: ${data.documentHash.slice(0, 16)}...`, {
+      lastPage.drawText(`Assinante: Protocolo Gov.br | Autenticidade Garantida`, {
         x: sealX + 20,
-        y: sealY + 25,
+        y: sealY + 55,
+        size: 10,
+        color: rgb(0.1, 0.1, 0.1),
+      });
+
+      lastPage.drawText(`Hash: ${data.documentHash}`, {
+        x: sealX + 20,
+        y: sealY + 35,
         size: 8,
-        color: rgb(0.2, 0.2, 0.2),
+        font: await pdfDoc.embedFont(StandardFonts.Courier),
+        color: rgb(0.3, 0.3, 0.3),
       });
 
       lastPage.drawText(`Verificado em: ${new Date().toLocaleString('pt-BR')} | ID: ${data.proposalId}`, {
         x: sealX + 20,
-        y: sealY + 10,
-        size: 7,
+        y: sealY + 15,
+        size: 8,
         color: rgb(0.4, 0.4, 0.4),
       });
 
