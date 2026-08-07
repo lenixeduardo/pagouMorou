@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Implementar a geração de contrato PDF dinâmico com os dados da proposta aceita.
+              Adicionar notificações automáticas quando o contrato estiver pronto para assinatura. Implemente também toast notifications, usar o componente do shadcn para isto
             </span>
           </nav>
         </div>
