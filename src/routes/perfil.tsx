@@ -660,7 +660,7 @@ function PerfilPage() {
               </Card>
             )}
 
-            <Tabs defaultValue="anuncios" className="w-full" onValueChange={setActiveTab}>
+            <Tabs defaultValue="anuncios" className="w-full">
               <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
                 <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">
                   Meus Anúncios
