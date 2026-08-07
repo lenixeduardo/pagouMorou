@@ -41,7 +41,7 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">mapeie a integração com assinatura digital que seja gratuita, mesmo que esta tenha limite por até 10 assinaturas ao dia</span>
+            <span className="text-sm font-medium text-text-secondary">certo, agora do roadmap, monte um to-do baseado em prioridade/criticidade/complexidade</span>
           </nav>
         </div>
 
