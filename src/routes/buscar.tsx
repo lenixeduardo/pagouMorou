@@ -1,18 +1,23 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Search, SlidersHorizontal, Sparkles, Star, Train } from "lucide-react";
+import { Filter, Search, SlidersHorizontal, Sparkles, Star, Train } from "lucide-react";
+import { z } from "zod";
 
 import { Page } from "@/components/layout/page";
 import { apartmentSearchQueryOptions } from "@/lib/queries/apartments";
-import type { SearchSort } from "@/lib/api/search";
+import type { SearchApartmentsInput, SearchSort } from "@/lib/api/search";
 import { PropertyCard } from "@/components/cards/property-card";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
   Select,
   SelectContent,
@@ -26,6 +31,7 @@ import type { Apartment, PropertyType } from "@/types";
 import { container, fadeIn } from "@/lib/motion";
 
 const PAGE_SIZE = 12;
+const MAX_RENT_BOUND = 20000;
 
 /** Os chips mapeiam direto para o enum `property_type` do banco — nada de
  * adivinhar tipo de imóvel procurando substring no título. */
@@ -48,9 +54,50 @@ const SORT_OPTIONS: { label: string; value: SearchSort }[] = [
   { label: "Mais perto do metrô", value: "metro" },
 ];
 
+const PROPERTY_TYPE_VALUES = TYPE_FILTERS.flatMap((filter) => (filter.value ? [filter.value] : []));
+const SORT_VALUES = SORT_OPTIONS.map((option) => option.value);
+
+/**
+ * Todos os campos ficam opcionais e sem `.default()` de propósito: um
+ * `.default()` torna o campo obrigatório no tipo de saída do Zod, o que
+ * quebra o tipo dos `<Link to="/buscar">` sem `search` espalhados pelo app
+ * (`index.tsx`, `apartamento.$id.tsx`, `mensagens.tsx`) — já vivi esse erro
+ * de compilador uma vez, não repetir.
+ */
+const searchParamsSchema = z.object({
+  q: z.string().trim().max(120).optional(),
+  type: z.enum(PROPERTY_TYPE_VALUES as [PropertyType, ...PropertyType[]]).optional(),
+  sort: z.enum(SORT_VALUES as [SearchSort, ...SearchSort[]]).optional(),
+  minRent: z.coerce.number().int().min(0).optional(),
+  maxRent: z.coerce.number().int().min(0).optional(),
+  bedrooms: z.coerce.number().int().min(0).max(6).optional(),
+  furnished: z.coerce.boolean().optional(),
+  petFriendly: z.coerce.boolean().optional(),
+});
+
+type SearchParams = z.infer<typeof searchParamsSchema>;
+
+function toSearchInput(search: SearchParams, limit: number): SearchApartmentsInput {
+  return {
+    ...(search.q ? { query: search.q } : {}),
+    ...(search.type ? { propertyType: search.type } : {}),
+    ...(search.minRent !== undefined ? { minRent: search.minRent } : {}),
+    ...(search.maxRent !== undefined ? { maxRent: search.maxRent } : {}),
+    ...(search.bedrooms !== undefined ? { bedrooms: search.bedrooms } : {}),
+    ...(search.furnished !== undefined ? { furnished: search.furnished } : {}),
+    ...(search.petFriendly !== undefined ? { petFriendly: search.petFriendly } : {}),
+    sort: search.sort ?? "relevance",
+    limit,
+  };
+}
+
 export const Route = createFileRoute("/buscar")({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(apartmentSearchQueryOptions({ sort: "rating", limit: 8 })),
+  validateSearch: (raw: Record<string, unknown>) => searchParamsSchema.parse(raw),
+  loaderDeps: ({ search }) => search,
+  loader: ({ context, deps }) =>
+    context.queryClient.ensureQueryData(
+      apartmentSearchQueryOptions(toSearchInput(deps, PAGE_SIZE)),
+    ),
   head: () => ({
     meta: [
       { title: "Explorar Imóveis para Alugar | PagouMorou" },
@@ -71,23 +118,56 @@ export const Route = createFileRoute("/buscar")({
 });
 
 function SearchPage() {
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [propertyType, setPropertyType] = useState<PropertyType | null>(null);
-  const [sort, setSort] = useState<SearchSort>("relevance");
+  const [searchTerm, setSearchTerm] = useState(search.q ?? "");
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const [rentRange, setRentRange] = useState<[number, number]>([
+    search.minRent ?? 0,
+    search.maxRent ?? MAX_RENT_BOUND,
+  ]);
 
   const debouncedTerm = useDebouncedValue(searchTerm);
-  const isSearching = debouncedTerm.trim() !== "" || propertyType !== null || sort !== "relevance";
+
+  // Volta/avança do navegador ou "Limpar filtros" mudam `search.q` sem
+  // passar pelo input — mantém o campo de texto em sincronia com a URL.
+  useEffect(() => {
+    setSearchTerm(search.q ?? "");
+  }, [search.q]);
+
+  useEffect(() => {
+    setRentRange([search.minRent ?? 0, search.maxRent ?? MAX_RENT_BOUND]);
+  }, [search.minRent, search.maxRent]);
+
+  // Sincroniza o texto debounced na URL, sem disparar uma navegação a cada
+  // tecla — é o que torna a busca compartilhável por link.
+  useEffect(() => {
+    const trimmed = debouncedTerm.trim();
+    if (trimmed === (search.q ?? "")) return;
+    navigate({ search: (prev) => ({ ...prev, q: trimmed || undefined }), replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedTerm]);
+
+  const activeFilterCount = [
+    search.minRent,
+    search.maxRent,
+    search.bedrooms,
+    search.furnished,
+    search.petFriendly,
+  ].filter((value) => value !== undefined).length;
+
+  const isSearching =
+    debouncedTerm.trim() !== "" ||
+    search.type !== undefined ||
+    (search.sort !== undefined && search.sort !== "relevance") ||
+    activeFilterCount > 0;
 
   const results = useQuery(
-    apartmentSearchQueryOptions({
-      ...(debouncedTerm.trim() ? { query: debouncedTerm.trim() } : {}),
-      ...(propertyType ? { propertyType } : {}),
-      sort,
-      limit: visible,
-    }),
+    apartmentSearchQueryOptions(
+      toSearchInput({ ...search, q: debouncedTerm.trim() || undefined }, visible),
+    ),
   );
 
   // Vitrines curadas da tela inicial de busca. Cada uma é uma ordenação
@@ -101,9 +181,22 @@ function SearchPage() {
 
   const resetFilters = () => {
     setSearchTerm("");
-    setPropertyType(null);
-    setSort("relevance");
+    setRentRange([0, MAX_RENT_BOUND]);
     setVisible(PAGE_SIZE);
+    navigate({ search: {} });
+  };
+
+  const updateSearch = (patch: Partial<SearchParams>) => {
+    setVisible(PAGE_SIZE);
+    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+  };
+
+  const commitRentRange = (value: number[]) => {
+    const [min, max] = value;
+    updateSearch({
+      minRent: min && min > 0 ? min : undefined,
+      maxRent: max && max < MAX_RENT_BOUND ? max : undefined,
+    });
   };
 
   return (
@@ -113,7 +206,108 @@ function SearchPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <h1 className="text-3xl font-bold tracking-tight">Buscar seu novo lar</h1>
             <div className="flex items-center gap-2">
-              <Select value={sort} onValueChange={(value) => setSort(value as SearchSort)}>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="h-11 gap-2 rounded-full px-6">
+                    <Filter className="size-4" aria-hidden />
+                    Filtros
+                    {activeFilterCount > 0 && (
+                      <Badge className="ml-1 size-5 rounded-full p-0 text-center leading-5">
+                        {activeFilterCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="w-full overflow-y-auto sm:max-w-md">
+                  <SheetHeader>
+                    <SheetTitle>Filtros</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-8 space-y-8">
+                    <div className="space-y-4">
+                      <Label>Faixa de aluguel</Label>
+                      <Slider
+                        min={0}
+                        max={MAX_RENT_BOUND}
+                        step={100}
+                        value={rentRange}
+                        onValueChange={(value) => setRentRange(value as [number, number])}
+                        onValueCommit={commitRentRange}
+                      />
+                      <div className="flex justify-between text-sm text-text-secondary">
+                        <span>{formatShort(rentRange[0])}</span>
+                        <span>{formatShort(rentRange[1])}+</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Dormitórios</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {[1, 2, 3, 4].map((n) => (
+                          <Badge
+                            key={n}
+                            variant={search.bedrooms === n ? "default" : "secondary"}
+                            className={`cursor-pointer rounded-full px-4 py-2 ${
+                              search.bedrooms === n
+                                ? "bg-primary text-white"
+                                : "bg-slate-100 text-slate-600"
+                            }`}
+                            onClick={() =>
+                              updateSearch({ bedrooms: search.bedrooms === n ? undefined : n })
+                            }
+                          >
+                            {n}+ {n === 1 ? "quarto" : "quartos"}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="filter-furnished">Mobiliado</Label>
+                      <Checkbox
+                        id="filter-furnished"
+                        checked={search.furnished ?? false}
+                        onCheckedChange={(checked) =>
+                          updateSearch({ furnished: checked === true ? true : undefined })
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="filter-pet">Aceita pet</Label>
+                      <Checkbox
+                        id="filter-pet"
+                        checked={search.petFriendly ?? false}
+                        onCheckedChange={(checked) =>
+                          updateSearch({ petFriendly: checked === true ? true : undefined })
+                        }
+                      />
+                    </div>
+
+                    {activeFilterCount > 0 && (
+                      <Button
+                        variant="ghost"
+                        className="w-full text-text-secondary"
+                        onClick={() =>
+                          updateSearch({
+                            minRent: undefined,
+                            maxRent: undefined,
+                            bedrooms: undefined,
+                            furnished: undefined,
+                            petFriendly: undefined,
+                          })
+                        }
+                      >
+                        Limpar filtros
+                      </Button>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              <Select
+                value={search.sort ?? "relevance"}
+                onValueChange={(value) => updateSearch({ sort: value as SearchSort })}
+              >
                 <SelectTrigger
                   className="h-11 w-[220px] rounded-full px-6"
                   aria-label="Ordenar resultados"
@@ -152,7 +346,7 @@ function SearchPage() {
 
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {TYPE_FILTERS.map((filter) => {
-              const active = propertyType === filter.value;
+              const active = (search.type ?? null) === filter.value;
               return (
                 <Badge
                   key={filter.label}
@@ -162,10 +356,7 @@ function SearchPage() {
                       ? "bg-primary text-white"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
-                  onClick={() => {
-                    setPropertyType(filter.value);
-                    setVisible(PAGE_SIZE);
-                  }}
+                  onClick={() => updateSearch({ type: filter.value ?? undefined })}
                 >
                   {filter.label}
                 </Badge>
@@ -333,4 +524,9 @@ function ApartmentCarousel({
       </div>
     </section>
   );
+}
+
+function formatShort(value: number): string {
+  if (value >= 1000) return `R$ ${Math.round(value / 1000)} mil`;
+  return `R$ ${value}`;
 }
