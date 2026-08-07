@@ -76,7 +76,7 @@ export function mapApartmentRow(row: ApartmentRowWithImages): Apartment {
       ...optional("floor", row.floor),
     },
     amenities: row.amenities,
-    standardClauses: row.standard_clauses ?? [],
+    standardClauses: (row as any).standard_clauses ?? [],
     ownerId: row.owner_id,
     rating: row.rating,
     reviewsCount: row.reviews_count,

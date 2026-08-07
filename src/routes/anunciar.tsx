@@ -82,6 +82,7 @@ const anuncioSchema = z.object({
   rent: z.coerce.number().min(1, "Informe o valor do aluguel."),
   condoFee: z.coerce.number().min(0),
   iptu: z.coerce.number().min(0),
+  standardClauses: z.array(z.string()).optional(),
 });
 
 type AnuncioForm = z.input<typeof anuncioSchema>;
@@ -92,6 +93,7 @@ const STEPS = [
   { id: "location", title: "Localização", icon: MapPin },
   { id: "photos", title: "Fotos", icon: Camera },
   { id: "pricing", title: "Valores", icon: Coins },
+  { id: "contract", title: "Contrato", icon: CheckCircle2 },
 ] as const;
 
 /** Campos validados ao clicar em "Continuar" de cada passo — assim o erro
@@ -101,6 +103,7 @@ const STEP_FIELDS: Path<AnuncioForm>[][] = [
   ["zipCode", "street", "number", "neighborhood", "city", "state"],
   [],
   ["rent", "condoFee", "iptu"],
+  ["standardClauses"],
 ];
 
 function AnunciarPage() {
@@ -145,6 +148,11 @@ function AnunciarPage() {
       rent: 0,
       condoFee: 0,
       iptu: 0,
+      standardClauses: [
+        "O imóvel deve ser entregue nas mesmas condições de limpeza do início do contrato.",
+        "A manutenção de itens de desgaste natural é de responsabilidade do locatário.",
+        "É proibida a realização de reformas sem autorização prévia por escrito do proprietário.",
+      ],
     },
   });
 
@@ -258,7 +266,14 @@ function AnunciarPage() {
           </div>
         )}
 
-        <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
+        <form onSubmit={(event) => {
+          if (currentStep < STEPS.length - 1) {
+            event.preventDefault();
+            void goNext();
+            return;
+          }
+          void handleSubmit(onSubmit)(event);
+        }}>
           <AnimatePresence mode="wait">
             {!isSuccess && currentStep === 0 && (
               <motion.div
