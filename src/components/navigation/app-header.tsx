@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              siga o to do agora para o fluxo de verificacao de transferencia
+              valide agora o ciclo de propostas
             </span>
           </nav>
         </div>
