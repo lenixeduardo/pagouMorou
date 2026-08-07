@@ -14,7 +14,290 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      apartment_images: {
+        Row: {
+          alt: string | null
+          apartment_id: string
+          created_at: string | null
+          external_url: string | null
+          height: number | null
+          id: string
+          position: number | null
+          storage_path: string | null
+          width: number | null
+        }
+        Insert: {
+          alt?: string | null
+          apartment_id: string
+          created_at?: string | null
+          external_url?: string | null
+          height?: number | null
+          id?: string
+          position?: number | null
+          storage_path?: string | null
+          width?: number | null
+        }
+        Update: {
+          alt?: string | null
+          apartment_id?: string
+          created_at?: string | null
+          external_url?: string | null
+          height?: number | null
+          id?: string
+          position?: number | null
+          storage_path?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "apartment_images_apartment_id_fkey"
+            columns: ["apartment_id"]
+            isOneToOne: false
+            referencedRelation: "apartments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      apartments: {
+        Row: {
+          amenities: string[] | null
+          area_m2: number
+          bathrooms: number
+          bedrooms: number
+          city: string
+          condo_fee: number | null
+          created_at: string | null
+          description: string | null
+          floor: number | null
+          furnished: boolean | null
+          id: string
+          iptu: number | null
+          metro_distance_m: number | null
+          neighborhood_id: string | null
+          number: string | null
+          owner_id: string
+          parking_spots: number | null
+          pet_friendly: boolean | null
+          property_type: Database["public"]["Enums"]["property_type"]
+          published: boolean | null
+          rating: number | null
+          rent: number
+          reviews_count: number | null
+          slug: string
+          state: string
+          status: Database["public"]["Enums"]["apartment_status"]
+          street: string
+          title: string
+          updated_at: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          amenities?: string[] | null
+          area_m2: number
+          bathrooms?: number
+          bedrooms?: number
+          city: string
+          condo_fee?: number | null
+          created_at?: string | null
+          description?: string | null
+          floor?: number | null
+          furnished?: boolean | null
+          id?: string
+          iptu?: number | null
+          metro_distance_m?: number | null
+          neighborhood_id?: string | null
+          number?: string | null
+          owner_id: string
+          parking_spots?: number | null
+          pet_friendly?: boolean | null
+          property_type?: Database["public"]["Enums"]["property_type"]
+          published?: boolean | null
+          rating?: number | null
+          rent: number
+          reviews_count?: number | null
+          slug: string
+          state: string
+          status?: Database["public"]["Enums"]["apartment_status"]
+          street: string
+          title: string
+          updated_at?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          amenities?: string[] | null
+          area_m2?: number
+          bathrooms?: number
+          bedrooms?: number
+          city?: string
+          condo_fee?: number | null
+          created_at?: string | null
+          description?: string | null
+          floor?: number | null
+          furnished?: boolean | null
+          id?: string
+          iptu?: number | null
+          metro_distance_m?: number | null
+          neighborhood_id?: string | null
+          number?: string | null
+          owner_id?: string
+          parking_spots?: number | null
+          pet_friendly?: boolean | null
+          property_type?: Database["public"]["Enums"]["property_type"]
+          published?: boolean | null
+          rating?: number | null
+          rent?: number
+          reviews_count?: number | null
+          slug?: string
+          state?: string
+          status?: Database["public"]["Enums"]["apartment_status"]
+          street?: string
+          title?: string
+          updated_at?: string | null
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "apartments_neighborhood_id_fkey"
+            columns: ["neighborhood_id"]
+            isOneToOne: false
+            referencedRelation: "neighborhoods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "apartments_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          apartment_id: string
+          created_at: string | null
+          profile_id: string
+        }
+        Insert: {
+          apartment_id: string
+          created_at?: string | null
+          profile_id: string
+        }
+        Update: {
+          apartment_id?: string
+          created_at?: string | null
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_apartment_id_fkey"
+            columns: ["apartment_id"]
+            isOneToOne: false
+            referencedRelation: "apartments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorites_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      neighborhoods: {
+        Row: {
+          average_rent: number | null
+          city: string
+          created_at: string | null
+          highlights: string[] | null
+          id: string
+          name: string
+          slug: string
+          state: string
+        }
+        Insert: {
+          average_rent?: number | null
+          city: string
+          created_at?: string | null
+          highlights?: string[] | null
+          id?: string
+          name: string
+          slug: string
+          state: string
+        }
+        Update: {
+          average_rent?: number | null
+          city?: string
+          created_at?: string | null
+          highlights?: string[] | null
+          id?: string
+          name?: string
+          slug?: string
+          state?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          auth_user_id: string | null
+          avatar_path: string | null
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          member_since: string | null
+          name: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          score: number | null
+          score_factors: Json | null
+          updated_at: string | null
+          verification:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified: boolean | null
+        }
+        Insert: {
+          auth_user_id?: string | null
+          avatar_path?: string | null
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          member_since?: string | null
+          name: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          score?: number | null
+          score_factors?: Json | null
+          updated_at?: string | null
+          verification?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified?: boolean | null
+        }
+        Update: {
+          auth_user_id?: string | null
+          avatar_path?: string | null
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          member_since?: string | null
+          name?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          score?: number | null
+          score_factors?: Json | null
+          updated_at?: string | null
+          verification?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +306,18 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      apartment_status: "available" | "rented" | "pending" | "inactive"
+      notification_kind:
+        | "proposal_received"
+        | "proposal_accepted"
+        | "proposal_rejected"
+        | "message_received"
+        | "kyc_update"
+        | "system"
+      property_type: "apartment" | "house" | "studio" | "kitnet"
+      proposal_status: "pending" | "accepted" | "rejected" | "canceled"
+      user_role: "tenant" | "owner" | "admin"
+      verification_status: "unverified" | "pending" | "verified" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +444,20 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      apartment_status: ["available", "rented", "pending", "inactive"],
+      notification_kind: [
+        "proposal_received",
+        "proposal_accepted",
+        "proposal_rejected",
+        "message_received",
+        "kyc_update",
+        "system",
+      ],
+      property_type: ["apartment", "house", "studio", "kitnet"],
+      proposal_status: ["pending", "accepted", "rejected", "canceled"],
+      user_role: ["tenant", "owner", "admin"],
+      verification_status: ["unverified", "pending", "verified", "rejected"],
+    },
   },
 } as const
