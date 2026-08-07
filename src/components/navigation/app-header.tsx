@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Integrar a biblioteca de manipulação de PDF no backend para aplicar o selo de assinatura do ITI.
+              Instalar bibliotecas como pdf-lib no ambiente de produção para realizar a manipulação real dos bytes do PDF.
             </span>
           </nav>
         </div>
