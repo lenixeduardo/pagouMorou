@@ -19,7 +19,7 @@ A proposta é permitir que o usuário:
 
 Este projeto **não é uma landing page** e não deve ganhar seções de marketing genéricas. É uma aplicação de produto: shell, design system, rotas e componentes reutilizáveis prontos para produção. A referência de qualidade visual e de interação é o **Airbnb**.
 
-Idioma do produto: **português do Brasil** (`<html lang="pt-BR">`). Textos de UI, rotas e dados mock são em pt-BR. Comentários e nomes de código são majoritariamente em inglês, com alguns em pt-BR — siga o padrão do arquivo que estiver editando.
+Idioma do produto: **português do Brasil** (`<html lang="pt-BR">`). Textos de UI, rotas e conteúdo são em pt-BR — inclusive as mensagens de erro levantadas pelas funções do Postgres, que chegam direto no toast. Comentários e nomes de código são majoritariamente em inglês, com alguns em pt-BR — siga o padrão do arquivo que estiver editando.
 
 ---
 
@@ -39,8 +39,13 @@ Idioma do produto: **português do Brasil** (`<html lang="pt-BR">`). Textos de U
 | Formulários | **React Hook Form** + **Zod** |
 | Toasts | **Sonner** |
 | Runtime/SSR | **Nitro** (target padrão Cloudflare) |
+| Backend | **Supabase** (Postgres + Auth + Storage + RLS), projeto `pagoumorou` |
 | Agentes | **MCP** via `@lovable.dev/mcp-js` |
 | Gerenciador | **Bun** (`bun.lock`, `bunfig.toml`) — `npm` também funciona |
+
+### Variáveis de ambiente
+
+`.env.example` lista o mínimo para rodar: `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`. Ambas são públicas por natureza (a anon key vive atrás da RLS). Chave `service_role`, se algum dia entrar, **não pode levar prefixo `VITE_`** — o Vite inlina isso no bundle do browser.
 
 O projeto é sincronizado com o **Lovable** (ver `AGENTS.md`): **não reescreva histórico git publicado** (sem force-push, rebase ou squash de commits já enviados) e mantenha a branch sempre em estado funcional.
 
@@ -76,10 +81,9 @@ src/
     shared/          # Logo
   config/            # navigation.ts (itens de navegação primária)
   contexts/          # theme-context.tsx (light/dark)
-  hooks/             # stores Zustand + hooks de UI
-  lib/               # utils, motion, score, mcp/, error reporting
-  mock/              # dados mock tipados (imóveis, bairros, usuários…)
-  types/             # modelos de domínio TypeScript
+  hooks/             # dados (Supabase + TanStack Query) e hooks de UI
+  lib/               # supabase/, api/, server-fns/, queries/, auth/, storage/, mcp/, utils, motion, score
+  types/             # index.ts (domínio) + database.ts (linhas do Postgres, gerado)
   utils/             # format.ts (moeda, data)
   docs/              # telas_referencia.md — descrição tela a tela
   styles.css         # DESIGN SYSTEM (tokens Tailwind v4)
@@ -202,32 +206,40 @@ HTML semântico, navegação por teclado, ARIA nos componentes Radix, `:focus-vi
 | Rota | Arquivo | O que faz |
 | --- | --- | --- |
 | `/` | `index.tsx` | Home: hero "Alugou. Pagou. Morou.", bairros em bento grid, categorias, "Como funciona", destaques, FAQ |
-| `/buscar` | `buscar.tsx` | Busca com filtros por tipo (Todos/Apartamentos/Casas/Studios/Lofts), texto por título/bairro/cidade, carrosséis de resultados e skeletons |
-| `/apartamento/$id` | `apartamento.$id.tsx` | Detalhe do imóvel: galeria, atributos (quartos, banheiros, vagas, andar), descrição, sidebar flutuante com aluguel + condomínio + IPTU + total, "Quero alugar" e "Falar com proprietário" |
-| `/favoritos` | `favoritos.tsx` | Grid dos imóveis favoritados (com empty state) |
-| `/mensagens` | `mensagens.tsx` | Conversas com proprietários (placeholder funcional + empty state) |
-| `/perfil` | `perfil.tsx` | Painel do usuário: avatar, verificação, score, stats, abas **Meus Anúncios** e **Propostas** |
-| `/perfil/agentes` | `perfil.agentes.tsx` | Integrações MCP: status do conector, chaves de acesso por cliente (Claude Desktop, Cursor…), revogação. **Rota protegida** — redireciona para `/entrar` |
-| `/configuracoes` | `configuracoes.tsx` | Informações do perfil, outros dados, preferências |
-| `/anunciar` | `anunciar.tsx` | Wizard de 4 passos: básico → localização → fotos (dropzone) → valores (com total automático) → tela de sucesso |
-| `/entrar` | `entrar.tsx` | Login em layout bipartido com bloco de branding |
-| `/cadastro` | `cadastro.tsx` | Cadastro com escolha de papel: **Sou Inquilino** vs **Sou Proprietário** |
+| `/buscar` | `buscar.tsx` | Busca server-side via `search_apartments`: texto full-text, chips por `property_type`, ordenação e "carregar mais". Sem filtro, mostra três vitrines curadas (avaliados / metrô / recentes) |
+| `/apartamento/$id` | `apartamento.$id.tsx` | Detalhe do imóvel: galeria, atributos, descrição, sidebar com aluguel + condomínio + IPTU + total, "Quero alugar" (proposta real), chat com o dono e cartão do proprietário |
+| `/favoritos` | `favoritos.tsx` | Grid dos imóveis favoritados. **Protegida** |
+| `/mensagens` | `mensagens.tsx` | Chat real: lista de conversas, thread, envio e marcação de lidas. **Protegida** |
+| `/perfil` | `perfil.tsx` | Painel: avatar (upload no Storage), KYC, score, stats, abas **Meus Anúncios** e **Propostas** (aprovar/recusar). **Protegida** |
+| `/perfil/agentes` | `perfil.agentes.tsx` | Integrações MCP: status do conector e chaves por cliente. **Protegida** |
+| `/configuracoes` | `configuracoes.tsx` | Edição de nome e telefone. E-mail e papel são somente leitura |
+| `/anunciar` | `anunciar.tsx` | Wizard de 4 passos (React Hook Form + Zod, validação por passo) que publica o imóvel e sobe as fotos. **Protegida** |
+| `/entrar` | `entrar.tsx` | Login com Supabase Auth (senha + Google OAuth) |
+| `/cadastro` | `cadastro.tsx` | Cadastro com escolha de papel (**Inquilino**/**Proprietário**), que vai no metadata e vira o `role` do profile |
 | `/mcp`, `/.mcp/*`, `/.well-known/*` | gerados | Endpoints do servidor MCP |
 | 404 | `__root.tsx` | `notFoundComponent` |
 
 `src/docs/telas_referencia.md` descreve cada tela em detalhe (útil como referência de mockup antes de alterar layout).
 
-### 5.3 Estado (Zustand, todos persistidos)
+### 5.3 Estado
 
-| Hook | Store | Responsabilidade |
+Não há mais store global de dados: **sessão e escritas moram no Postgres**, e o cache é do TanStack Query. Zustand permanece como dependência, mas nenhum hook de domínio o usa.
+
+| Hook | Fonte | Responsabilidade |
 | --- | --- | --- |
-| `useAuthStore` | — | usuário logado, `isAuthenticated`, `login/updateUser/logout`, tipo `inquilino \| proprietario` |
-| `useFavorites` | `pagou-morou-favorites` | toggle e consulta de favoritos |
-| `useChat` | `chat-storage` | mensagens das conversas |
-| `useProposals` | — | propostas de aluguel (`pending \| approved \| rejected`) com toast |
-| `useNotifications` | `notifications-storage` | notificações in-app com toast |
+| `useAuth` | Supabase Auth + `profiles` | `user` (modelo `User`), `isAuthenticated`, `isLoading`, `signIn/signUp/signOut/updateProfile` |
+| `useAuthListener` | `onAuthStateChange` | sincroniza o cache de perfil; montado uma vez em `__root.tsx` |
+| `useRequireAuth` | — | guarda de rota privada (espera `isLoading` antes de redirecionar) |
+| `useFavorites` | tabela `favorites` | toggle otimista + consulta |
+| `useConversations` / `useConversationMessages` / `useSendMessage` / `useStartConversation` | `conversations`, `messages` | chat real entre inquilino e proprietário |
+| `useProposals` | `list_proposals` / `send_proposal` / `respond_proposal` | propostas recebidas e enviadas |
+| `useNotifications` | tabela `notifications` | caixa de notificações (só leitura e marcação; quem grava é o banco) |
+| `useCreateApartment` | `create_apartment` + Storage | publica anúncio e sobe as fotos |
+| `usePublicProfile` | `public_profiles` | dados públicos do proprietário |
 
-Auxiliares: `use-mobile`, `use-in-view-animation`.
+Auxiliares: `use-mobile`, `use-in-view-animation`, `use-debounced-value`.
+
+**Regra de ouro:** o cliente do browser (`src/lib/supabase/browser.ts`) carrega o JWT da sessão, então **a RLS é a autorização real** — nunca confie em checagem só na UI. Leitura pública de catálogo continua no servidor (`src/lib/supabase/server.ts`, role anon) para preservar o SSR.
 
 ### 5.4 Score de confiança (`src/lib/score.ts`)
 
@@ -249,9 +261,42 @@ As rotas em `src/routes/mcp.ts` e `src/routes/[.mcp]/*` são geradas pelo plugin
 
 ### 5.6 Dados
 
-Tudo vem de **mock tipado** (`src/mock/index.ts`) — não há backend. Modelos em `src/types/index.ts`: `Apartment` (+`ApartmentFeatures`, `ApartmentStatus`), `Neighborhood`, `User` (+`UserRole`, `scoreFactors`), `Review`, `Favorite`, `Message`, `Conversation`, `AppNotification`, `SearchFilters`. Cidades cobertas: São Paulo (Vila Madalena, Pinheiros), Rio de Janeiro (Botafogo), Belo Horizonte (Savassi).
+Tudo vem do **Supabase** (projeto `pagoumorou`, `sa-east-1`). Não há mais mock: `src/mock/` foi removido.
 
-Ao introduzir dado novo: primeiro o tipo em `src/types`, depois o mock em `src/mock`.
+Modelos de domínio em `src/types/index.ts` (`Apartment`, `Neighborhood`, `User`, `Review`, `Message`, `Conversation`, `AppNotification`, `SearchFilters`); as linhas cruas do Postgres em `src/types/database.ts` (gerado — regerar com o MCP do Supabase, nunca editar à mão salvo para acompanhar uma migration).
+
+**Camadas**
+
+```
+src/lib/supabase/   server.ts (anon, SSR) · browser.ts (sessão) · buckets.ts
+src/lib/api/        consultas puras que recebem um client (server-only)
+src/lib/server-fns/ createServerFn — entrada do SSR
+src/lib/queries/    queryOptions do TanStack Query
+src/lib/auth/       mapeamento de profile e tradução de erros do GoTrue
+src/lib/storage/    uploads (avatar e fotos de anúncio)
+```
+
+`src/lib/api/mappers.ts` é **server-only** (monta URL do Storage a partir de `env.server`). Para mapear perfil no browser existe `src/lib/auth/profile.ts`.
+
+**Tabelas:** `profiles`, `neighborhoods`, `apartments`, `apartment_images`, `reviews`, `favorites`, `conversations`, `messages`, `proposals`, `notifications`. Todas com RLS.
+
+**Funções de negócio (SECURITY DEFINER).** Escritas que tocam mais de um dono não podem sair do cliente — notificar alguém é gravar na caixa da outra pessoa. Por isso passam por RPC:
+
+| Função | Papel |
+| --- | --- |
+| `search_apartments` | busca full-text pt-BR + filtros, ordenação e paginação |
+| `start_conversation` / `send_message` | abre thread (idempotente) e envia mensagem, notificando o outro lado |
+| `send_proposal` / `respond_proposal` | valida as regras da proposta e notifica |
+| `list_conversations` / `list_proposals` | resumo pronto para a UI, sem N+1 |
+| `create_apartment` | resolve bairro, gera slug único e promove o perfil a `owner` |
+| `public_profiles` | únicos campos de `profiles` que saem para terceiros |
+| `request_verification` | põe o KYC na fila; quem aprova é o backoffice |
+
+Ao criar função nova: `revoke execute ... from public` **e** de `anon`/`authenticated` conforme o caso — o Supabase concede EXECUTE por default privilege, e revogar só de `public` não basta. Funções de gatilho não devem ficar acessíveis pelo PostgREST.
+
+**Storage:** buckets públicos `apartment-photos` e `avatars`. A política de escrita exige que o primeiro nível do caminho seja o id do profile (`{profileId}/...`).
+
+Ao introduzir dado novo: migration primeiro, depois regerar `database.ts`, depois o tipo de domínio em `src/types` e o mapper.
 
 ---
 
@@ -265,5 +310,7 @@ Ao introduzir dado novo: primeiro o tipo em `src/types`, depois o mock em `src/m
 6. **Textos de UI em pt-BR**; cada rota define seu bloco `head` com `title` e `description` (SEO/OG) — siga o padrão ao criar rotas.
 7. **Formulários** com React Hook Form + Zod, via `components/ui/form.tsx` e `forms/field.tsx`.
 8. **Feedback ao usuário** com Sonner (`toast`) e `EmptyState` para listas vazias.
-9. Rodar `bun run lint` e `bun run format` antes de commitar (Prettier + ESLint com `eslint-plugin-prettier`).
-10. Não tocar em arquivos gerados: `routeTree.gen.ts`, `src/routes/mcp.ts`, `src/routes/[.mcp]/*`, `src/routes/[.well-known]/*`.
+9. **Rota privada** usa `useRequireAuth()` e espera `isLoading` antes de redirecionar — a sessão só é conhecida depois da hidratação.
+10. **Autorização é RLS**, não UI. Escrita que toca dado de outra pessoa vira função `SECURITY DEFINER`, não política permissiva.
+11. Rodar `bun run lint` e `bun run format` antes de commitar (Prettier + ESLint com `eslint-plugin-prettier`). O repositório tem dívida de formatação anterior em arquivos não tocados — formate só o que você mexeu, para não inflar o diff.
+12. Não tocar em arquivos gerados: `routeTree.gen.ts`, `src/routes/mcp.ts`, `src/routes/[.mcp]/*`, `src/routes/[.well-known]/*`.

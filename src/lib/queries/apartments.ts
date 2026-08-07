@@ -3,9 +3,11 @@ import { queryOptions } from "@tanstack/react-query";
 import {
   fetchApartmentBySlug,
   fetchApartments,
+  fetchApartmentSearch,
   fetchApartmentsByIds,
   fetchApartmentsByOwner,
 } from "@/lib/server-fns/apartments";
+import type { SearchApartmentsInput } from "@/lib/api/search";
 
 export const apartmentsQueryOptions = (opts: { limit?: number } = {}) =>
   queryOptions({
@@ -34,4 +36,15 @@ export const apartmentsByOwnerQueryOptions = (ownerId: string) =>
     queryKey: ["apartments", "byOwner", ownerId],
     queryFn: () => fetchApartmentsByOwner({ data: { ownerId } }),
     staleTime: 30_000,
+    enabled: ownerId.length > 0,
+  });
+
+export const apartmentSearchQueryOptions = (filters: SearchApartmentsInput = {}) =>
+  queryOptions({
+    queryKey: ["apartments", "search", filters],
+    queryFn: () => fetchApartmentSearch({ data: filters }),
+    staleTime: 30_000,
+    // Mantém a lista anterior visível enquanto o usuário digita, em vez de
+    // piscar skeleton a cada tecla.
+    placeholderData: (previous) => previous,
   });

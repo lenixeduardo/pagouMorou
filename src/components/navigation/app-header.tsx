@@ -1,14 +1,12 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Bell, Menu, Settings, CheckCircle2, MessageSquare, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Logo } from "@/components/shared/logo";
-import { SearchInput } from "@/components/forms";
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
 import { useNotifications } from "@/hooks/use-notifications";
-import { primaryNav } from "@/config/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,16 +16,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { currentUser } from "@/mock";
 
 export function AppHeader() {
-  const { isAuthenticated, user, logout } = useAuthStore();
-  const { notifications, markAsRead } = useNotifications();
-  const unreadNotifications = notifications.filter((n) => !n.read);
-  const unreadCount = unreadNotifications.length;
+  const { isAuthenticated, user, signOut } = useAuth();
+  const { notifications, unreadCount, markAsRead } = useNotifications();
+  const navigate = useNavigate();
   const location = useLocation();
   const isAuthPage = location.pathname === "/entrar" || location.pathname === "/cadastro";
+
+  const handleSignOut = async () => {
+    await signOut();
+    void navigate({ to: "/" });
+  };
 
   return (
     <motion.header
@@ -130,7 +130,7 @@ export function AppHeader() {
                     >
                       <Menu className="size-4 text-text-secondary" />
                       <Avatar className="size-8">
-                        {isAuthenticated && user?.avatarUrl ? (
+                        {user?.avatarUrl ? (
                           <img
                             src={user.avatarUrl}
                             alt={user.name}
@@ -138,7 +138,7 @@ export function AppHeader() {
                           />
                         ) : (
                           <AvatarFallback className="bg-surface-secondary text-caption font-bold text-text-secondary">
-                            {(isAuthenticated ? user?.name || "U" : currentUser.name).slice(0, 1)}
+                            {(user?.name ?? "Visitante").slice(0, 1)}
                           </AvatarFallback>
                         )}
                       </Avatar>
@@ -146,7 +146,7 @@ export function AppHeader() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 rounded-lg">
                     <DropdownMenuLabel className="text-label">
-                      {isAuthenticated ? user?.name : currentUser.name}
+                      {user?.name ?? "Visitante"}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
@@ -159,14 +159,14 @@ export function AppHeader() {
                       <Link to="/anunciar">Anunciar imóvel</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/perfil" className="flex items-center gap-2">
+                      <Link to="/configuracoes" className="flex items-center gap-2">
                         <Settings className="size-4" />
                         Configurações
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     {isAuthenticated ? (
-                      <DropdownMenuItem onClick={() => logout()}>Sair</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => void handleSignOut()}>Sair</DropdownMenuItem>
                     ) : (
                       <>
                         <DropdownMenuItem asChild>
