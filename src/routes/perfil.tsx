@@ -878,6 +878,9 @@ function PerfilPage() {
                                      className="rounded-lg border-[#1351b4] text-[#1351b4] hover:bg-[#1351b4]/5"
                                      onClick={async () => {
                                        try {
+                                         // Salvar ID da proposta para o callback
+                                         localStorage.setItem("pending_signature_proposal_id", proposal.id);
+                                         
                                          const url = await getGovBrAuthUrl({ 
                                            data: { redirectUri: window.location.origin + "/auth/callback" } 
                                          });

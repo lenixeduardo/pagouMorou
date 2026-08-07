@@ -41,8 +41,9 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">
-              Implementar a integração real com a API do Gov.br para assinatura digital.
+            <span className="text-sm font-medium text-text-secondary whitespace-pre-wrap">
+              Implementar a rota de callback /auth/callback para processar o token e finalizar a assinatura do documento.{"\n\n"}
+              Integrar a biblioteca de manipulação de PDF no backend para aplicar o selo de assinatura do ITI.
             </span>
           </nav>
         </div>
