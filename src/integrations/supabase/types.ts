@@ -84,6 +84,7 @@ export type Database = {
           rent: number
           reviews_count: number | null
           slug: string
+          standard_clauses: string[] | null
           state: string
           status: Database["public"]["Enums"]["apartment_status"]
           street: string
@@ -116,6 +117,7 @@ export type Database = {
           rent: number
           reviews_count?: number | null
           slug: string
+          standard_clauses?: string[] | null
           state: string
           status?: Database["public"]["Enums"]["apartment_status"]
           street: string
@@ -148,6 +150,7 @@ export type Database = {
           rent?: number
           reviews_count?: number | null
           slug?: string
+          standard_clauses?: string[] | null
           state?: string
           status?: Database["public"]["Enums"]["apartment_status"]
           street?: string
