@@ -376,7 +376,43 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      list_proposals: {
+        Args: never
+        Returns: {
+          apartment_id: string
+          apartment_slug: string
+          apartment_title: string
+          contract_url: string
+          counter_rent_amount: number
+          created_at: string
+          direction: string
+          id: string
+          message: string
+          owner_id: string
+          owner_name: string
+          payment_proof_url: string
+          rent_amount: number
+          signed_contract_url: string
+          status: Database["public"]["Enums"]["proposal_status"]
+          tenant_id: string
+          tenant_name: string
+        }[]
+      }
+      respond_proposal: {
+        Args: {
+          p_contract?: string
+          p_counter_rent?: number
+          p_id: string
+          p_payment_proof?: string
+          p_signed_contract?: string
+          p_status: Database["public"]["Enums"]["proposal_status"]
+        }
+        Returns: boolean
+      }
+      send_proposal: {
+        Args: { p_apartment_id: string; p_message?: string; p_rent?: number }
+        Returns: string
+      }
     }
     Enums: {
       apartment_status: "available" | "rented" | "pending" | "inactive"
