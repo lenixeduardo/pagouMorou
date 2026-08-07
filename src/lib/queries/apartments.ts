@@ -39,6 +39,7 @@ export const apartmentsByOwnerQueryOptions = (ownerId: string) =>
     queryKey: ["apartments", "byOwner", ownerId],
     queryFn: () => fetchApartmentsByOwner({ data: { ownerId } }),
     staleTime: 30_000,
+    enabled: ownerId.length > 0,
   });
 
 export const apartmentsNearMetroQueryOptions = (limit = 5) =>
