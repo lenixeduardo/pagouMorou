@@ -189,6 +189,21 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
         } as any)
         .eq('id', data.proposalId);
 
+      // 7. Adicionar log de auditoria
+      await supabaseAdmin
+        .from('signature_audit_logs')
+        .insert({
+          proposal_id: data.proposalId,
+          user_id: proposal.tenant_id, // Capturado na query inicial ou vindo do contexto
+          action: 'digital_signature_govbr_iti',
+          document_hash: data.documentHash,
+          metadata: {
+            signed_path: signedPath,
+            signature_type: 'digital_iti_conform',
+            timestamp: new Date().toISOString()
+          }
+        });
+
       return {
         success: true,
         signatureType: "digital_iti_conform",
