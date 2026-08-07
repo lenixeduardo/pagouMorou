@@ -11,7 +11,6 @@ import {
   Coins,
   X,
   Plus,
-  FileText,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm, type Path } from "react-hook-form";
@@ -84,7 +83,7 @@ const anuncioSchema = z.object({
   rent: z.coerce.number().min(1, "Informe o valor do aluguel."),
   condoFee: z.coerce.number().min(0),
   iptu: z.coerce.number().min(0),
-  standardClauses: z.array(z.string()).optional(),
+  standardClauses: z.array(z.string()).default([]),
 });
 
 type AnuncioForm = z.input<typeof anuncioSchema>;

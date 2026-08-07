@@ -65,6 +65,7 @@ export function useCreateApartment() {
         p_furnished: input.furnished,
         p_pet_friendly: input.petFriendly,
         p_amenities: input.amenities,
+        p_standard_clauses: input.standardClauses ?? [],
       });
 
       if (error) throw new Error(error.message);
