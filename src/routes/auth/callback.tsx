@@ -56,7 +56,7 @@ function AuthCallback() {
             }
           });
 
-          if (result.success) {
+          if (result && result.success) {
             setStatus("success");
             setMessage("Documento assinado com sucesso via Gov.br!");
             toast.success("Assinatura digital concluída!");

@@ -98,7 +98,12 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const pages = pdfDoc.getPages();
       const lastPage = pages[pages.length - 1];
-      const { width, height } = lastPage.getSize();
+      
+      if (!lastPage) {
+        throw new Error("O documento PDF está vazio ou corrompido.");
+      }
+
+      const { width } = lastPage.getSize();
       const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
       // 4. Aplicar o selo de assinatura do ITI (Estampa visual)
@@ -161,6 +166,15 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
           contract_url: signedPath
         } as any)
         .eq('id', data.proposalId);
+
+      return {
+        success: true,
+        signatureType: "digital_iti_conform",
+        sealUrl: "https://pki.gov.br/seal-verification",
+        timestamp: new Date().toISOString(),
+        documentId: `signed_${data.proposalId}.pdf`,
+        contractUrl: signedPath
+      };
     } catch (error) {
       console.error("[ITI] Erro ao manipular PDF:", error);
       throw new Error("Falha na geração do selo digital no documento.");
