@@ -204,5 +204,6 @@ export function useProposals() {
     counterOffer,
     requestPayment,
     sendPaymentProof,
+    respondMutation,
   };
 }
