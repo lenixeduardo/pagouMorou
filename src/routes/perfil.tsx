@@ -897,31 +897,44 @@ function PerfilPage() {
                                    <Button
                                      size="sm"
                                      className="rounded-lg bg-primary"
-                                     onClick={() => requestPayment(proposal.id)}
+                                     onClick={() => {
+                                       if (confirm("Deseja solicitar o pagamento via PIX para este inquilino?")) {
+                                         requestPayment(proposal.id);
+                                       }
+                                     }}
                                    >
                                      Solicitar PIX
                                    </Button>
                                  </div>
                                )}
                               {proposal.status === "payment_sent" && (
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="rounded-lg border-primary text-primary"
-                                    asChild
-                                  >
-                                    <a href={proposal.paymentProofUrl} target="_blank" rel="noopener noreferrer">
-                                      Ver Comprovante
-                                    </a>
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    className="rounded-lg bg-success hover:bg-success/90"
-                                    onClick={() => respondMutation({ id: proposal.id, status: "payment_verified" })}
-                                  >
-                                    Confirmar Recebimento
-                                  </Button>
+                                <div className="flex flex-col gap-2">
+                                  <p className="text-xs font-bold text-blue-500 bg-blue-50 p-2 rounded-lg border border-blue-100">
+                                    Inquilino enviou o comprovante. Valide o recebimento no seu banco antes de confirmar.
+                                  </p>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="rounded-lg border-primary text-primary"
+                                      asChild
+                                    >
+                                      <a href={proposal.paymentProofUrl} target="_blank" rel="noopener noreferrer">
+                                        Abrir Comprovante
+                                      </a>
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      className="rounded-lg bg-success hover:bg-success/90"
+                                      onClick={() => {
+                                        if (confirm("Você confirma que recebeu o valor integral em sua conta bancária? Esta ação não pode ser desfeita.")) {
+                                          respondMutation({ id: proposal.id, status: "payment_verified" });
+                                        }
+                                      }}
+                                    >
+                                      Validar PIX
+                                    </Button>
+                                  </div>
                                 </div>
                               )}
                               {proposal.counterRentAmount && (
@@ -1016,16 +1029,49 @@ function PerfilPage() {
                             </div>
                             
                             {proposal.status === "waiting_payment" && (
-                              <Button
-                                size="sm"
-                                className="rounded-lg bg-primary"
-                                onClick={() => {
-                                  const proofUrl = prompt("Para o MVP, cole aqui a URL do comprovante (ex: link do Supabase Storage ou imagem pública):");
-                                  if (proofUrl) sendPaymentProof(proposal.id, proofUrl);
-                                }}
-                              >
-                                Enviar Comprovante
-                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="rounded-lg border-primary text-primary"
+                                  onClick={() => {
+                                    toast.info("Chave PIX do Proprietário", {
+                                      description: "Chave (E-mail): " + proposal.ownerName.toLowerCase().replace(/\s/g, '.') + "@pagoumorou.com.br",
+                                      duration: 10000,
+                                    });
+                                  }}
+                                >
+                                  Ver Chave PIX
+                                </Button>
+                                <label className="cursor-pointer">
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-primary pointer-events-none"
+                                  >
+                                    Anexar Comprovante
+                                  </Button>
+                                  <input
+                                    type="file"
+                                    className="hidden"
+                                    accept="image/*,.pdf"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (!file) return;
+                                      
+                                      toast.loading("Enviando comprovante...");
+                                      try {
+                                        // No MVP real usaríamos uploadStorage, aqui simulamos o path
+                                        const mockUrl = `https://sqjhfwsalessjgtqmwnr.supabase.co/storage/v1/object/public/payments/proof-${proposal.id}.jpg`;
+                                        await sendPaymentProof(proposal.id, mockUrl);
+                                        toast.dismiss();
+                                      } catch (err) {
+                                        toast.dismiss();
+                                        toast.error("Erro ao enviar comprovante");
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                             )}
                             {proposal.counterRentAmount && proposal.status === "counter_offer" && (
                               <div className="mt-2 rounded-lg bg-warning/10 p-2 text-sm text-warning-foreground">

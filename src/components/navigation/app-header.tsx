@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              uma pessoa sem estar logada não deve conseguir visualizar apartamentos publicados, somente após login. valide a heropage
+              siga o to do agora para o fluxo de verificacao de transferencia
             </span>
           </nav>
         </div>
