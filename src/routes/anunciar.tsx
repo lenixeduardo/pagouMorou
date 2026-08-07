@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { 
-  Building2, 
-  ChevronRight, 
+import {
+  ChevronRight,
   ChevronLeft, 
   Upload, 
   MapPin, 

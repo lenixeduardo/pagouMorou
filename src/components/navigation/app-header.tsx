@@ -4,11 +4,9 @@ import { Bell, Menu, Settings, CheckCircle2, MessageSquare, DollarSign } from "l
 import { cn } from "@/lib/utils";
 
 import { Logo } from "@/components/shared/logo";
-import { SearchInput } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useNotifications } from "@/hooks/use-notifications";
-import { primaryNav } from "@/config/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { currentUser, notifications } from "@/mock";
+import { currentUser } from "@/mock";
 
 export function AppHeader() {
   const { isAuthenticated, user, logout } = useAuthStore();
