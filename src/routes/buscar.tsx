@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Filter, Search, SlidersHorizontal, Sparkles, Star, Train } from "lucide-react";
+import { Building2, Filter, Search, SlidersHorizontal, Sparkles, Star, Train } from "lucide-react";
 import { z } from "zod";
 
 import { Page } from "@/components/layout/page";
@@ -10,6 +10,7 @@ import { apartmentSearchQueryOptions } from "@/lib/queries/apartments";
 import type { SearchApartmentsInput, SearchSort } from "@/lib/api/search";
 import { PropertyCard } from "@/components/cards/property-card";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useAuth } from "@/hooks/use-auth";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,6 +122,7 @@ function SearchPage() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState(search.q ?? "");
   const [visible, setVisible] = useState(PAGE_SIZE);
@@ -198,6 +200,30 @@ function SearchPage() {
       maxRent: max && max < MAX_RENT_BOUND ? max : undefined,
     });
   };
+
+  if (!isAuthenticated && !isAuthLoading) {
+    return (
+      <Page fullWidth className="bg-white flex items-center justify-center py-20" component="main">
+        <div className="container mx-auto px-4 max-w-lg text-center">
+          <div className="size-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto mb-8">
+            <Building2 className="size-10" />
+          </div>
+          <h1 className="text-3xl font-bold mb-4">Acesso restrito</h1>
+          <p className="text-text-secondary text-lg mb-10">
+            Você precisa estar logado para visualizar o catálogo de imóveis e realizar buscas.
+          </p>
+          <div className="flex flex-col gap-4">
+            <Button size="lg" className="rounded-2xl h-14 font-bold" asChild>
+              <Link to="/cadastro">Criar conta grátis</Link>
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-2xl h-14 font-bold" asChild>
+              <Link to="/entrar">Entrar</Link>
+            </Button>
+          </div>
+        </div>
+      </Page>
+    );
+  }
 
   return (
     <Page fullWidth className="bg-white pb-20 pt-6" component="main">

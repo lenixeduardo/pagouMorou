@@ -84,7 +84,7 @@ function ApartamentoPage() {
   const { id } = Route.useParams();
   const { data: apartment } = useSuspenseQuery(apartmentBySlugQueryOptions(id));
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const { sendProposal, isSending } = useProposals();
   const { startConversation, isSending: isSendingMessage } = useStartConversation();
   const { data: owner } = usePublicProfile(apartment?.ownerId);
@@ -126,6 +126,31 @@ function ApartamentoPage() {
   // The loader already throws notFound() when the slug doesn't resolve, so
   // this never renders — it only narrows the type for TypeScript.
   if (!apartment) return null;
+
+  if (!isAuthenticated && !isAuthLoading) {
+    return (
+      <Page fullWidth className="bg-white flex items-center justify-center py-20" component="main">
+        <div className="container mx-auto px-4 max-w-lg text-center">
+          <div className="size-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto mb-8">
+            <Building2 className="size-10" />
+          </div>
+          <h1 className="text-3xl font-bold mb-4">Acesso restrito</h1>
+          <p className="text-text-secondary text-lg mb-10">
+            Você precisa estar logado para ver os detalhes completos deste imóvel e entrar em
+            contato com o proprietário.
+          </p>
+          <div className="flex flex-col gap-4">
+            <Button size="lg" className="rounded-2xl h-14 font-bold" asChild>
+              <Link to="/cadastro">Criar conta grátis</Link>
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-2xl h-14 font-bold" asChild>
+              <Link to="/entrar">Entrar</Link>
+            </Button>
+          </div>
+        </div>
+      </Page>
+    );
+  }
 
   return (
     <Page fullWidth className="pb-20" component="main">
