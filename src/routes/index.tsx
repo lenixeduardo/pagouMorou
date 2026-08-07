@@ -79,7 +79,7 @@ function HeroPage() {
                 className="bg-primary hover:bg-primary-hover text-white rounded-full px-8 py-6 font-bold shadow-lg"
                 asChild
               >
-                <Link to="/entrar">
+                <Link to="/buscar">
                   Ver imóveis
                   <Plus className="ml-2 size-4 rotate-45" />
                 </Link>
@@ -190,9 +190,9 @@ function HeroPage() {
                 Como funciona
               </span>
               <h2 className="text-[44px] font-bold leading-[1.1] text-foreground mb-12">
-                Alugar foi
+                Alugar nunca foi
                 <br />
-                nunca tão fácil.
+                tão fácil.
               </h2>
 
               <div className="space-y-10 relative">
@@ -250,7 +250,7 @@ function HeroPage() {
                   <p className="text-text-secondary text-xs mb-4 leading-relaxed">
                     Negocie direto e de forma segura.
                   </p>
-                  <Link to="/" className="text-primary text-xs font-bold flex items-center">
+                  <Link to="/buscar" className="text-primary text-xs font-bold flex items-center">
                     Enviar proposta <ChevronRight className="ml-1 size-3" />
                   </Link>
                 </div>
