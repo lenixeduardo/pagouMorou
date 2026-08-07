@@ -244,6 +244,7 @@ export type Database = {
           avatar_path: string | null
           avatar_url: string | null
           created_at: string | null
+          document_urls: Json | null
           email: string | null
           id: string
           member_since: string | null
@@ -263,6 +264,7 @@ export type Database = {
           avatar_path?: string | null
           avatar_url?: string | null
           created_at?: string | null
+          document_urls?: Json | null
           email?: string | null
           id?: string
           member_since?: string | null
@@ -282,6 +284,7 @@ export type Database = {
           avatar_path?: string | null
           avatar_url?: string | null
           created_at?: string | null
+          document_urls?: Json | null
           email?: string | null
           id?: string
           member_since?: string | null
@@ -298,12 +301,118 @@ export type Database = {
         }
         Relationships: []
       }
+      proposals: {
+        Row: {
+          apartment_id: string
+          contract_url: string | null
+          counter_rent_amount: number | null
+          created_at: string
+          id: string
+          message: string | null
+          owner_id: string
+          payment_proof_url: string | null
+          rent_amount: number
+          signed_contract_url: string | null
+          status: Database["public"]["Enums"]["proposal_status"]
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          apartment_id: string
+          contract_url?: string | null
+          counter_rent_amount?: number | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          owner_id: string
+          payment_proof_url?: string | null
+          rent_amount: number
+          signed_contract_url?: string | null
+          status?: Database["public"]["Enums"]["proposal_status"]
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          apartment_id?: string
+          contract_url?: string | null
+          counter_rent_amount?: number | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          owner_id?: string
+          payment_proof_url?: string | null
+          rent_amount?: number
+          signed_contract_url?: string | null
+          status?: Database["public"]["Enums"]["proposal_status"]
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_apartment_id_fkey"
+            columns: ["apartment_id"]
+            isOneToOne: false
+            referencedRelation: "apartments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      list_proposals: {
+        Args: never
+        Returns: {
+          apartment_id: string
+          apartment_slug: string
+          apartment_title: string
+          contract_url: string
+          counter_rent_amount: number
+          created_at: string
+          direction: string
+          id: string
+          message: string
+          owner_id: string
+          owner_name: string
+          payment_proof_url: string
+          rent_amount: number
+          signed_contract_url: string
+          status: Database["public"]["Enums"]["proposal_status"]
+          tenant_id: string
+          tenant_name: string
+        }[]
+      }
+      respond_proposal: {
+        Args: {
+          p_contract?: string
+          p_counter_rent?: number
+          p_id: string
+          p_payment_proof?: string
+          p_signed_contract?: string
+          p_status: Database["public"]["Enums"]["proposal_status"]
+        }
+        Returns: boolean
+      }
+      send_proposal: {
+        Args: { p_apartment_id: string; p_message?: string; p_rent?: number }
+        Returns: string
+      }
     }
     Enums: {
       apartment_status: "available" | "rented" | "pending" | "inactive"

@@ -79,7 +79,7 @@ const KYC_LABEL: Record<NonNullable<User["verification"]>, string> = {
 function PerfilPage() {
   const { isAuthenticated, isLoading: isLoadingSession } = useRequireAuth();
   const { user, updateProfile, signOut, refresh } = useAuth();
-  const { received: receivedProposals, approveProposal, rejectProposal } = useProposals();
+  const { received: receivedProposals, sent: sentProposals, approveProposal, rejectProposal, counterOffer, requestPayment, sendPaymentProof, respondMutation } = useProposals();
   const { conversations, totalUnread } = useConversations();
   const navigate = useNavigate();
   // activeTab removed as it was unused
@@ -660,16 +660,26 @@ function PerfilPage() {
               </Card>
             )}
 
-            <Tabs defaultValue="anuncios" className="w-full">
-              <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
-                <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">
-                  Meus Anúncios
-                </TabsTrigger>
+            <Tabs defaultValue={isOwner ? "anuncios" : "propostas-enviadas"} className="w-full">
+              <TabsList className="mb-8 grid w-full grid-cols-3 rounded-2xl bg-surface-secondary p-1">
+                {isOwner && (
+                  <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">
+                    Meus Anúncios
+                  </TabsTrigger>
+                )}
                 <TabsTrigger value="propostas" className="rounded-xl py-3 font-bold">
-                  Propostas{" "}
-                  {receivedProposals.length > 0 && (
+                  {isOwner ? "Propostas Recebidas" : "Propostas"}
+                  {receivedProposals.length > 0 && isOwner && (
                     <Badge variant="secondary" className="ml-2">
                       {receivedProposals.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="propostas-enviadas" className="rounded-xl py-3 font-bold">
+                  Propostas Enviadas
+                  {sentProposals.length > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {sentProposals.length}
                     </Badge>
                   )}
                 </TabsTrigger>
@@ -744,22 +754,27 @@ function PerfilPage() {
                             </div>
                             <Badge
                               variant={
-                                proposal.status === "pending"
+                                proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment"
                                   ? "outline"
-                                  : proposal.status === "approved"
+                                  : proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed"
                                     ? "default"
                                     : "destructive"
                               }
                               className={cn(
-                                proposal.status === "approved" && "bg-success hover:bg-success/90",
-                                proposal.status === "pending" && "text-warning border-warning",
+                                (proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed") && "bg-success hover:bg-success/90",
+                                (proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment") && "text-warning border-warning",
+                                proposal.status === "payment_sent" && "text-blue-500 border-blue-500",
                               )}
                             >
-                              {proposal.status === "pending"
-                                ? "Pendente"
-                                : proposal.status === "approved"
-                                  ? "Aprovada"
-                                  : "Recusada"}
+                              {proposal.status === "pending" ? "Pendente" : 
+                               proposal.status === "accepted" ? "Aceita" : 
+                               proposal.status === "rejected" ? "Recusada" :
+                               proposal.status === "counter_offer" ? "Contraproposta" :
+                               proposal.status === "waiting_payment" ? "Aguardando Pagamento" :
+                               proposal.status === "payment_sent" ? "Pagamento Enviado" :
+                               proposal.status === "payment_verified" ? "Pagamento Verificado" :
+                               proposal.status === "contract_signed" ? "Contrato Assinado" : 
+                               proposal.status}
                             </Badge>
                           </CardHeader>
                           <CardContent>
@@ -785,6 +800,17 @@ function PerfilPage() {
                                     Recusar
                                   </Button>
                                   <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg text-primary border-primary hover:bg-primary/5"
+                                    onClick={() => {
+                                      const amount = prompt("Digite o valor da contraproposta:");
+                                      if (amount) counterOffer(proposal.id, Number(amount));
+                                    }}
+                                  >
+                                    Contraproposta
+                                  </Button>
+                                  <Button
                                     size="sm"
                                     className="rounded-lg bg-success hover:bg-success/90"
                                     onClick={() => approveProposal(proposal.id)}
@@ -793,11 +819,154 @@ function PerfilPage() {
                                   </Button>
                                 </div>
                               )}
+                              {proposal.status === "accepted" && (
+                                <Button
+                                  size="sm"
+                                  className="rounded-lg bg-primary"
+                                  onClick={() => requestPayment(proposal.id)}
+                                >
+                                  Solicitar PIX
+                                </Button>
+                              )}
+                              {proposal.status === "payment_sent" && (
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg border-primary text-primary"
+                                    asChild
+                                  >
+                                    <a href={proposal.paymentProofUrl} target="_blank" rel="noopener noreferrer">
+                                      Ver Comprovante
+                                    </a>
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-success hover:bg-success/90"
+                                    onClick={() => respondMutation({ id: proposal.id, status: "payment_verified" })}
+                                  >
+                                    Confirmar Recebimento
+                                  </Button>
+                                </div>
+                              )}
+                              {proposal.counterRentAmount && (
+                                <div className="mt-2 rounded-lg bg-warning/10 p-2 text-sm text-warning-foreground">
+                                  Você sugeriu contraproposta de{" "}
+                                  <span className="font-bold">
+                                    {new Intl.NumberFormat("pt-BR", {
+                                      style: "currency",
+                                      currency: "BRL",
+                                    }).format(proposal.counterRentAmount)}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </CardContent>
                         </Card>
                       );
                     })}
+                  </div>
+                )}
+              </TabsContent>
+              <TabsContent value="propostas-enviadas" className="space-y-6">
+                {sentProposals.length === 0 ? (
+                  <Card className="border-dashed py-12 text-center">
+                    <CardContent>
+                      <Clock className="mx-auto mb-4 size-12 text-muted" />
+                      <CardTitle className="mb-2">Você ainda não enviou propostas</CardTitle>
+                      <CardDescription>
+                        Busque um imóvel e envie uma proposta para começar seu processo de locação.
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-4">
+                    {sentProposals.map((proposal) => (
+                      <Card key={proposal.id} className="overflow-hidden border-border transition-all hover:shadow-md">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                          <div className="space-y-1">
+                            <CardTitle className="text-xl">{proposal.apartmentTitle}</CardTitle>
+                            <CardDescription className="flex items-center gap-1">
+                              Proprietário: {proposal.ownerName}
+                            </CardDescription>
+                          </div>
+                          <Badge
+                            variant={
+                              proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment"
+                                ? "outline"
+                                : proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed"
+                                  ? "default"
+                                  : "destructive"
+                            }
+                            className={cn(
+                              (proposal.status === "accepted" || proposal.status === "payment_verified" || proposal.status === "contract_signed") && "bg-success hover:bg-success/90",
+                              (proposal.status === "pending" || proposal.status === "counter_offer" || proposal.status === "waiting_payment") && "text-warning border-warning",
+                              proposal.status === "payment_sent" && "text-blue-500 border-blue-500",
+                            )}
+                          >
+                            {proposal.status === "pending" ? "Pendente" : 
+                             proposal.status === "accepted" ? "Aceita" : 
+                             proposal.status === "rejected" ? "Recusada" :
+                             proposal.status === "counter_offer" ? "Contraproposta" :
+                             proposal.status === "waiting_payment" ? "Aguardando Pagamento" :
+                             proposal.status === "payment_sent" ? "Pagamento Enviado" :
+                             proposal.status === "payment_verified" ? "Pagamento Verificado" :
+                             proposal.status === "contract_signed" ? "Contrato Assinado" : 
+                             proposal.status}
+                          </Badge>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center justify-between">
+                            <div className="text-2xl font-bold text-primary">
+                              {new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                              }).format(proposal.rentAmount)}
+                              {proposal.counterRentAmount && (
+                                <span className="ml-2 text-sm text-text-secondary line-through">
+                                  {new Intl.NumberFormat("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                  }).format(proposal.rentAmount)}
+                                </span>
+                              )}
+                              {proposal.counterRentAmount && (
+                                <span className="ml-2 text-sm font-bold text-warning">
+                                  Contra: {new Intl.NumberFormat("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                  }).format(proposal.counterRentAmount)}
+                                </span>
+                              )}
+                            </div>
+                            
+                            {proposal.status === "waiting_payment" && (
+                              <Button
+                                size="sm"
+                                className="rounded-lg bg-primary"
+                                onClick={() => {
+                                  const proofUrl = prompt("Para o MVP, cole aqui a URL do comprovante (ex: link do Supabase Storage ou imagem pública):");
+                                  if (proofUrl) sendPaymentProof(proposal.id, proofUrl);
+                                }}
+                              >
+                                Enviar Comprovante
+                              </Button>
+                            )}
+                            {proposal.counterRentAmount && proposal.status === "counter_offer" && (
+                              <div className="mt-2 rounded-lg bg-warning/10 p-2 text-sm text-warning-foreground">
+                                Proprietário sugeriu contraproposta de{" "}
+                                <span className="font-bold">
+                                  {new Intl.NumberFormat("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                  }).format(proposal.counterRentAmount)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
                 )}
               </TabsContent>
