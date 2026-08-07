@@ -41,7 +41,7 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            <span className="text-sm font-medium text-text-secondary">acredito que para o MVP pagamentos através da plataforma não seria o ideal. valide se a ideia de status: pendente pagamento {" > "} envio comprovante {" > "} validacao veracidade comprovante {" > "} prosseguimento no fluxo de mudança</span>
+            <span className="text-sm font-medium text-text-secondary">mapeie a integração com assinatura digital que seja gratuita, mesmo que esta tenha limite por até 10 assinaturas ao dia</span>
           </nav>
         </div>
 
