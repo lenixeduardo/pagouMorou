@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Adicionar notificações automáticas quando o contrato estiver pronto para assinatura. Implemente também toast notifications, usar o componente do shadcn para isto
+              Realizar testes de ponta a ponta simulando a criação de uma notificação via banco de dados para validar o disparo do toast.
             </span>
           </nav>
         </div>
