@@ -7,7 +7,7 @@ import {
   Send,
   MessageSquare,
   ShieldCheck,
-  TrendingUp,
+  // TrendingUp removed as it was unused
   Sparkles,
 } from "lucide-react";
 import { apartmentBySlugQueryOptions } from "@/lib/queries/apartments";
@@ -26,7 +26,7 @@ import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
 import { motion, AnimatePresence } from "framer-motion";
-import { slideUp, fadeIn } from "@/lib/motion";
+import { slideUp } from "@/lib/motion";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
 

@@ -106,7 +106,7 @@ const STEP_FIELDS: Path<AnuncioForm>[][] = [
 function AnunciarPage() {
   const { isAuthenticated, isLoading } = useRequireAuth();
   const { createApartment, isCreating } = useCreateApartment();
-  const navigate = useNavigate();
+  // navigate removed as it was unused
 
   const [currentStep, setCurrentStep] = useState(0);
   const [photos, setPhotos] = useState<File[]>([]);

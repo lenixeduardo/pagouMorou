@@ -18,9 +18,7 @@ import {
   UserCircle,
   Settings,
   FileText,
-  Home,
   MessageSquare,
-  Bell,
   LogOut,
   ChevronRight,
   Verified,
@@ -31,7 +29,7 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  Plus,
+  // Plus removed as it was unused
   Star,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -84,7 +82,7 @@ function PerfilPage() {
   const { received: receivedProposals, approveProposal, rejectProposal } = useProposals();
   const { conversations, totalUnread } = useConversations();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("anuncios");
+  // activeTab removed as it was unused
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const isOwner = user?.role === "owner";
   const isTenant = user?.role === "tenant";
