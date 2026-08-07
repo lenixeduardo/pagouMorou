@@ -36,22 +36,29 @@ const steps: Step[] = [
     id: "proposals",
     title: "Ciclo de Propostas",
     description: "Negociação direta e gestão de ofertas.",
-    status: "current",
+    status: "completed",
     icon: Clock,
   },
   {
     id: "payment",
     title: "Pagamento e Comprovante",
     description: "Fluxo manual de verificação de transferência.",
-    status: "pending",
+    status: "completed",
     icon: CreditCard,
   },
   {
     id: "contract",
     title: "Contrato e Assinatura",
     description: "Geração de PDF e integração Gov.br.",
-    status: "pending",
+    status: "current",
     icon: FileSignature,
+  },
+  {
+    id: "govbr-env",
+    title: "Configuração Gov.br",
+    description: "Obtenção de CLIENT_ID e SECRET no Portal Gov.br.",
+    status: "pending",
+    icon: ShieldCheck,
   },
 ];
 

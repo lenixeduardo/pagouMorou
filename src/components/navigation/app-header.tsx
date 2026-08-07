@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              voce consegue me ajudar a obter as env para executar a api do gov? https://github.com/dtedesco/govbr-oauth
+              me de as instruções corretas de como obter cada uma das variaveis e coloque como pendente no to do
             </span>
           </nav>
         </div>
