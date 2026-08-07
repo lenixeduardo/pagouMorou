@@ -1,13 +1,9 @@
 import { HeroSection } from "@/components/sections/hero-section";
-import { useFavorites } from "@/hooks/use-favorites";
 import { motion } from "framer-motion";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Quote, Sparkles, Building2, FileSignature, FileText, Plus, MapPin, Search, ChevronRight } from "lucide-react";
+import { Quote, Sparkles, Building2, FileText, Plus, MapPin, Search, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
-import { apartments } from "@/mock";
-import { container } from "@/lib/motion";
 import footerAsset from "@/assets/footer.asset.json";
 import { FAQSection } from "@/components/sections/faq-section";
 
@@ -32,10 +28,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HeroPage() {
-  const { toggleFavorite, isFavorite } = useFavorites();
-  const featuredApartments = apartments.slice(0, 3);
-
-
   return (
     <Page fullWidth className="bg-[#F9FBF9] pb-20 pt-0" component="main">
       <h1 className="sr-only">PagouMorou - Aluguel Residencial Descomplicado e Seguro</h1>
@@ -54,7 +46,7 @@ function HeroPage() {
                 Próximos de tudo que importa: transporte, mercados, escolas, lazer e muito mais.
               </p>
               <Button size="lg" className="bg-primary hover:bg-primary-hover text-white rounded-full px-8 py-6 font-bold shadow-lg" asChild>
-                <Link to="/entrar">
+                <Link to="/buscar">
                   Ver imóveis
                   <Plus className="ml-2 size-4 rotate-45" />
                 </Link>
@@ -135,7 +127,7 @@ function HeroPage() {
             <div>
               <span className="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Como funciona</span>
               <h2 className="text-[44px] font-bold leading-[1.1] text-foreground mb-12">
-                Alugar foi<br />nunca tão fácil.
+                Alugar nunca foi<br />tão fácil.
               </h2>
               
               <div className="space-y-10 relative">
@@ -181,7 +173,7 @@ function HeroPage() {
                 <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20">
                   <p className="font-bold text-sm mb-2">Sem burocracia</p>
                   <p className="text-text-secondary text-xs mb-4 leading-relaxed">Negocie direto e de forma segura.</p>
-                  <Link to="/" className="text-primary text-xs font-bold flex items-center">
+                  <Link to="/buscar" className="text-primary text-xs font-bold flex items-center">
                     Enviar proposta <ChevronRight className="ml-1 size-3" />
                   </Link>
                 </div>

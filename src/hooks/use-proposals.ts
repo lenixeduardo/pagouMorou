@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { toast } from "sonner";
 
 export type ProposalStatus = "pending" | "approved" | "rejected";
 
@@ -32,19 +31,14 @@ export const useProposals = create<ProposalsStore>()(
           createdAt: new Date().toISOString(),
         };
         set((state) => ({ proposals: [...state.proposals, newProposal] }));
-        toast.success("Proposta enviada com sucesso!");
       },
+      // O feedback visual fica com quem chama — o store não fala com a UI.
       updateStatus: (id, status) => {
         set((state) => ({
           proposals: state.proposals.map((p) =>
             p.id === id ? { ...p, status } : p
           ),
         }));
-        if (status === "approved") {
-          toast.success("Proposta aprovada!");
-        } else if (status === "rejected") {
-          toast.error("Proposta recusada.");
-        }
       },
     }),
     { name: "proposals-storage" }
