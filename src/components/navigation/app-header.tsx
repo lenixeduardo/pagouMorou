@@ -41,7 +41,7 @@ export function AppHeader() {
           {!isAuthPage && <Logo className="shrink-0" />}
 
           <nav className="hidden items-center gap-6 lg:flex">
-            {/* Nav items removed per user request for clean landing state */}
+            <span className="text-sm font-medium text-text-secondary">oi</span>
           </nav>
         </div>
 
