@@ -830,7 +830,7 @@ function PerfilPage() {
                               )}
                               {proposal.counterRentAmount && (
                                 <div className="mt-2 rounded-lg bg-warning/10 p-2 text-sm text-warning-foreground">
-                                  Proprietário sugeriu contraproposta de{" "}
+                                  Você sugeriu contraproposta de{" "}
                                   <span className="font-bold">
                                     {new Intl.NumberFormat("pt-BR", {
                                       style: "currency",
