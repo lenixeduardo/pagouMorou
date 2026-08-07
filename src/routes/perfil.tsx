@@ -660,16 +660,26 @@ function PerfilPage() {
               </Card>
             )}
 
-            <Tabs defaultValue="anuncios" className="w-full">
-              <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
-                <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">
-                  Meus Anúncios
-                </TabsTrigger>
+            <Tabs defaultValue={isOwner ? "anuncios" : "propostas-enviadas"} className="w-full">
+              <TabsList className="mb-8 grid w-full grid-cols-3 rounded-2xl bg-surface-secondary p-1">
+                {isOwner && (
+                  <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">
+                    Meus Anúncios
+                  </TabsTrigger>
+                )}
                 <TabsTrigger value="propostas" className="rounded-xl py-3 font-bold">
-                  Propostas{" "}
-                  {receivedProposals.length > 0 && (
+                  {isOwner ? "Propostas Recebidas" : "Propostas"}
+                  {receivedProposals.length > 0 && isOwner && (
                     <Badge variant="secondary" className="ml-2">
                       {receivedProposals.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="propostas-enviadas" className="rounded-xl py-3 font-bold">
+                  Propostas Enviadas
+                  {sentProposals.length > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {sentProposals.length}
                     </Badge>
                   )}
                 </TabsTrigger>
