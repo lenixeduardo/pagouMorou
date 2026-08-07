@@ -888,13 +888,13 @@ function PerfilPage() {
                             <div className="text-2xl font-bold text-primary">
                               {new Intl.NumberFormat("pt-BR", {
                                 style: "currency",
-                                currency: BRL,
+                                currency: "BRL",
                               }).format(proposal.rentAmount)}
                               {proposal.counterRentAmount && (
                                 <span className="ml-2 text-sm text-text-secondary line-through">
                                   {new Intl.NumberFormat("pt-BR", {
                                     style: "currency",
-                                    currency: BRL,
+                                    currency: "BRL",
                                   }).format(proposal.rentAmount)}
                                 </span>
                               )}
@@ -902,7 +902,7 @@ function PerfilPage() {
                                 <span className="ml-2 text-sm font-bold text-warning">
                                   Contra: {new Intl.NumberFormat("pt-BR", {
                                     style: "currency",
-                                    currency: BRL,
+                                    currency: "BRL",
                                   }).format(proposal.counterRentAmount)}
                                 </span>
                               )}
