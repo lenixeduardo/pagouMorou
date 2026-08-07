@@ -7,7 +7,7 @@ import {
   Quote,
   Sparkles,
   Building2,
-  FileSignature,
+  // FileSignature removed as it was unused
   FileText,
   Plus,
   MapPin,
@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/cards/property-card";
 import { Page } from "@/components/layout/page";
 import { apartmentsQueryOptions } from "@/lib/queries/apartments";
-import { container } from "@/lib/motion";
+// container removed as it was unused
 import footerAsset from "@/assets/footer.asset.json";
 import { FAQSection } from "@/components/sections/faq-section";
 import { MVPRoadmap } from "@/components/sections/mvp-roadmap";

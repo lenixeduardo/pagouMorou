@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Clock, Rocket, ShieldCheck, CreditCard, FileSignature } from "lucide-react";
+import { CheckCircle2, Clock, Rocket, ShieldCheck, CreditCard, FileSignature } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -78,7 +78,7 @@ export function MVPRoadmap() {
           <div className="space-y-12">
             {steps.map((step, index) => {
               const Icon = step.icon;
-              const isEven = index % 2 === 0;
+              // isEven is removed as it was unused
 
               return (
                 <motion.div

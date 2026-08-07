@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Building2,
   ChevronRight,
@@ -106,7 +106,7 @@ const STEP_FIELDS: Path<AnuncioForm>[][] = [
 function AnunciarPage() {
   const { isAuthenticated, isLoading } = useRequireAuth();
   const { createApartment, isCreating } = useCreateApartment();
-  const navigate = useNavigate();
+  // navigate removed as it was unused
 
   const [currentStep, setCurrentStep] = useState(0);
   const [photos, setPhotos] = useState<File[]>([]);

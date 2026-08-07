@@ -4,10 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 import {
   User,
-  Mail,
   Phone,
-  MapPin,
-  ChevronRight,
   ShieldCheck,
   Bell,
   Lock,
