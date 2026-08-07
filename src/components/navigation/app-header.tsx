@@ -42,10 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              O perfil deve exibir todos os documentos enviados e o contrato digital.
-              <br />
-              Adicionar botão para baixar o contrato em PDF e outro para baixar todos os documentos
-              de uma vez.
+              Iniciar a atualização do schema da tabela proposals para suportar o fluxo P0.
             </span>
           </nav>
         </div>
