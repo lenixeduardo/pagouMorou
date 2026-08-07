@@ -10,7 +10,16 @@ import { getBrowserSupabase } from "@/lib/supabase/browser";
 import { useAuth } from "@/hooks/use-auth";
 import { notificationsRefreshKey } from "@/lib/queries/keys";
 
-export type ProposalStatus = "pending" | "approved" | "rejected";
+export type ProposalStatus = 
+  | "pending" 
+  | "accepted" 
+  | "rejected" 
+  | "cancelled"
+  | "counter_offer"
+  | "waiting_payment"
+  | "payment_sent"
+  | "payment_verified"
+  | "contract_signed";
 
 export interface Proposal {
   id: string;
@@ -22,8 +31,12 @@ export interface Proposal {
   ownerId: string;
   ownerName: string;
   rentAmount: number;
+  counterRentAmount?: number;
   message: string;
   status: ProposalStatus;
+  paymentProofUrl?: string;
+  contractUrl?: string;
+  signedContractUrl?: string;
   /** `received` = sou o proprietário; `sent` = sou o inquilino. */
   direction: "received" | "sent";
   createdAt: string;
