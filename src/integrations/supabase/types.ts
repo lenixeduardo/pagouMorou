@@ -374,6 +374,50 @@ export type Database = {
           },
         ]
       }
+      signature_audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          document_hash: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          proposal_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          document_hash: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          proposal_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          document_hash?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          proposal_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signature_audit_logs_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

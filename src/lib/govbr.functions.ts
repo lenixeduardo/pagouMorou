@@ -42,17 +42,18 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       
       // 1. Buscar dados da proposta e do imóvel para localizar o contrato
-      const { data: proposal, error: proposalError } = await supabaseAdmin
+      const { data: proposal, error: proposalError } = await (supabaseAdmin
         .from('proposals')
         .select(`
           id,
           apartment_id,
+          tenant_id,
           contract_url,
           apartments (
             title,
             owner_id
           )
-        `)
+        `) as any)
         .eq('id', data.proposalId)
         .single();
 
@@ -188,6 +189,21 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
           contract_url: signedPath
         } as any)
         .eq('id', data.proposalId);
+
+      // 7. Adicionar log de auditoria
+      await supabaseAdmin
+        .from('signature_audit_logs')
+        .insert({
+          proposal_id: data.proposalId,
+          user_id: proposal.tenant_id, // Capturado na query inicial ou vindo do contexto
+          action: 'digital_signature_govbr_iti',
+          document_hash: data.documentHash,
+          metadata: {
+            signed_path: signedPath,
+            signature_type: 'digital_iti_conform',
+            timestamp: new Date().toISOString()
+          }
+        });
 
       return {
         success: true,
