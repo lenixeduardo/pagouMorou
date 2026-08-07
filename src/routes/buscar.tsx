@@ -1,15 +1,14 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, Building2, MapPin, Sparkles, Train } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, Sparkles, Train } from "lucide-react";
 import { Page } from "@/components/layout/page";
 import { apartments } from "@/mock";
 import { PropertyCard } from "@/components/cards/property-card";
 import { useFavorites } from "@/hooks/use-favorites";
+import { isNearMetro, matchesCategory, matchesQuery, sortByRecency } from "@/lib/search";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 
 export const Route = createFileRoute("/buscar")({
@@ -36,33 +35,29 @@ function SearchPage() {
   const { toggleFavorite, isFavorite } = useFavorites();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("Todos");
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Simular carregamento inicial para mostrar esqueletos
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const filters = ["Todos", "Apartamentos", "Casas", "Studios", "Lofts"];
 
-  const filteredApartments = useMemo(() => {
-    return apartments.filter((apt) => {
-      const matchesSearch = 
-        apt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        apt.address.neighborhoodId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        apt.address.city.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesFilter = 
-        activeFilter === "Todos" || 
-        apt.title.toLowerCase().includes(activeFilter.toLowerCase().slice(0, -1));
+  const filteredApartments = useMemo(
+    () =>
+      apartments.filter(
+        (apt) => matchesQuery(apt, searchTerm) && matchesCategory(apt, activeFilter),
+      ),
+    [searchTerm, activeFilter],
+  );
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [searchTerm, activeFilter]);
-
-  const carousel1 = filteredApartments.slice(0, 5);
-  const carousel2 = filteredApartments.slice(5, 10);
+  const mostWanted = useMemo(
+    () => [...filteredApartments].sort((a, b) => b.rating - a.rating).slice(0, 5),
+    [filteredApartments],
+  );
+  const nearMetro = useMemo(
+    () => filteredApartments.filter(isNearMetro).slice(0, 5),
+    [filteredApartments],
+  );
+  const recentlyAdded = useMemo(
+    () => sortByRecency(filteredApartments).slice(0, 5),
+    [filteredApartments],
+  );
 
 
   return (
@@ -131,14 +126,8 @@ function SearchPage() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-            {isLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="min-w-[320px] md:min-w-[380px]">
-                  <SkeletonCardGrid count={1} />
-                </div>
-              ))
-            ) : carousel1.length > 0 ? (
-              carousel1.map((apt) => (
+            {mostWanted.length > 0 ? (
+              mostWanted.map((apt) => (
                 <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
                   <PropertyCard 
                     apartment={apt} 
@@ -174,14 +163,8 @@ function SearchPage() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-            {isLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="min-w-[320px] md:min-w-[380px]">
-                  <SkeletonCardGrid count={1} />
-                </div>
-              ))
-            ) : carousel2.length > 0 ? (
-              carousel2.map((apt) => (
+            {nearMetro.length > 0 ? (
+              nearMetro.map((apt) => (
                 <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
                   <PropertyCard 
                     apartment={apt} 
@@ -216,14 +199,8 @@ function SearchPage() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-            {isLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="min-w-[320px] md:min-w-[380px]">
-                  <SkeletonCardGrid count={1} />
-                </div>
-              ))
-            ) : filteredApartments.length > 0 ? (
-              [...filteredApartments].reverse().slice(0, 5).map((apt) => (
+            {recentlyAdded.length > 0 ? (
+              recentlyAdded.map((apt) => (
                 <div key={apt.id} className="min-w-[320px] md:min-w-[380px]">
                   <PropertyCard 
                     apartment={apt} 
