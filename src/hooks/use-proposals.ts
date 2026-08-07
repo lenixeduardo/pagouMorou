@@ -107,7 +107,7 @@ export function useProposals() {
   const { mutate: respondMutation } = useMutation({
     mutationFn: async (input: { 
       id: string; 
-      status: Exclude<ProposalStatus, "pending">;
+      status: ProposalStatus; // Removido Exclude para evitar conflitos de tipos
       counterRentAmount?: number;
       paymentProofUrl?: string;
       contractUrl?: string;
