@@ -115,7 +115,7 @@ export function useProposals() {
     }) => {
       const { data, error } = await getBrowserSupabase().rpc("respond_proposal", {
         p_id: input.id,
-        p_status: input.status,
+        p_status: input.status as any,
         p_counter_rent: input.counterRentAmount,
         p_payment_proof: input.paymentProofUrl,
         p_contract: input.contractUrl,
