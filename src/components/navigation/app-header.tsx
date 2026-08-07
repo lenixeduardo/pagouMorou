@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              Implementando Ciclo de Propostas P0: Contrapropostas e Comprovantes
+              Fluxo P0 de Propostas Finalizado: Contrapropostas e Pagamento Manual
             </span>
           </nav>
         </div>
