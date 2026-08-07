@@ -790,6 +790,17 @@ function PerfilPage() {
                                     Recusar
                                   </Button>
                                   <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-lg text-primary border-primary hover:bg-primary/5"
+                                    onClick={() => {
+                                      const amount = prompt("Digite o valor da contraproposta:");
+                                      if (amount) counterOffer(proposal.id, Number(amount));
+                                    }}
+                                  >
+                                    Contraproposta
+                                  </Button>
+                                  <Button
                                     size="sm"
                                     className="rounded-lg bg-success hover:bg-success/90"
                                     onClick={() => approveProposal(proposal.id)}
@@ -797,6 +808,15 @@ function PerfilPage() {
                                     Aprovar
                                   </Button>
                                 </div>
+                              )}
+                              {proposal.status === "accepted" && (
+                                <Button
+                                  size="sm"
+                                  className="rounded-lg bg-primary"
+                                  onClick={() => requestPayment(proposal.id)}
+                                >
+                                  Solicitar PIX
+                                </Button>
                               )}
                             </div>
                           </CardContent>
