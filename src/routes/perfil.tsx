@@ -1,18 +1,17 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { calculateTenantScore, calculateOwnerScore, getScoreColor, getScoreLabel } from "@/lib/score";
-import { ShieldCheck, TrendingUp, AlertTriangle, CloudUpload, Sparkles } from "lucide-react";
-import { useEffect, useState, ChangeEvent, useCallback } from "react";
+import { ShieldCheck, TrendingUp, CloudUpload, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
 import { useNotifications } from "@/hooks/use-notifications";
+import { useChat } from "@/hooks/use-chat";
 import confetti from "canvas-confetti";
-import { 
-  UserCircle, 
-  Settings, 
-  FileText, 
-  Home, 
-  MessageSquare, 
-  Bell, 
+import {
+  UserCircle,
+  Settings,
+  FileText,
+  MessageSquare,
   LogOut,
   ChevronRight,
   Verified,
@@ -23,7 +22,6 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  Plus,
   Star
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -36,11 +34,10 @@ import { PropertyCard } from "@/components/cards/property-card";
 import { currentUser, apartments } from "@/mock";
 import { fadeIn, stagger, container } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
+import { DemoNotice } from "@/components/feedback/demo-notice";
 
 
 export const Route = createFileRoute("/perfil")({
@@ -67,11 +64,16 @@ function PerfilPage() {
   const { isAuthenticated, user, updateUser, logout } = useAuthStore();
   const { proposals, updateStatus } = useProposals();
   const { addNotification } = useNotifications();
+  const { messages } = useChat();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("anuncios");
   const isOwner = user?.type === 'proprietario';
   const isTenant = user?.type === 'inquilino';
+
+  // Conversas abertas neste navegador (o chat ainda não tem backend).
+  const conversationCount = useMemo(
+    () => new Set(messages.map((message) => message.conversationId)).size,
+    [messages],
+  );
 
   // Meus anúncios
   const myApartments = apartments.filter(apt => apt.ownerId === user?.id);
@@ -102,6 +104,7 @@ function PerfilPage() {
 
   const handleApproveProposal = (id: string) => {
     updateStatus(id, "approved");
+    toast.success("Proposta aprovada!");
     const proposal = proposals.find(p => p.id === id);
     if (proposal) {
       addNotification({
@@ -115,6 +118,7 @@ function PerfilPage() {
 
   const handleRejectProposal = (id: string) => {
     updateStatus(id, "rejected");
+    toast.error("Proposta recusada.");
   };
 
   const triggerEmeraldCelebration = useCallback(() => {
@@ -148,35 +152,6 @@ function PerfilPage() {
     }, 250);
   }, []);
 
-  const handleKycUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      toast.promise(
-        new Promise((resolve) => setTimeout(resolve, 2000)),
-        {
-          loading: 'Validando documentos...',
-          success: () => {
-            updateUser({ 
-              verified: true,
-              scoreFactors: { 
-                ...user?.scoreFactors, 
-                incompleteDocs: false,
-                kycVerified: true 
-              } 
-            });
-            addNotification({
-              kind: "system",
-              title: "Identidade Verificada!",
-              description: "Seus documentos foram validados. Seu score aumentou!",
-            });
-            return 'Documentos validados com sucesso!';
-          },
-          error: 'Erro ao validar documentos.',
-        }
-      );
-    }
-  };
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
@@ -195,20 +170,12 @@ function PerfilPage() {
         duration: 5000,
       });
     }
-
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => {
-      clearTimeout(timer);
-    };
   }, [isAuthenticated, navigate, isOwner, isTenant, ownerScore, tenantScore, triggerEmeraldCelebration, user?.id]);
 
 
 
 
   if (!isAuthenticated) return null;
-
-  // Simula os imóveis do usuário (se for proprietário)
-  const userProperties = apartments.slice(0, 2);
 
   return (
     <Page className="pb-20 pt-10" component="main">
@@ -276,7 +243,7 @@ function PerfilPage() {
                 </div>
                 <div className="mt-4 flex items-center gap-1.5">
                   <h2 className="text-xl font-bold">{user?.name}</h2>
-                  {currentUser.verified && (
+                  {user?.verified && (
                     <Verified className="size-5 fill-primary text-white" />
                   )}
                   {isOwner && ownerScore >= 800 && (
@@ -387,6 +354,10 @@ function PerfilPage() {
                   <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
                     Perfil {getScoreLabel(tenantScore)}
                   </p>
+                  <DemoNotice className="mt-3">
+                    Valor ilustrativo, calculado neste navegador. Não é análise de crédito nem
+                    influencia propostas.
+                  </DemoNotice>
                   <div className="absolute bottom-0 left-0 h-1 bg-surface-secondary w-full">
                     <div 
                       className={cn("h-full transition-all duration-1000", 
@@ -413,6 +384,9 @@ function PerfilPage() {
                   <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
                     Reputação {getScoreLabel(ownerScore)}
                   </p>
+                  <DemoNotice className="mt-3">
+                    Valor ilustrativo, calculado neste navegador a partir dos anúncios de exemplo.
+                  </DemoNotice>
                   <div className="absolute bottom-0 left-0 h-1 bg-surface-secondary w-full">
                     <div 
                       className={cn("h-full transition-all duration-1000", 
@@ -430,32 +404,14 @@ function PerfilPage() {
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm overflow-hidden relative">
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-caption font-bold text-text-secondary">Segurança KYC</span>
-                  {user?.scoreFactors?.kycVerified ? (
-                    <CheckCircle2 className="size-5 text-success" />
-                  ) : (
-                    <CloudUpload className="size-5 text-warning" />
-                  )}
+                  <CloudUpload className="size-5 text-muted" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p className="text-xl font-bold">
-                    {user?.scoreFactors?.kycVerified ? "Verificado" : "Pendente"}
-                  </p>
-                  {!user?.scoreFactors?.kycVerified && (
-                    <label className="cursor-pointer group">
-                      <span className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-                        Enviar Documentos <ChevronRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
-                      </span>
-                      <input 
-                        type="file" 
-                        className="hidden" 
-                        accept=".pdf,image/*" 
-                        onChange={handleKycUpload}
-                      />
-                    </label>
-                  )}
-                  {user?.scoreFactors?.kycVerified && (
-                    <p className="text-xs text-text-secondary">Seus dados estão protegidos.</p>
-                  )}
+                  <p className="text-xl font-bold">Indisponível</p>
+                  <DemoNotice>
+                    A verificação de identidade ainda não existe nesta demonstração. Nenhum documento
+                    é enviado, analisado ou armazenado.
+                  </DemoNotice>
                 </div>
               </div>
               
@@ -463,18 +419,18 @@ function PerfilPage() {
                 <span className="text-caption font-bold text-text-secondary">
                   {isOwner ? "Meus Anúncios" : "Imóveis Alugados"}
                 </span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{isOwner ? myApartments.length : 0}</p>}
+                <p className="text-3xl font-bold mt-1">{isOwner ? myApartments.length : 0}</p>
               </div>
               
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                 <span className="text-caption font-bold text-text-secondary">Propostas</span>
-                {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">{receivedProposals.length}</p>}
+                <p className="text-3xl font-bold mt-1">{receivedProposals.length}</p>
               </div>
 
               {isOwner && (
                 <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
                   <span className="text-caption font-bold text-text-secondary">Mensagens</span>
-                  {isLoading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold mt-1">1</p>}
+                  <p className="text-3xl font-bold mt-1">{conversationCount}</p>
                 </div>
               )}
             </div>
@@ -587,7 +543,7 @@ function PerfilPage() {
               </Card>
             )}
 
-            <Tabs defaultValue="anuncios" className="w-full" onValueChange={setActiveTab}>
+            <Tabs defaultValue="anuncios" className="w-full">
               <TabsList className="mb-8 grid w-full grid-cols-2 rounded-2xl bg-surface-secondary p-1">
                 <TabsTrigger value="anuncios" className="rounded-xl py-3 font-bold">Meus Anúncios</TabsTrigger>
                 <TabsTrigger value="propostas" className="rounded-xl py-3 font-bold">
@@ -596,17 +552,7 @@ function PerfilPage() {
               </TabsList>
 
               <TabsContent value="anuncios">
-                {isLoading ? (
-                  <div className="grid gap-6 md:grid-cols-2">
-                    {[1, 2].map((i) => (
-                      <div key={i} className="space-y-4">
-                        <Skeleton className="aspect-video w-full rounded-3xl" />
-                        <Skeleton className="h-6 w-2/3" />
-                        <Skeleton className="h-4 w-1/3" />
-                      </div>
-                    ))}
-                  </div>
-                ) : myApartments.length === 0 ? (
+                {myApartments.length === 0 ? (
                   <Card className="border-dashed py-12 text-center">
                     <CardContent>
                       <Building2 className="mx-auto mb-4 size-12 text-muted" />

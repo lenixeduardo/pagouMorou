@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useAuthStore } from "@/hooks/use-auth";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -10,7 +10,6 @@ import { container, fadeIn } from "@/lib/motion";
 
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
-import { SkeletonCardGrid } from "@/components/cards/skeleton-card";
 
 
 export const Route = createFileRoute("/favoritos")({
@@ -36,33 +35,25 @@ export const Route = createFileRoute("/favoritos")({
 function FavoritosPage() {
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  // Hooks precisam ser chamados antes de qualquer retorno antecipado.
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate({ to: "/entrar" });
-      return;
     }
-    
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => {
-      clearTimeout(timer);
-    };
   }, [isAuthenticated, navigate]);
 
-
-
+  const favoriteApartments = useMemo(
+    () => apartments.filter((apt) => favorites.includes(apt.id)),
+    [favorites],
+  );
 
   if (!isAuthenticated) return null;
 
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const favoriteApartments = apartments.filter((apt) => favorites.includes(apt.id));
-
   return (
     <Page title="Favoritos" description="Seus apartamentos salvos aparecerão aqui." component="main">
-      {isLoading ? (
-        <SkeletonCardGrid count={4} />
-      ) : favoriteApartments.length > 0 ? (
+      {favoriteApartments.length > 0 ? (
         <motion.div
           variants={container}
           initial="initial"

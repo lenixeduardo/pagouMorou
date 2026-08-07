@@ -1,21 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, MapPin, Maximize, Send, MessageSquare, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
+import { Building2, MapPin, Maximize, Send, MessageSquare } from "lucide-react";
 import { apartments } from "@/mock";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useAuthStore } from "@/hooks/use-auth";
 import { useProposals } from "@/hooks/use-proposals";
 import { useNotifications } from "@/hooks/use-notifications";
-import { useChat } from "@/hooks/use-chat";
+import { useChat, conversationIdForApartment } from "@/hooks/use-chat";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
-import { calculateTenantScore, getScoreColor, getScoreLabel } from "@/lib/score";
+import { neighborhoodName } from "@/lib/search";
 import { motion, AnimatePresence } from "framer-motion";
-import { slideUp, fadeIn } from "@/lib/motion";
+import { slideUp } from "@/lib/motion";
+import { DemoNotice } from "@/components/feedback/demo-notice";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Page } from "@/components/layout/page";
 
@@ -51,10 +51,8 @@ function ApartamentoPage() {
   
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const favorite = apartment ? isFavorite(apartment.id) : false;
-  const tenantScore = user ? calculateTenantScore(user) : 850;
 
   const handleProposal = () => {
     if (!isAuthenticated) {
@@ -90,7 +88,7 @@ function ApartamentoPage() {
       return;
     }
 
-    sendMessage(`conv-${apartment!.id}`, user!.id, chatMessage);
+    sendMessage(conversationIdForApartment(apartment!.id), user!.id, chatMessage);
     addNotification({
       kind: "message",
       title: "Mensagem enviada",
@@ -141,7 +139,7 @@ function ApartamentoPage() {
                 </Button>
               </div>
               <div className="flex items-center gap-4 text-text-secondary">
-                <span className="flex items-center gap-1"><MapPin className="size-4" /> {apartment.address.neighborhoodId}, {apartment.address.city}</span>
+                <span className="flex items-center gap-1"><MapPin className="size-4" /> {neighborhoodName(apartment.address.neighborhoodId)}, {apartment.address.city}</span>
                 <span className="flex items-center gap-1"><Maximize className="size-4" /> {apartment.features.areaM2}m²</span>
               </div>
             </div>
@@ -256,50 +254,10 @@ function ApartamentoPage() {
               </div>
 
               <div className="space-y-6">
-                <div className="rounded-2xl bg-surface-secondary p-6">
-                  <p className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-4">Seu Perfil de Inquilino</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className={cn(
-                        "size-16 rounded-full flex items-center justify-center bg-white shadow-sm border-2",
-                        tenantScore >= 800 ? "border-emerald-500" : "border-border"
-                      )}>
-                        {tenantScore >= 800 ? (
-                          <Sparkles className="size-8 text-emerald-500" />
-                        ) : (
-                          <ShieldCheck className={cn("size-8", getScoreColor(tenantScore))} />
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold leading-none">{tenantScore}</p>
-                        <p className={cn("text-xs font-bold uppercase tracking-widest mt-1", getScoreColor(tenantScore))}>
-                          {getScoreLabel(tenantScore)}
-                        </p>
-                      </div>
-                    </div>
-                    {tenantScore >= 800 && (
-                      <Badge className="bg-emerald-500 text-white rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
-                        Top Inquilino
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className="mt-4 h-1.5 w-full bg-border rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(tenantScore / 1000) * 100}%` }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                      className={cn("h-full", 
-                        tenantScore >= 800 ? "bg-emerald-500" : 
-                        tenantScore >= 600 ? "bg-primary" : 
-                        tenantScore >= 400 ? "bg-warning" : "bg-danger"
-                      )}
-                    />
-                  </div>
-                  <p className="mt-4 text-xs text-text-secondary leading-relaxed">
-                    Seu score será exibido ao proprietário para aumentar a confiança na sua proposta.
-                  </p>
-                </div>
+                <DemoNotice variant="block">
+                  Esta proposta é uma demonstração: ela fica salva apenas neste navegador e não é
+                  enviada ao proprietário.
+                </DemoNotice>
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-border">
