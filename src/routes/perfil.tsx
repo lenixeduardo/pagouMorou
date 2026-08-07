@@ -5,7 +5,7 @@ import {
   getScoreColor,
   getScoreLabel,
 } from "@/lib/score";
-import { ShieldCheck, TrendingUp, CloudUpload, Sparkles, Download } from "lucide-react";
+import { ShieldCheck, TrendingUp, CloudUpload, Sparkles, Download, ExternalLink } from "lucide-react";
 import { useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRequireAuth } from "@/hooks/use-require-auth";
@@ -13,6 +13,7 @@ import { useProposals } from "@/hooks/use-proposals";
 import { useConversations } from "@/hooks/use-conversations";
 import { getBrowserSupabase } from "@/lib/supabase/browser";
 import { uploadAvatar, isAcceptedImage } from "@/lib/storage/upload";
+import { getGovBrAuthUrl } from "@/lib/govbr.functions";
 import confetti from "canvas-confetti";
 import {
   UserCircle,
