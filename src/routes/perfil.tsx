@@ -5,7 +5,7 @@ import {
   getScoreColor,
   getScoreLabel,
 } from "@/lib/score";
-import { ShieldCheck, TrendingUp, CloudUpload, Sparkles } from "lucide-react";
+import { ShieldCheck, TrendingUp, CloudUpload, Sparkles, Download } from "lucide-react";
 import { useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRequireAuth } from "@/hooks/use-require-auth";
@@ -29,8 +29,8 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  // Plus removed as it was unused
   Star,
+  FileDown,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
