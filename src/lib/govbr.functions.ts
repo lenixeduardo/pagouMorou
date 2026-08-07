@@ -147,11 +147,11 @@ export const signDocumentWithGovBr = createServerFn({ method: "POST" })
 
       const signedPdfBytes = await pdfDoc.save();
       
-      // 5. Salvar o PDF assinado de volta no Storage (sobrescrevendo ou criando versão assinada)
+      // 5. Salvar o PDF assinado de volta no Storage (sobrescrevendo ou criando versão assinada no bucket 'contracts')
       const signedPath = contractPath.replace('.pdf', '_signed.pdf');
       const { error: uploadError } = await supabaseAdmin
         .storage
-        .from('documents')
+        .from(CONTRACTS_BUCKET)
         .upload(signedPath, signedPdfBytes, {
           contentType: 'application/pdf',
           upsert: true
