@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              me de as instruções corretas de como obter cada uma das variaveis e coloque como pendente no to do
+              passe por todos os pontos q n envolvam a api key variavel do gov e execute
             </span>
           </nav>
         </div>
