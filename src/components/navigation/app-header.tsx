@@ -42,7 +42,8 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              troque a assinatura de portal do desenvolvedor gov para docu sign
+              Se quiser, posso trocar de fato a integração de assinatura do Gov.br para DocuSign
+              (OAuth + envelopes via server function)
             </span>
           </nav>
         </div>
