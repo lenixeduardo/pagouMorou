@@ -42,7 +42,7 @@ export function AppHeader() {
 
           <nav className="hidden items-center gap-6 lg:flex">
             <span className="text-sm font-medium text-text-secondary">
-              passe por todos os pontos q n envolvam a api key variavel do gov e execute
+              troque a assinatura de portal do desenvolvedor gov para docu sign
             </span>
           </nav>
         </div>
