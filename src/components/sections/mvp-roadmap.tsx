@@ -49,15 +49,15 @@ const steps: Step[] = [
   {
     id: "contract",
     title: "Contrato e Assinatura",
-    description: "Geração de PDF e integração Gov.br.",
-    status: "current",
+    description: "Geração de PDF, Auditoria e Assinatura ITI (Simulada/Manual).",
+    status: "completed",
     icon: FileSignature,
   },
   {
     id: "govbr-env",
-    title: "Configuração Gov.br",
-    description: "Obtenção de CLIENT_ID e SECRET no Portal Gov.br.",
-    status: "pending",
+    title: "Integração API Gov.br",
+    description: "Configuração de CLIENT_ID e SECRET para assinatura real.",
+    status: "current",
     icon: ShieldCheck,
   },
 ];
